@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from "react";
-import { ArrowRight, Bike, BedDouble, MapPin, Camera, Soup, Trees, Waves, Instagram, Mountain, CalendarDays } from "lucide-react";
+import { ArrowRight, Bike, BedDouble, MapPin, Soup, Trees, Waves, Instagram, Mountain, CalendarDays } from "lucide-react";
 
 // 🔧 Replace these with your real links
 const BOOKING_URL = "https://www.booking.com/hotel/jp/kashiwaya-inn.en-gb.html"; // English
@@ -173,6 +173,8 @@ function Badge({ icon, children }: { icon: React.ReactNode; children: React.Reac
   );
 }
 
+type WrapperProps = { children: React.ReactNode };
+
 function Card({ title, desc, bullets, ctaLabel, ctaHref, ctaOnClick, icon }: {
   title: string;
   desc: string;
@@ -182,7 +184,7 @@ function Card({ title, desc, bullets, ctaLabel, ctaHref, ctaOnClick, icon }: {
   ctaOnClick?: () => void;
   icon?: React.ReactNode;
 }) {
-  const Wrapper: any = ({ children }: { children: React.ReactNode }) => (
+  const Wrapper = ({ children }: WrapperProps) => (
     <div className="rounded-2xl bg-white p-6 shadow-sm">
       <div className="flex items-start gap-3">
         {icon && <div className="rounded-xl bg-stone-100 p-2 text-stone-700">{icon}</div>}
