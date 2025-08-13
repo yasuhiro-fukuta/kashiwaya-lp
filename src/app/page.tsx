@@ -173,9 +173,7 @@ function Badge({ icon, children }: { icon: React.ReactNode; children: React.Reac
   );
 }
 
-type WrapperProps = { children: React.ReactNode };
-
-function Card({ title, desc, bullets, ctaLabel, ctaHref, ctaOnClick, icon }: {
+type CardProps = {
   title: string;
   desc: string;
   bullets?: string[];
@@ -183,8 +181,10 @@ function Card({ title, desc, bullets, ctaLabel, ctaHref, ctaOnClick, icon }: {
   ctaHref?: string;
   ctaOnClick?: () => void;
   icon?: React.ReactNode;
-}) {
-  const Wrapper = ({ children }: WrapperProps) => (
+};
+
+function Card({ title, desc, bullets, ctaLabel, ctaHref, ctaOnClick, icon }: CardProps) {
+  const Wrapper = ({ children }: { children: React.ReactNode }) => (
     <div className="rounded-2xl bg-white p-6 shadow-sm">
       <div className="flex items-start gap-3">
         {icon && <div className="rounded-xl bg-stone-100 p-2 text-stone-700">{icon}</div>}
@@ -206,11 +206,19 @@ function Card({ title, desc, bullets, ctaLabel, ctaHref, ctaOnClick, icon }: {
       )}
       <div className="mt-4">
         {ctaHref ? (
-          <a href={ctaHref} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-xl bg-stone-900 px-4 py-2 text-white hover:bg-black">
+          <a
+            href={ctaHref}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex items-center gap-2 rounded-xl bg-stone-900 px-4 py-2 text-white hover:bg-black"
+          >
             {ctaLabel} <ArrowRight className="h-4 w-4" />
           </a>
         ) : (
-          <button onClick={ctaOnClick} className="inline-flex items-center gap-2 rounded-xl bg-stone-900 px-4 py-2 text-white hover:bg-black">
+          <button
+            onClick={ctaOnClick}
+            className="inline-flex items-center gap-2 rounded-xl bg-stone-900 px-4 py-2 text-white hover:bg-black"
+          >
             {ctaLabel} <ArrowRight className="h-4 w-4" />
           </button>
         )}
@@ -218,3 +226,4 @@ function Card({ title, desc, bullets, ctaLabel, ctaHref, ctaOnClick, icon }: {
     </Wrapper>
   );
 }
+
