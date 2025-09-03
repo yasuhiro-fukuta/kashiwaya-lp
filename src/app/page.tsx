@@ -141,6 +141,24 @@ export default function KashiwayaLanding() {
         </div>
       </section>
 
+{/* More details */}
+<section className="mx-auto max-w-6xl px-6 pb-10">
+  <div className="rounded-2xl bg-white p-6 shadow-sm">
+    <h3 className="text-xl font-semibold mb-2">More details</h3>
+    <p className="text-sm text-stone-700">
+      For more information (English):{" "}
+      <a
+        href="https://docs.google.com/document/d/1vRxNpu0zOpsHfTbXBqu-omb4C9N_ozqYZ_Eo2EsmMpE/edit?usp=sharing"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="underline text-emerald-700 hover:text-emerald-900"
+      >
+        Google Document
+      </a>
+    </p>
+  </div>
+</section>
+
       {/* Footer */}
       <footer className="border-t bg-white/70">
         <div className="mx-auto max-w-6xl px-6 py-8 flex flex-col md:flex-row items-center justify-between gap-4">
