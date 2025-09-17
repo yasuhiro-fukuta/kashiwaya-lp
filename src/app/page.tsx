@@ -148,27 +148,6 @@ export default function KashiwayaLanding() {
 
       </section>
 
-      {/* E-bikes & Map */}
-      <section className="mx-auto max-w-6xl px-6 pb-10">
-        <div className="rounded-2xl bg-white p-6 shadow-sm">
-          <div className="flex items-start gap-4">
-            <Bike className="h-6 w-6 text-emerald-600" />
-            <div>
-              <h3 className="text-xl font-semibold">E-Bike Rental & Custom Map</h3>
-              <p className="mt-2 text-stone-700">Explore famous sights and hidden gems with our electric crossbikes. Start navigation with one tap.</p>
-              <div className="mt-4 flex gap-3">
-                <a className="inline-flex items-center gap-2 rounded-xl border border-stone-300 px-4 py-2 hover:bg-stone-100" href={GOOGLE_MAP_URL} target="_blank" rel="noreferrer">
-                  <MapPin className="h-4 w-4" /> Open the map
-                </a>
-                <a className="inline-flex items-center gap-2 rounded-xl bg-stone-900 px-4 py-2 text-white hover:bg-black" href={BOOKING_URL} target="_blank" rel="noreferrer">
-                  Book your stay <ArrowRight className="h-4 w-4" />
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
 {/* More details */}
 <section className="mx-auto max-w-6xl px-6 pb-10">
   <div className="rounded-2xl bg-white p-6 shadow-sm">
