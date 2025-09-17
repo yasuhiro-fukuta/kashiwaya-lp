@@ -6,12 +6,12 @@
 import { useState } from "react";
 import {
   ArrowRight, Bike, BedDouble, MapPin, Soup,
-  Trees, Waves, Instagram, Mountain, CalendarDays
+  Trees, Waves, Instagram, Mountain, CalendarDays, Droplets
 } from "lucide-react";
 
 // 🔧 Links
 const BOOKING_URL = "https://www.booking.com/hotel/jp/kashiwaya-inn.en-gb.html";
-const INSTAGRAM_URL = "https://www.instagram.com/yourusername";
+const INSTAGRAM_URL = "https://www.instagram.com/kashiwaya_nakasendo";
 const GOOGLE_MAP_URL = "https://maps.app.goo.gl/ViXN6oJNxvjQkv2SA?g_st=ac";
 
 // 🔧 Images
@@ -19,6 +19,9 @@ const HERO = "/gallery/light.JPG"; // top banner
 const WHY_NAGISO = ["/gallery/tsumago.jpg", "/gallery/kakizore.JPG"];
 const STAY_IMAGES = ["/gallery/futon.JPG", "/gallery/2ndfloor.JPG"];
 const DINNER_IMAGES = ["/gallery/somen.jpg", "/gallery/wine.JPG"];
+const EBIKE_IMAGES = ["/gallery/ebike1.jpg", "/gallery/ebike2.jpg"];
+const ONSEN_IMAGES = ["/gallery/onsen1.jpg", "/gallery/onsen2.jpg"];
+
 
 export default function KashiwayaLanding() {
   const [open, setOpen] = useState(false);
@@ -118,6 +121,31 @@ export default function KashiwayaLanding() {
           icon={<Soup className="h-5 w-5" />}
           images={DINNER_IMAGES}
         />
+
+
+        {/* NEW: E-bike card replaces the old map section design */}
+        <Card
+          title="E-Bike Rental"
+          desc="Explore Nagiso with our comfortable electric crossbikes. Perfect for Tsumago, Kakizore Gorge, and local hidden gems."
+          bullets={["Motor assisted", "Drop-off available at terminals", "At Kashiwaya, life jackets and rash guards are available for free rental"]}
+          ctaLabel="Book your stay"
+          ctaHref={BOOKING_URL}
+          secondaryLabel="Open the map"
+          secondaryHref={GOOGLE_MAP_URL}
+          icon={<Bike className="h-5 w-5" />}
+          images={EBIKE_IMAGES}
+        />
+        {/* NEW: Onsen card */}
+        <Card
+          title="Onsen (Hot Spring)"
+          desc="Kakizore onsen Ichikawa - local loved, wooden based onsen with mountains and stars."
+          bullets={["Saturday and Sunday 10：00～20：00", "20 mins drive from Kashiwaya", "please call and check it available just in case"]}
+          ctaLabel="How to get there"
+          ctaHref={GOOGLE_MAP_URL}
+          icon={<Droplets className="h-5 w-5" />}
+          images={ONSEN_IMAGES}
+        />
+
       </section>
 
       {/* E-bikes & Map */}
