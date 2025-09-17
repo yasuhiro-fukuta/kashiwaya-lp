@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import {
-  ArrowRight, Bike, BedDouble, MapPin, Soup,
+  ArrowRight, Bike, BedDouble, Soup,
   Trees, Waves, Instagram, Mountain, CalendarDays, Droplets
 } from "lucide-react";
 
@@ -121,17 +121,22 @@ export default function KashiwayaLanding() {
 
 
         {/* NEW: E-bike card replaces the old map section design */}
-        <Card
-          title="E-Bike Rental"
-          desc="Explore Nagiso with our comfortable electric crossbikes. Perfect for Tsumago, Kakizore Gorge, and local hidden gems."
-          bullets={["Motor assisted", "Drop-off available at terminals", "At Kashiwaya, life jackets and rash guards are available for free rental"]}
-          ctaLabel="Book your stay"
-          ctaHref={BOOKING_URL}
-          secondaryLabel="Open the map"
-          secondaryHref={GOOGLE_MAP_URL}
-          icon={<Bike className="h-5 w-5" />}
-          images={EBIKE_IMAGES}
-        />
+<Card
+  title="E-Bike Rental"
+  desc="Explore Nagiso with our comfortable electric crossbikes. Perfect for Tsumago, Kakizore Gorge, and local hidden gems."
+  bullets={[
+    "Motor assisted",
+    "Drop-off available at terminals",
+    "At Kashiwaya, life jackets and rash guards are available for free rental",
+  ]}
+  ctaLabel="Open the map"
+  ctaHref={GOOGLE_MAP_URL}
+  icon={<Bike className="h-5 w-5" />}
+  images={EBIKE_IMAGES}
+/>
+
+
+
         {/* NEW: Onsen card */}
         <Card
           title="Onsen (Hot Spring)"
