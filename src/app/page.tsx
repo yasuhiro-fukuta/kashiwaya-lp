@@ -123,7 +123,7 @@ export default function KashiwayaLanding() {
         {/* NEW: E-bike card replaces the old map section design */}
 <Card
   title="E-Bike Rental"
-  desc="Explore Nagiso with our comfortable electric crossbikes. Perfect for Tsumago, Kakizore Gorge, and local hidden gems."
+  desc="Explore Nagiso with ebikes. Perfect for Tsumago, Kakizore Gorge, and local hidden gems."
   bullets={[
     "Motor assisted",
     "Drop-off available at terminals",
