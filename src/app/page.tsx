@@ -118,8 +118,6 @@ export default function KashiwayaLanding() {
           icon={<Soup className="h-5 w-5" />}
           images={DINNER_IMAGES}
         />
-
-
         {/* NEW: E-bike card replaces the old map section design */}
 <Card
   title="E-Bike Rental"
@@ -184,23 +182,98 @@ export default function KashiwayaLanding() {
       </footer>
 
       {/* Modal */}
-      {open && (
-        <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-6" onClick={() => setOpen(false)}>
-          <div className="max-w-md w-full rounded-2xl bg-white p-6 shadow-xl" onClick={(e)=>e.stopPropagation()}>
-            <h4 className="text-xl font-semibold">Dinner Options</h4>
-            <ul className="mt-3 list-disc pl-6 space-y-1 text-stone-700">
-              <li>Wagyu BBQ set — ¥10,000 / 2 persons (courtyard, fully prepared)</li>
-              <li>Chilled shabu set — ¥8,000 / 2 persons (indoor)</li>
-              <li>Partner restaurants (chef’s choice) — ¥4,000 pp + drinks</li>
-            </ul>
-            <div className="mt-4 text-sm text-stone-600">Vegan options available on request.</div>
-            <div className="mt-6 flex justify-end gap-3">
-              <button className="rounded-xl border px-4 py-2" onClick={()=>setOpen(false)}>Close</button>
-              <a className="rounded-xl bg-stone-900 px-4 py-2 text-white" href={BOOKING_URL} target="_blank" rel="noreferrer">Book</a>
-            </div>
-          </div>
-        </div>
-      )}
+
+      
+      
+{open && (
+  <div
+    className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-6"
+    onClick={() => setOpen(false)}
+  >
+    <div
+      className="max-w-md w-full rounded-2xl bg-white p-6 shadow-xl overflow-y-auto max-h-[90vh]"
+      onClick={(e) => e.stopPropagation()}
+    >
+      <h4 className="text-xl font-semibold mb-3">Dinner Options</h4>
+
+      <p className="text-sm text-stone-700 mb-2">Each set is for 2 people:</p>
+
+      <ul className="list-disc pl-5 space-y-3 text-stone-800">
+        <li>
+          <strong>Chicken Hot Pot Set</strong><br />
+          Chicken hot pot with rice selection – ¥6,000
+        </li>
+        <li>
+          <strong>Shabu-Shabu Set</strong><br />
+          Pork shabu-shabu hot pot with rice selection – ¥8,000
+        </li>
+        <li>
+          <strong>Japanese Wagyu Sukiyaki Set</strong><br />
+          Wagyu beef hot pot with rice selection – ¥9,000
+        </li>
+        <li>
+          <strong>Japanese Wagyu BBQ Set</strong><br />
+          BBQ, salad, and rice balls – ¥10,000
+        </li>
+        <li>
+          <strong>Cold Shabu-Shabu Set</strong><br />
+          Chilled pork salad with somen noodles – ¥8,000
+        </li>
+        <li>
+          <strong>Vegan Cold Shabu-Shabu Set</strong><br />
+          Chilled soy meat salad with somen noodles – ¥9,000
+        </li>
+        <li>
+          <strong>Vegan Hot Pot &amp; Fruit Chirashi Set</strong><br />
+          Vegan hot pot with fruit chirashi sushi – ¥9,000
+        </li>
+      </ul>
+
+      <div className="mt-4 text-sm text-stone-700 space-y-2">
+        <p>
+          Our original Kashiwaya craft beer is available for ¥800 per bottle,
+          no reservation required. Snacks ranging from ¥200 to ¥500 are also available.
+        </p>
+
+        <p className="font-semibold mt-4">Note:</p>
+        <ul className="list-disc pl-5 space-y-1">
+          <li>Reservations are available until 5 days before.</li>
+          <li>If ordered for one person, the price will be half of the set price plus ¥1,000.</li>
+          <li>Wagyu sets are unavailable for odd-number orders.</li>
+          <li>Payment (card or cash) will be collected at the end of your meal.</li>
+          <li>Rice selection can be either chirashi sushi or rice balls.</li>
+        </ul>
+
+        <p className="mt-4 italic text-stone-600">
+          Please just let us know which set looks best for you, and we’ll be happy to prepare it for your dinner.
+        </p>
+      </div>
+
+      <div className="mt-6 flex justify-end gap-3">
+        <button
+          className="rounded-xl border px-4 py-2 hover:bg-stone-100"
+          onClick={() => setOpen(false)}
+        >
+          Close
+        </button>
+        <a
+          className="rounded-xl bg-stone-900 px-4 py-2 text-white hover:bg-black"
+          href={BOOKING_URL}
+          target="_blank"
+          rel="noreferrer"
+        >
+          Book
+        </a>
+      </div>
+    </div>
+  </div>
+)}
+
+      
+      
+      
+      
+      
     </div>
   );
 }
