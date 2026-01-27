@@ -1,350 +1,496 @@
-'use client';
+"use client";
 
-import { useState } from "react";
+import type { ReactNode } from "react";
 import {
-  ArrowRight, Bike, BedDouble, Soup,
-  Trees, Waves, Instagram, Mountain, CalendarDays, Droplets
+  ArrowRight,
+  Bike,
+  BedDouble,
+  CalendarDays,
+  Droplets,
+  Instagram,
+  Mountain,
+  Soup,
 } from "lucide-react";
 
-// 🔧 Links
+// -----------------------------------------------------------------------------
+// Links
+// -----------------------------------------------------------------------------
 const BOOKING_URL = "https://www.booking.com/hotel/jp/kashiwaya-inn.en-gb.html";
 const INSTAGRAM_URL = "https://www.instagram.com/kashiwaya_nakasendo";
 const GOOGLE_MAP_URL = "https://maps.app.goo.gl/ViXN6oJNxvjQkv2SA?g_st=ac";
 
-// 🔧 Images
-const HERO = "/gallery/light.JPG"; // top banner
-const WHY_NAGISO = ["/gallery/tsumago.jpg", "/gallery/kakizore.JPG"];
-const STAY_IMAGES = ["/gallery/futon.JPG", "/gallery/2ndfloor.JPG"];
-const DINNER_IMAGES = ["/gallery/somen.jpg", "/gallery/wine.JPG"];
-const EBIKE_IMAGES = ["/gallery/ebike1.jpg", "/gallery/ebike2.jpg"];
-const ONSEN_IMAGES = ["/gallery/onsen1.jpg", "/gallery/onsen2.jpg"];
+// -----------------------------------------------------------------------------
+// Images (public/gallery)
+// NOTE: Vercel/Linux is case-sensitive. Must match filenames exactly.
+// -----------------------------------------------------------------------------
+const HERO = {
+  desktop: "/gallery/light.JPG",
+  alt: "Kashiwaya Inn — warm light",
+};
 
+const IMAGES = {
+  concept: [
+    { desktop: "/gallery/tsumago.jpg", alt: "Tsumago-juku, a post town on the Nakasendo" },
+    { desktop: "/gallery/kakizore.JPG", alt: "Kakizore Gorge and river scenery" },
+  ],
+  house: [
+    { desktop: "/gallery/1fchess.jpg", alt: "Tatami living space on the first floor" },
+    { desktop: "/gallery/2fdining.jpg", alt: "Dining space on the second floor" },
+  ],
+  food: [
+    { desktop: "/gallery/garden.jpg", alt: "Garden at Kashiwaya" },
+    { desktop: "/gallery/somen.jpg", alt: "Local caterer, seasonal table" },
+  ],
+  drink: [
+    { desktop: "/gallery/beer.jpg", alt: "Limited craft beer: Kiso Kaido Beer" },
+    { desktop: "/gallery/wine.JPG", alt: "Other type of local drink also available" },
+  ],
+  activities: [
+    { desktop: "/gallery/ebike3.jpg", alt: "Cycle guide & local routes" },
+    { desktop: "/gallery/dosojin.jpg", alt: "Dosojin, guardian deities of the road" },
+  ],
+} satisfies Record<string, { desktop: string; mobile?: string; alt: string }[]>;
 
-export default function KashiwayaLanding() {
-  const [open, setOpen] = useState(false);
+// -----------------------------------------------------------------------------
+// People (EN) — rendered from this array (no hard-coded cards)
+// -----------------------------------------------------------------------------
+const PEOPLE = [
+  {
+    name: "Shu Ichikawa",
+    role: "Owner",
+    body: [
+      "Fourth-generation owner of Kashiwaya, founded by the Ichikawa family.",
+      "He has kept the house alive while moving between overseas, Tokyo, and Nagiso — protecting it through changing times.",
+    ],
+  },
+  {
+    name: "Kaku Ichikawa",
+    role: "Craft Beer Creator",
+    body: [
+      "Eldest son of Shu Ichikawa.",
+      "Based in Tokyo, he runs a hair salon and a brewery, and developed three Kashiwaya-exclusive beers.",
+    ],
+  },
+  {
+    name: "Hiroshi Kumagai",
+    role: "Renovator",
+    body: [
+      "Moved from Tokyo in 2015 and renovated three kominka in Nagiso — one of them is Kashiwaya.",
+      "He now runs “Yui-an,” an iconic kominka hostel that has become a symbol of Nagiso.",
+    ],
+  },
+  {
+    name: "Yasuhiro Fukuta",
+    role: "Master",
+    body: [
+      "The current operator of Kashiwaya.",
+      "After visiting Nagiso many times from Nagoya, he began a dual-base life and apprenticed under Hiroshi Kumagai while working two jobs.",
+      "He inherited the partnership with Shu Ichikawa and relocated to Nagiso in 2025 to relaunch Kashiwaya.",
+      "Inspired by a year living in West Virginia, USA, his mission is to recreate that deep “dive into the local” experience here in Nagiso.",
+    ],
+  },
+] as const;
 
+// -----------------------------------------------------------------------------
+// UI helpers
+// -----------------------------------------------------------------------------
+type ResponsiveImageProps = {
+  desktop: string;
+  mobile?: string;
+  alt: string;
+  className?: string;
+};
+
+function ResponsiveImage({ desktop, mobile, alt, className }: ResponsiveImageProps) {
   return (
-    <div className="min-h-screen bg-stone-50 text-stone-900">
-      {/* HERO */}
-      <section className="relative overflow-hidden">
-        <img
-          src={HERO}
-          alt="Kashiwaya – traditional Japanese house"
-          className="h-[70vh] w-full object-cover"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-        <div className="absolute inset-x-0 bottom-0 mx-auto max-w-6xl px-6 pb-10 text-white">
-          <h1 className="text-4xl md:text-6xl font-semibold drop-shadow leading-tight">
-            Kashiwaya Inn — Nagiso, Kiso Valley
-          </h1>
-          <p className="mt-3 max-w-2xl text-lg md:text-xl opacity-90">
-            For three days, feel like a villager in Japan. A century-old inn, the historic Nakasendo, and the slow magic of Nagiso.
-          </p>
-          <div className="mt-6 flex flex-wrap gap-3">
-            <a
-              href={BOOKING_URL}
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex items-center gap-2 rounded-2xl bg-emerald-500 px-5 py-3 text-white shadow-lg hover:bg-emerald-600 transition"
-            >
-              <CalendarDays className="h-5 w-5" />
-              Book on Booking.com
-              <ArrowRight className="h-4 w-4" />
-            </a>
-            <a
-              href={INSTAGRAM_URL}
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex items-center gap-2 rounded-2xl bg-white/10 px-5 py-3 text-white backdrop-blur hover:bg-white/20 transition"
-            >
-              <Instagram className="h-5 w-5" />
-              See photos
-            </a>
-          </div>
-        </div>
-      </section>
-
-      {/* USP Badges */}
-      <section className="mx-auto max-w-6xl px-6 py-10 grid gap-4 md:grid-cols-3">
-        <Feature icon={<BedDouble className="h-6 w-6" />} title="100+ year-old house" desc="Meiji-era atmosphere downstairs, warm Japanese-modern upstairs." />
-        <Feature icon={<Bike className="h-6 w-6" />} title="E-bikes included" desc="Explore Tsumago, Kakizore Gorge, and hidden paths with ease." />
-        <Feature icon={<Soup className="h-6 w-6" />} title="Local dinners" desc="Catering & partner restaurants. Vegan-friendly options available." />
-      </section>
-
-      {/* About (Why Nagiso) */}
-      <section className="mx-auto max-w-6xl px-6 py-6">
-        <div className="grid gap-6 md:grid-cols-2 items-start">
-          <div>
-            <h2 className="text-2xl md:text-3xl font-semibold">Why Nagiso?</h2>
-            <p className="mt-3 leading-7 text-stone-700">
-              Nagiso is the gateway to the 100-km Kiso Valley on the historic Nakasendo trail. Stone-paved post towns, river-side eateries, hidden canyons, and winding rice-field paths connect culture, nature, and daily life.
-            </p>
-            <div className="mt-5 flex flex-wrap gap-3">
-              <Badge icon={<Mountain className="h-4 w-4" />}>Kiso Valley</Badge>
-              <Badge icon={<Trees className="h-4 w-4" />}>Canyoneering spots</Badge>
-              <Badge icon={<Waves className="h-4 w-4" />}>Rivers & waterfalls</Badge>
-            </div>
-          </div>
-          <div className="grid grid-cols-2 gap-2">
-            {WHY_NAGISO.map((src) => (
-              <img
-                key={src}
-                src={src}
-                alt="Nagiso view"
-                className="rounded-lg object-cover w-full h-40 md:h-48"
-              />
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Stays & Dining */}
-      <section className="mx-auto max-w-6xl px-6 py-10 grid gap-6 md:grid-cols-2">
-        <Card
-          title="Stay"
-          desc="Feels like visiting your Japanese grandmother’s house — nostalgic and comfortable. Sleeps up to 4 (futons)."
-          bullets={["Meiji-style first floor", "Modern second floor", "Self-serve breakfast"]}
-          ctaLabel="Check availability"
-          ctaHref={BOOKING_URL}
-          icon={<BedDouble className="h-5 w-5" />}
-          images={STAY_IMAGES}
-        />
-        <Card
-          title="Dinner Options"
-          desc="Catering sets at the inn and reservation-only partner restaurants nearby. Craft beer available on-site."
-          bullets={["Wagyu BBQ set (courtyard)", "Chilled shabu set (indoor)", "Chef’s-choice partner restaurants"]}
-          ctaLabel="Ask about dinner"
-          ctaOnClick={() => setOpen(true)}
-          icon={<Soup className="h-5 w-5" />}
-          images={DINNER_IMAGES}
-        />
-        {/* NEW: E-bike card replaces the old map section design */}
-<Card
-  title="E-Bike Rental"
-  desc="Explore Nagiso with ebikes. Perfect for Tsumago, Kakizore Gorge, and local hidden gems."
-  bullets={[
-    "Motor assisted",
-    "Drop-off available at terminals",
-    "At Kashiwaya, life jackets and rash guards are available for free rental",
-  ]}
-  ctaLabel="Open the map"
-  ctaHref={GOOGLE_MAP_URL}
-  icon={<Bike className="h-5 w-5" />}
-  images={EBIKE_IMAGES}
-/>
-
-
-
-        {/* NEW: Onsen card */}
-        <Card
-          title="Onsen (Hot Spring)"
-          desc="Kakizore onsen Ichikawa - local loved, wooden based onsen with mountains and stars."
-          bullets={["Saturday and Sunday 10：00～20：00", "20 mins drive from Kashiwaya", "please call and check it available just in case"]}
-          ctaLabel="How to get there"
-          ctaHref={GOOGLE_MAP_URL}
-          icon={<Droplets className="h-5 w-5" />}
-          images={ONSEN_IMAGES}
-        />
-
-      </section>
-
-{/* More details */}
-<section className="mx-auto max-w-6xl px-6 pb-10">
-  <div className="rounded-2xl bg-white p-6 shadow-sm">
-    <h3 className="text-xl font-semibold mb-2">More details</h3>
-    <p className="text-sm text-stone-700">
-      For more information (English):{" "}
-      <a
-        href="https://docs.google.com/document/d/1vRxNpu0zOpsHfTbXBqu-omb4C9N_ozqYZ_Eo2EsmMpE/edit?usp=sharing"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="underline text-emerald-700 hover:text-emerald-900"
-      >
-        Google Document
-      </a>
-    </p>
-  </div>
-</section>
-
-      {/* Footer */}
-      <footer className="border-t bg-white/70">
-        <div className="mx-auto max-w-6xl px-6 py-8 flex flex-col md:flex-row items-center justify-between gap-4">
-          <div className="text-sm text-stone-600">© {new Date().getFullYear()} Kashiwaya Inn, Nagiso</div>
-          <div className="flex items-center gap-3">
-            <a className="inline-flex items-center gap-2 rounded-xl border border-stone-300 px-3 py-2 hover:bg-stone-100" href={INSTAGRAM_URL} target="_blank" rel="noreferrer">
-              <Instagram className="h-4 w-4" /> Instagram
-            </a>
-            <a className="inline-flex items-center gap-2 rounded-xl bg-emerald-500 px-3 py-2 text-white hover:bg-emerald-600" href={BOOKING_URL} target="_blank" rel="noreferrer">
-              Book now
-            </a>
-          </div>
-        </div>
-      </footer>
-
-      {/* Modal */}
-
-      
-      
-{open && (
-  <div
-    className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-6"
-    onClick={() => setOpen(false)}
-  >
-    <div
-      className="max-w-md w-full rounded-2xl bg-white p-6 shadow-xl overflow-y-auto max-h-[90vh]"
-      onClick={(e) => e.stopPropagation()}
-    >
-      <h4 className="text-xl font-semibold mb-3">Dinner Options</h4>
-
-      <p className="text-sm text-stone-700 mb-2">Each set is for 2 people:</p>
-
-      <ul className="list-disc pl-5 space-y-3 text-stone-800">
-        <li>
-          <strong>Chicken Hot Pot Set</strong><br />
-          Chicken hot pot with rice selection – ¥6,000
-        </li>
-        <li>
-          <strong>Shabu-Shabu Set</strong><br />
-          Pork shabu-shabu hot pot with rice selection – ¥8,000
-        </li>
-        <li>
-          <strong>Japanese Wagyu Sukiyaki Set</strong><br />
-          Wagyu beef hot pot with rice selection – ¥9,000
-        </li>
-        <li>
-          <strong>Japanese Wagyu BBQ Set</strong><br />
-          BBQ, salad, and rice balls – ¥10,000
-        </li>
-        <li>
-          <strong>Cold Shabu-Shabu Set</strong><br />
-          Chilled pork salad with somen noodles – ¥8,000
-        </li>
-        <li>
-          <strong>Vegan Cold Shabu-Shabu Set</strong><br />
-          Chilled soy meat salad with somen noodles – ¥9,000
-        </li>
-        <li>
-          <strong>Vegan Hot Pot &amp; Fruit Chirashi Set</strong><br />
-          Vegan hot pot with fruit chirashi sushi – ¥9,000
-        </li>
-      </ul>
-
-      <div className="mt-4 text-sm text-stone-700 space-y-2">
-        <p>
-          Our original Kashiwaya craft beer is available for ¥800 per bottle,
-          no reservation required. Snacks ranging from ¥200 to ¥500 are also available.
-        </p>
-
-        <p className="font-semibold mt-4">Note:</p>
-        <ul className="list-disc pl-5 space-y-1">
-          <li>Reservations are available until 5 days before.</li>
-          <li>If ordered for one person, the price will be half of the set price plus ¥1,000.</li>
-          <li>Wagyu sets are unavailable for odd-number orders.</li>
-          <li>Payment (card or cash) will be collected at the end of your meal.</li>
-          <li>Rice selection can be either chirashi sushi or rice balls.</li>
-        </ul>
-
-        <p className="mt-4 italic text-stone-600">
-          Please just let us know which set looks best for you, and we’ll be happy to prepare it for your dinner.
-        </p>
-      </div>
-
-      <div className="mt-6 flex justify-end gap-3">
-        <button
-          className="rounded-xl border px-4 py-2 hover:bg-stone-100"
-          onClick={() => setOpen(false)}
-        >
-          Close
-        </button>
-        <a
-          className="rounded-xl bg-stone-900 px-4 py-2 text-white hover:bg-black"
-          href={BOOKING_URL}
-          target="_blank"
-          rel="noreferrer"
-        >
-          Book
-        </a>
-      </div>
-    </div>
-  </div>
-)}
-
-      
-      
-      
-      
-      
-    </div>
+    <img
+      src={mobile ?? desktop}
+      alt={alt}
+      loading="lazy"
+      className={className ?? "h-full w-full object-cover"}
+    />
   );
 }
 
-function Feature({ icon, title, desc }: { icon: React.ReactNode; title: string; desc: string }) {
+function Pill({
+  icon,
+  children,
+}: {
+  icon: ReactNode;
+  children: ReactNode;
+}) {
   return (
-    <div className="rounded-2xl bg-white p-5 shadow-sm flex gap-3 items-start">
-      <div className="rounded-xl bg-stone-100 p-2 text-stone-700">{icon}</div>
-      <div>
-        <div className="font-semibold">{title}</div>
-        <div className="text-sm text-stone-700 mt-1">{desc}</div>
-      </div>
-    </div>
-  );
-}
-
-function Badge({ icon, children }: { icon: React.ReactNode; children: React.ReactNode }) {
-  return (
-    <span className="inline-flex items-center gap-1 rounded-full bg-stone-200/70 px-3 py-1 text-xs font-medium text-stone-800">
-      {icon}
+    <span className="inline-flex items-center gap-2 rounded-full border border-white/40 bg-white/20 px-3 py-1 text-xs font-medium text-white backdrop-blur">
+      <span className="opacity-90">{icon}</span>
       {children}
     </span>
   );
 }
 
-type CardProps = {
-  title: string;
-  desc: string;
-  bullets?: string[];
-  ctaLabel: string;
-  ctaHref?: string;
-  ctaOnClick?: () => void;
-  icon?: React.ReactNode;
-  images?: string[];
-};
-
-function Card({ title, desc, bullets, ctaLabel, ctaHref, ctaOnClick, icon, images }: CardProps) {
+function CTAButton({
+  href,
+  icon,
+  children,
+  variant = "primary",
+}: {
+  href: string;
+  icon?: ReactNode;
+  children: ReactNode;
+  variant?: "primary" | "secondary";
+}) {
+  const base =
+    "inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-medium transition";
+  const styles =
+    variant === "primary"
+      ? "bg-emerald-600 text-white hover:bg-emerald-700"
+      : "bg-white/15 text-white hover:bg-white/25 border border-white/30 backdrop-blur";
   return (
-    <div className="rounded-2xl bg-white p-6 shadow-sm">
-      <div className="flex items-start gap-3">
-        {icon && <div className="rounded-xl bg-stone-100 p-2 text-stone-700">{icon}</div>}
-        <div className="w-full">
-          <h3 className="text-xl font-semibold">{title}</h3>
-          <p className="mt-2 text-stone-700">{desc}</p>
-          {images && (
-            <div className="mt-3 grid grid-cols-2 gap-2">
-              {images.map((src) => (
-                <img key={src} src={src} alt={`${title} photo`} className="rounded-lg object-cover w-full h-32" />
-              ))}
+    <a href={href} target="_blank" rel="noreferrer" className={`${base} ${styles}`}>
+      {icon}
+      {children}
+      <ArrowRight className="h-4 w-4" />
+    </a>
+  );
+}
+
+function PersonCard({
+  name,
+  role,
+  body,
+}: {
+  name: string;
+  role: string;
+  body: string[];
+}) {
+  return (
+    <div className="rounded-2xl border border-stone-200 bg-white p-6 shadow-sm">
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <div className="text-base font-semibold text-stone-900">{name}</div>
+          <div className="mt-1 text-xs font-medium text-stone-500">{role}</div>
+        </div>
+        <div className="h-10 w-10 rounded-xl bg-stone-100" />
+      </div>
+
+      <div className="mt-4 space-y-3 text-sm leading-7 text-stone-700">
+        {body.map((p, i) => (
+          <p key={i}>{p}</p>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// -----------------------------------------------------------------------------
+// Page
+// -----------------------------------------------------------------------------
+export default function Page() {
+  return (
+    <div className="min-h-screen bg-stone-50 text-stone-900">
+      {/* Top Nav */}
+      <header className="sticky top-0 z-50 border-b border-stone-200 bg-white/80 backdrop-blur">
+        <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-3">
+          <a href="#top" className="text-sm font-semibold tracking-tight">
+            Kashiwaya
+          </a>
+
+          <nav className="hidden gap-5 text-xs font-medium text-stone-600 md:flex">
+            <a className="hover:text-stone-900" href="#concept">
+              Concept
+            </a>
+            <a className="hover:text-stone-900" href="#house">
+              House
+            </a>
+            <a className="hover:text-stone-900" href="#food">
+              Food
+            </a>
+            <a className="hover:text-stone-900" href="#drink">
+              Drink
+            </a>
+            <a className="hover:text-stone-900" href="#activities">
+              Activities
+            </a>
+            <a className="hover:text-stone-900" href="#people">
+              People
+            </a>
+          </nav>
+
+          <a
+            className="inline-flex items-center gap-2 rounded-full bg-stone-900 px-4 py-2 text-xs font-semibold text-white hover:bg-stone-800"
+            href={BOOKING_URL}
+            target="_blank"
+            rel="noreferrer"
+          >
+            <CalendarDays className="h-4 w-4" />
+            Book
+            <ArrowRight className="h-4 w-4" />
+          </a>
+        </div>
+      </header>
+
+      {/* Hero */}
+      <section id="top" className="relative">
+        <div className="relative h-[520px] w-full overflow-hidden md:h-[640px]">
+          <ResponsiveImage
+            desktop={HERO.desktop}
+            alt={HERO.alt}
+            className="absolute inset-0 h-full w-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/35 via-black/30 to-black/60" />
+
+          <div className="relative mx-auto flex h-full max-w-6xl flex-col justify-end px-6 pb-10">
+            <div className="flex flex-wrap gap-2">
+              <Pill icon={<Mountain className="h-4 w-4" />}>Nagiso / Kiso Valley</Pill>
+              <Pill icon={<BedDouble className="h-4 w-4" />}>Kominka stay</Pill>
+              <Pill icon={<Bike className="h-4 w-4" />}>Cycle activities</Pill>
             </div>
-          )}
-          {bullets && (
-            <ul className="mt-3 list-disc pl-6 space-y-1 text-stone-700">
-              {bullets.map((b, i) => (
-                <li key={i}>{b}</li>
-              ))}
-            </ul>
-          )}
-          <div className="mt-4">
-            {ctaHref ? (
-              <a href={ctaHref} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-xl bg-stone-900 px-4 py-2 text-white hover:bg-black">
-                {ctaLabel} <ArrowRight className="h-4 w-4" />
-              </a>
-            ) : (
-              <button onClick={ctaOnClick} className="inline-flex items-center gap-2 rounded-xl bg-stone-900 px-4 py-2 text-white hover:bg-black">
-                {ctaLabel} <ArrowRight className="h-4 w-4" />
-              </button>
-            )}
+
+            <h1 className="mt-5 max-w-2xl text-4xl font-semibold tracking-tight text-white md:text-5xl">
+              Kashiwaya Inn — Dive into the local
+            </h1>
+
+            <p className="mt-4 max-w-2xl text-sm leading-7 text-white/90 md:text-base">
+              Feel like your life is gently “sliding” into Nagiso — as if you were born in this
+              village, just taking a long, slow vacation.
+            </p>
+
+            <div className="mt-6 flex flex-wrap gap-3">
+              <CTAButton href={BOOKING_URL} icon={<CalendarDays className="h-4 w-4" />}>
+                Book on Booking.com
+              </CTAButton>
+              <CTAButton
+                href={INSTAGRAM_URL}
+                icon={<Instagram className="h-4 w-4" />}
+                variant="secondary"
+              >
+                Instagram
+              </CTAButton>
+              <CTAButton
+                href={GOOGLE_MAP_URL}
+                icon={<ArrowRight className="h-4 w-4" />}
+                variant="secondary"
+              >
+                Open Map
+              </CTAButton>
+            </div>
           </div>
         </div>
-      </div>
+      </section>
+
+      {/* What is */}
+      <section className="border-t border-stone-200 bg-white/60">
+        <div className="mx-auto max-w-6xl px-6 py-16">
+          <div className="grid gap-10 md:grid-cols-12">
+            <div className="md:col-span-7">
+              <h2 className="text-2xl font-semibold tracking-tight md:text-3xl">
+                What is Kashiwaya?
+              </h2>
+              <p className="mt-4 max-w-2xl text-sm leading-7 text-stone-700 md:text-base">
+                Kashiwaya is not a “tourist facility” first. It’s a small base to experience the
+                deep local — the everyday rhythm of Nagiso, the old houses and warm light,
+                neighbors’ food, and the quiet confidence of the Kiso valley.
+              </p>
+              <p className="mt-4 text-sm leading-7 text-stone-700 md:text-base">
+                Below are five chapters that explain what your stay feels like.
+              </p>
+            </div>
+
+            <div className="md:col-span-5">
+              <div className="rounded-2xl border border-stone-200 bg-white p-6 shadow-sm">
+                <div className="text-xs font-semibold tracking-widest text-stone-500">CHAPTERS</div>
+                <ol className="mt-4 space-y-2 text-sm text-stone-700">
+                  <li>1. Concept — Dive into the local</li>
+                  <li>2. House — 140-year-old kominka</li>
+                  <li>3. Food — Local caterer</li>
+                  <li>4. Drink — Kiso Kaido Beer</li>
+                  <li>5. Activities — Cycle guide</li>
+                </ol>
+              </div>
+            </div>
+          </div>
+
+          {/* Chapter 1 */}
+          <div id="concept" className="mt-12 grid gap-8 md:grid-cols-12 scroll-mt-24">
+            <div className="md:col-span-4">
+              <div className="flex items-center gap-3 text-xs font-semibold tracking-widest text-stone-500">
+                <span className="rounded-full border border-stone-200 bg-white px-3 py-1">CHAPTER</span>
+                <span className="rounded-full bg-stone-900 px-3 py-1 text-white">1</span>
+              </div>
+              <h3 className="mt-4 text-lg font-semibold">Concept</h3>
+              <div className="mt-2 text-3xl font-semibold tracking-tight">Dive into the local</div>
+              <p className="mt-4 text-sm leading-7 text-stone-700">
+                The goal is simple: a stay that feels like you’re borrowing a local life. Not a
+                checklist of “must-see” spots — more like waking up slowly, making tea, walking
+                the old road, and letting the village set your pace.
+              </p>
+              <ul className="mt-5 space-y-2 text-xs text-stone-600">
+                <li>• One group / one house feel (quiet and private)</li>
+                <li>• Long-stay friendly — slow is the point</li>
+                <li>• A base for Nakasendo, Tsumago & the Kiso valley</li>
+              </ul>
+            </div>
+
+            <div className="md:col-span-8">
+              <div className="grid gap-4 md:grid-cols-2">
+                {IMAGES.concept.map((img) => (
+                  <div key={img.desktop} className="overflow-hidden rounded-2xl border border-stone-200 bg-white shadow-sm">
+                    <ResponsiveImage desktop={img.desktop} mobile={img.mobile} alt={img.alt} className="h-[260px] w-full object-cover" />
+                    <div className="p-4 text-xs text-stone-600">{img.alt}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Chapter 2 */}
+          <div id="house" className="mt-12 grid gap-8 md:grid-cols-12 scroll-mt-24">
+            <div className="md:col-span-4">
+              <div className="flex items-center gap-3 text-xs font-semibold tracking-widest text-stone-500">
+                <span className="rounded-full border border-stone-200 bg-white px-3 py-1">CHAPTER</span>
+                <span className="rounded-full bg-stone-900 px-3 py-1 text-white">2</span>
+              </div>
+              <h3 className="mt-4 text-lg font-semibold">House</h3>
+              <div className="mt-2 text-3xl font-semibold tracking-tight">A renovated 140-year-old home</div>
+              <p className="mt-4 text-sm leading-7 text-stone-700">
+                Kashiwaya is a kominka with time in its wood. Renovated carefully, it keeps the
+                atmosphere of an old home while adding only what’s necessary for a comfortable stay.
+              </p>
+            </div>
+
+            <div className="md:col-span-8">
+              <div className="grid gap-4 md:grid-cols-2">
+                {IMAGES.house.map((img) => (
+                  <div key={img.desktop} className="overflow-hidden rounded-2xl border border-stone-200 bg-white shadow-sm">
+                    <ResponsiveImage desktop={img.desktop} mobile={img.mobile} alt={img.alt} className="h-[260px] w-full object-cover" />
+                    <div className="p-4 text-xs text-stone-600">{img.alt}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Chapter 3 */}
+          <div id="food" className="mt-12 grid gap-8 md:grid-cols-12 scroll-mt-24">
+            <div className="md:col-span-4">
+              <div className="flex items-center gap-3 text-xs font-semibold tracking-widest text-stone-500">
+                <span className="rounded-full border border-stone-200 bg-white px-3 py-1">CHAPTER</span>
+                <span className="rounded-full bg-stone-900 px-3 py-1 text-white">3</span>
+              </div>
+              <h3 className="mt-4 text-lg font-semibold">Food</h3>
+              <div className="mt-2 text-3xl font-semibold tracking-tight">Local caterer, seasonal table</div>
+              <p className="mt-4 text-sm leading-7 text-stone-700">
+                Dinner can be arranged with local partners — food that belongs to this area,
+                made for real life, not for show.
+              </p>
+            </div>
+
+            <div className="md:col-span-8">
+              <div className="grid gap-4 md:grid-cols-2">
+                {IMAGES.food.map((img) => (
+                  <div key={img.desktop} className="overflow-hidden rounded-2xl border border-stone-200 bg-white shadow-sm">
+                    <ResponsiveImage desktop={img.desktop} mobile={img.mobile} alt={img.alt} className="h-[260px] w-full object-cover" />
+                    <div className="p-4 text-xs text-stone-600">{img.alt}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Chapter 4 */}
+          <div id="drink" className="mt-12 grid gap-8 md:grid-cols-12 scroll-mt-24">
+            <div className="md:col-span-4">
+              <div className="flex items-center gap-3 text-xs font-semibold tracking-widest text-stone-500">
+                <span className="rounded-full border border-stone-200 bg-white px-3 py-1">CHAPTER</span>
+                <span className="rounded-full bg-stone-900 px-3 py-1 text-white">4</span>
+              </div>
+              <h3 className="mt-4 text-lg font-semibold">Drink</h3>
+              <div className="mt-2 text-3xl font-semibold tracking-tight">Limited craft beer: Kiso Kaido Beer</div>
+              <p className="mt-4 text-sm leading-7 text-stone-700">
+                A quiet drink fits this house. Kiso Kaido Beer is made only for Kashiwaya — a small
+                taste of the old road and the people connected to it.
+              </p>
+            </div>
+
+            <div className="md:col-span-8">
+              <div className="grid gap-4 md:grid-cols-2">
+                {IMAGES.drink.map((img) => (
+                  <div key={img.desktop} className="overflow-hidden rounded-2xl border border-stone-200 bg-white shadow-sm">
+                    <ResponsiveImage desktop={img.desktop} mobile={img.mobile} alt={img.alt} className="h-[260px] w-full object-cover" />
+                    <div className="p-4 text-xs text-stone-600">{img.alt}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Chapter 5 */}
+          <div id="activities" className="mt-12 grid gap-8 md:grid-cols-12 scroll-mt-24">
+            <div className="md:col-span-4">
+              <div className="flex items-center gap-3 text-xs font-semibold tracking-widest text-stone-500">
+                <span className="rounded-full border border-stone-200 bg-white px-3 py-1">CHAPTER</span>
+                <span className="rounded-full bg-stone-900 px-3 py-1 text-white">5</span>
+              </div>
+              <h3 className="mt-4 text-lg font-semibold">Activities</h3>
+              <div className="mt-2 text-3xl font-semibold tracking-tight">Cycle guide & local routes</div>
+              <p className="mt-4 text-sm leading-7 text-stone-700">
+                Explore at village speed. With local routes and guidance, the valley opens up in a way
+                cars never can.
+              </p>
+            </div>
+
+            <div className="md:col-span-8">
+              <div className="grid gap-4 md:grid-cols-2">
+                {IMAGES.activities.map((img) => (
+                  <div key={img.desktop} className="overflow-hidden rounded-2xl border border-stone-200 bg-white shadow-sm">
+                    <ResponsiveImage desktop={img.desktop} mobile={img.mobile} alt={img.alt} className="h-[260px] w-full object-cover" />
+                    <div className="p-4 text-xs text-stone-600">{img.alt}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* People */}
+          <section id="people" className="mt-16 scroll-mt-24 border-t border-stone-200 bg-white/60">
+            <div className="mx-auto max-w-6xl py-16">
+              <div className="grid gap-8 md:grid-cols-12">
+                <div className="md:col-span-5">
+                  <h2 className="text-2xl font-semibold tracking-tight text-stone-900 md:text-3xl">
+                    Kashiwaya is supported by
+                  </h2>
+                  <p className="mt-4 text-sm leading-7 text-stone-700 md:text-base">
+                    This place exists because people kept caring for it — across generations,
+                    renovations, and restarts.
+                  </p>
+                </div>
+
+                <div className="md:col-span-7">
+                  <div className="grid gap-4 md:grid-cols-2">
+                    {PEOPLE.map((p) => (
+                      <PersonCard key={p.name} name={p.name} role={p.role} body={[...p.body]} />
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* Footer */}
+          <footer className="mt-16 border-t border-stone-200 pt-8 text-xs text-stone-500">
+            <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+              <div>© {new Date().getFullYear()} Kashiwaya Inn</div>
+              <div className="flex gap-4">
+                <a className="hover:text-stone-800" href={INSTAGRAM_URL} target="_blank" rel="noreferrer">
+                  Instagram
+                </a>
+                <a className="hover:text-stone-800" href={BOOKING_URL} target="_blank" rel="noreferrer">
+                  Booking
+                </a>
+              </div>
+            </div>
+          </footer>
+        </div>
+      </section>
     </div>
   );
 }
