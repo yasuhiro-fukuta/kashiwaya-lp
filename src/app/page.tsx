@@ -6,10 +6,8 @@ import {
   Bike,
   BedDouble,
   CalendarDays,
-  Droplets,
   Instagram,
   Mountain,
-  Soup,
 } from "lucide-react";
 
 // -----------------------------------------------------------------------------
@@ -28,13 +26,15 @@ const HERO = {
   alt: "Kashiwaya Inn — warm light",
 };
 
-const IMAGES = {
+type ChapterImage = { desktop: string; mobile?: string; alt: string };
+
+const IMAGES: Record<string, ChapterImage[]> = {
   concept: [
     { desktop: "/gallery/tsumago.jpg", alt: "Tsumago-juku, a post town on the Nakasendo" },
     { desktop: "/gallery/kakizore.JPG", alt: "Kakizore Gorge and river scenery" },
   ],
   house: [
-    { desktop: "/gallery/1fchess.jpg", alt: "Tatami living space on the first floor" },
+    { desktop: "/gallery/1fchess.jpg", mobile: "/gallery/1fchessV.jpg", alt: "Tatami living space on the first floor" },
     { desktop: "/gallery/2fdining.jpg", alt: "Dining space on the second floor" },
   ],
   food: [
@@ -43,13 +43,14 @@ const IMAGES = {
   ],
   drink: [
     { desktop: "/gallery/beer.jpg", alt: "Limited craft beer: Kiso Kaido Beer" },
-    { desktop: "/gallery/wine.JPG", alt: "Other type of local drink also available" },
+    { desktop: "/gallery/garden.jpg", alt: "Evening in the garden" },
   ],
   activities: [
     { desktop: "/gallery/ebike3.jpg", alt: "Cycle guide & local routes" },
     { desktop: "/gallery/dosojin.jpg", alt: "Dosojin, guardian deities of the road" },
   ],
-} satisfies Record<string, { desktop: string; mobile?: string; alt: string }[]>;
+};
+
 
 // -----------------------------------------------------------------------------
 // People (EN) — rendered from this array (no hard-coded cards)
@@ -102,15 +103,21 @@ type ResponsiveImageProps = {
 };
 
 function ResponsiveImage({ desktop, mobile, alt, className }: ResponsiveImageProps) {
-  return (
-    <img
-      src={mobile ?? desktop}
-      alt={alt}
-      loading="lazy"
-      className={className ?? "h-full w-full object-cover"}
-    />
-  );
+  const imgClass = className ?? "h-full w-full object-cover";
+
+  // If a dedicated mobile asset exists, serve it only on small screens.
+  if (mobile) {
+    return (
+      <picture className="block">
+        <source srcSet={mobile} media="(max-width: 768px)" />
+        <img src={desktop} alt={alt} loading="lazy" className={imgClass} />
+      </picture>
+    );
+  }
+
+  return <img src={desktop} alt={alt} loading="lazy" className={imgClass} />;
 }
+
 
 function Pill({
   icon,
