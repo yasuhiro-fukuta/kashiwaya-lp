@@ -43,7 +43,7 @@ const IMAGES: Record<string, ChapterImage[]> = {
   ],
   drink: [
     { desktop: "/gallery/beer.jpg", alt: "Limited craft beer: Kiso Kaido Beer" },
-    { desktop: "/gallery/garden.jpg", alt: "Evening in the garden" },
+    { desktop: "/gallery/wine.JPG", alt: "Sake, Wine and Plum wine are also available" },
   ],
   activities: [
     { desktop: "/gallery/ebike3.jpg", alt: "Cycle guide & local routes" },
