@@ -47,7 +47,7 @@ const IMAGES: Record<string, ChapterImage[]> = {
   ],
   activities: [
     { desktop: "/gallery/ebike3.jpg", alt: "Cycle guide & local routes" },
-    { desktop: "/gallery/dosojin.jpg", alt: "Dosojin, guardian deities of the road" },
+    { desktop: "/gallery/dosojin.jpg", alt: "Making dosojin, guardians of the road" },
   ],
 };
 
