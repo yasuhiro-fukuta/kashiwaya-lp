@@ -22,13 +22,13 @@ const EBIKE_LP_URL = "https://kiso-ebike-lp.vercel.app/";
 const WHATSAPP_URL =
   "https://wa.me/819038392354?text=Hello%20Kashiwaya%2C%20I%27d%20like%20to%20ask%20about%20a%20stay.";
 
-const HERO_IMG = "/gallery/entrance.jpg";
-const HOUSE_IMG = "/gallery/1stfloor.jpg";
+const HERO_IMG = "/gallery/entrance.JPG";
+const HOUSE_IMG = "/gallery/1stfloor.JPG";
 const ONSEN_IMG = "/gallery/onsen1.jpg";
 const FOOD_IMG = "/gallery/somen.jpg";
 const DRINK_IMG = "/gallery/beer.jpg";
 const BIKE_IMG = "/gallery/ebike1.jpg";
-const GORGE_IMG = "/gallery/kakizore.jpg";
+const GORGE_IMG = "/gallery/kakizore.JPG";
 /** ====================================================== */
 
 const PEOPLE = [
@@ -269,7 +269,7 @@ export default function Page() {
             <div className="room-card">
               <div className="room-photo">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="/gallery/2ndfloor.jpg" alt="Superior Family Room — 2nd modern floor" />
+                <img src="/gallery/2ndfloor.JPG" alt="Superior Family Room — 2nd modern floor" />
               </div>
               <div className="room-body">
                 <h3>Superior Family Room</h3>
