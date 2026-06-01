@@ -7,7 +7,6 @@ import {
   BedDouble,
   Instagram,
   MapPin,
-  Bath,
   UtensilsCrossed,
   Beer,
 } from "lucide-react";
@@ -24,7 +23,6 @@ const WHATSAPP_URL =
 
 const HERO_IMG = "/gallery/entrance.JPG";
 const HOUSE_IMG = "/gallery/1stfloor.JPG";
-const ONSEN_IMG = "/gallery/onsen1.jpg";
 const FOOD_IMG = "/gallery/somen.jpg";
 const DRINK_IMG = "/gallery/beer.jpg";
 const BIKE_IMG = "/gallery/ebike1.jpg";
@@ -244,11 +242,12 @@ export default function Page() {
         <div className="book-direct-inner">
           <span className="eyebrow-dark">Book direct</span>
           <h2>
-            Stay with us, <em>no middleman.</em>
+            No middleman, <em>just us.</em>
           </h2>
           <p className="book-direct-lede">
-            Two rooms in one kominka — pick the one that suits you. Same
-            calendar, same rates, paid straight to the house.
+            Book direct, skip the platforms — and deal with real people, not a
+            front desk. We host you ourselves, from the first message to the
+            last morning. Two rooms in one kominka; pick the one that suits you.
           </p>
 
           <div className="room-grid">
@@ -419,39 +418,6 @@ export default function Page() {
         </div>
       </section>
 
-      {/* ============ ONSEN (chapter 5) ============ */}
-      <section className="chapter" id="stay">
-        <div className="chapter-visual">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={ONSEN_IMG} alt="Natural hot spring nearby" />
-        </div>
-        <div className="chapter-text">
-          <span className="chapter-num">Chapter 05 · The Onsen</span>
-          <h3>
-            A natural hot spring, <em>fifteen minutes away.</em>
-          </h3>
-          <p>
-            The nearest natural hot spring is about 15 minutes away by car —
-            mineral-rich water, the kind people in the valley have soaked in for
-            generations. If you&apos;d like to go, the manager will help you
-            arrange a taxi.
-          </p>
-          <p>
-            Once your booking is confirmed, we&apos;ll send you a short form
-            by DM. Tell us whether you&apos;d like help arranging a taxi to the
-            onsen and any other small things — meals, arrival time, anything we
-            should know — and we&apos;ll plan the stay around you.
-          </p>
-          <div className="note">
-            <Bath
-              size={14}
-              style={{ display: "inline", verticalAlign: "-2px", marginRight: "0.4rem" }}
-            />
-            Onsen closed on Wednesdays.
-          </div>
-        </div>
-      </section>
-
       {/* ============ ACTIVITIES CTA → ebike LP ============ */}
       <section className="activities-cta full">
         <div className="activities-cta-inner">
@@ -518,14 +484,6 @@ export default function Page() {
             Nagiso Station on the JR Chuo line, then 15 minutes on foot to
             Kashiwaya in Mitsuno-juku (Nagiso 3993). If you need a ride, the
             manager will help you arrange a taxi — just tell us in advance.
-          </p>
-        </details>
-        <details className="faq-item">
-          <summary>How do I get to the onsen?</summary>
-          <p>
-            The nearest natural hot spring is about 15 minutes away by car. If
-            you&apos;d like to visit, the manager will help you arrange a taxi.
-            The onsen is closed on Wednesdays.
           </p>
         </details>
         <details className="faq-item">
