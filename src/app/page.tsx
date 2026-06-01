@@ -404,9 +404,10 @@ export default function Page() {
             Three craft beers, <em>brewed only for us.</em>
           </h3>
           <p>
-            A local brewer makes three beers exclusively for Kashiwaya — you
-            won&apos;t find them anywhere else. Alongside them, a small
-            selection of local sake and wine, hand-picked by the master.
+            A brewery run by the owner&apos;s family makes three beers
+            exclusively for Kashiwaya — you won&apos;t find them anywhere else.
+            Alongside them, a small selection of local sake and wine, hand-picked
+            by the master.
           </p>
           <div className="note">
             <Beer
@@ -430,23 +431,23 @@ export default function Page() {
             A natural hot spring, <em>fifteen minutes away.</em>
           </h3>
           <p>
-            We&apos;ll drive you to and from a real local onsen, about 15
-            minutes from the house. Mineral-rich water, the kind people in the
-            valley have soaked in for generations. Free shuttle for guests, by
-            request.
+            The nearest natural hot spring is about 15 minutes away by car —
+            mineral-rich water, the kind people in the valley have soaked in for
+            generations. If you&apos;d like to go, the manager will help you
+            arrange a taxi.
           </p>
           <p>
             Once your booking is confirmed, we&apos;ll send you a short form
-            by DM. Tell us whether you&apos;d like the onsen shuttle and any
-            other small things — meals, arrival time, anything we should know
-            — and we&apos;ll plan the stay around you.
+            by DM. Tell us whether you&apos;d like help arranging a taxi to the
+            onsen and any other small things — meals, arrival time, anything we
+            should know — and we&apos;ll plan the stay around you.
           </p>
           <div className="note">
             <Bath
               size={14}
               style={{ display: "inline", verticalAlign: "-2px", marginRight: "0.4rem" }}
             />
-            Shuttle available daily, except Wednesdays (onsen closed).
+            Onsen closed on Wednesdays.
           </div>
         </div>
       </section>
@@ -515,15 +516,16 @@ export default function Page() {
           <summary>How do I get there?</summary>
           <p>
             Nagiso Station on the JR Chuo line, then 15 minutes on foot to
-            Kashiwaya in Mitsuno-juku (Nagiso 4181). We can also pick you up
-            from the station — just tell us in advance.
+            Kashiwaya in Mitsuno-juku (Nagiso 3993). If you need a ride, the
+            manager will help you arrange a taxi — just tell us in advance.
           </p>
         </details>
         <details className="faq-item">
-          <summary>Is the onsen shuttle really free?</summary>
+          <summary>How do I get to the onsen?</summary>
           <p>
-            Yes, free for guests, by request. About 15 minutes by car each way.
-            The onsen itself is closed on Wednesdays.
+            The nearest natural hot spring is about 15 minutes away by car. If
+            you&apos;d like to visit, the manager will help you arrange a taxi.
+            The onsen is closed on Wednesdays.
           </p>
         </details>
         <details className="faq-item">
@@ -559,7 +561,7 @@ export default function Page() {
             <div className="ft-brand">Kashiwaya Inn</div>
             <p>
               A 140-year-old kominka in Mitsuno-juku, the 41st post town on
-              the Nakasendo. Nagiso 4181, Kiso, Nagano.
+              the Nakasendo. Nagiso 3993, Kiso, Nagano.
             </p>
             <p>15 minutes&apos; walk from Nagiso Station (JR Chuo line).</p>
           </div>
