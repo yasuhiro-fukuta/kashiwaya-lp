@@ -20,6 +20,7 @@ const GOOGLE_MAP_URL = "https://maps.app.goo.gl/ViXN6oJNxvjQkv2SA?g_st=ac";
 const EBIKE_LP_URL = "https://kiso-ebike-lp.vercel.app/";
 const WHATSAPP_URL =
   "https://wa.me/819038392354?text=Hello%20Kashiwaya%2C%20I%27d%20like%20to%20ask%20about%20a%20stay.";
+const MEAL_ORDER_URL = "https://kashiwaya-inn.square.site/s/shop";
 
 const HERO_IMG = "/gallery/entrance.JPG";
 const HOUSE_IMG = "/gallery/1stfloor.JPG";
@@ -237,7 +238,7 @@ export default function Page() {
         </div>
       </div>
 
-      {/* ============ BOOK DIRECT (Lodgify widget) ============ */}
+      {/* ============ BOOK DIRECT (Lodgify rooms + Square meals) ============ */}
       <section className="book-direct" id="book">
         <div className="book-direct-inner">
           <span className="eyebrow-dark">Book direct</span>
@@ -250,12 +251,22 @@ export default function Page() {
             last morning. Two rooms in one kominka; pick the one that suits you.
           </p>
 
+          {/* ----- Step 1 · the room ----- */}
+          <div className="book-step">
+            <span className="step-num">1</span> Book your room
+          </div>
+
           <div className="room-grid">
             {/* ===== Room 1: Japanese-Style Room (1F) ===== */}
             <div className="room-card">
               <div className="room-photo">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="/gallery/1fchess.jpg" alt="Japanese-Style Room — 1st historic floor" />
+                <img
+                  src="/gallery/1fchess.jpg"
+                  alt="Japanese-Style Room — 1st historic floor"
+                  loading="lazy"
+                  decoding="async"
+                />
               </div>
               <div className="room-body">
                 <h3>Japanese-Style Room</h3>
@@ -268,7 +279,12 @@ export default function Page() {
             <div className="room-card">
               <div className="room-photo">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="/gallery/2ndfloor.JPG" alt="Superior Family Room — 2nd modern floor" />
+                <img
+                  src="/gallery/2ndfloor.JPG"
+                  alt="Superior Family Room — 2nd modern floor"
+                  loading="lazy"
+                  decoding="async"
+                />
               </div>
               <div className="room-body">
                 <h3>Superior Family Room</h3>
@@ -276,6 +292,60 @@ export default function Page() {
                 <LodgifyBox rentalId="793801" />
               </div>
             </div>
+          </div>
+
+          {/* ----- bridge note → meals ----- */}
+          <p className="meal-lead">
+            Staying with us? Reserve your meals in step 2 below — and please keep
+            your room booking confirmation number handy, you&apos;ll need it when
+            you order.
+          </p>
+
+          {/* ----- Step 2 · the meals (Square) ----- */}
+          <div className="book-step">
+            <span className="step-num">2</span> Add your meals
+          </div>
+
+          <div className="meal-order">
+            <div className="meal-order-head">
+              <UtensilsCrossed size={22} className="meal-icon" />
+              <h3>Dinner &amp; breakfast</h3>
+              <p>
+                Rooms and meals are booked separately. Once your room is set
+                above, reserve your meals here — a traditional nabe for dinner,
+                ochazuke for breakfast, cooked around any dietary needs.
+              </p>
+            </div>
+
+            <a
+              href={MEAL_ORDER_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="meal-cta"
+            >
+              Reserve meals <ArrowRight size={16} />
+            </a>
+
+            <ul className="meal-note">
+              <li>
+                Please order using the <strong>same email address</strong> you
+                used for your room booking.
+              </li>
+              <li>
+                In the <strong>notes / message field</strong> of your meal
+                order, please include:
+                <span className="meal-sub">
+                  ① Your room booking confirmation number
+                </span>
+                <span className="meal-sub">
+                  ② Any dietary restrictions, in detail
+                </span>
+                <span className="meal-sub">
+                  ③ For multi-night stays, which dish on which day (e.g. Day 1:
+                  …, Day 2: …)
+                </span>
+              </li>
+            </ul>
           </div>
 
           <p className="book-direct-foot">
@@ -307,7 +377,7 @@ export default function Page() {
       <section className="chapter" id="house">
         <div className="chapter-visual">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={HOUSE_IMG} alt="The 140-year-old kominka of Kashiwaya" />
+          <img src={HOUSE_IMG} alt="The 140-year-old kominka of Kashiwaya" loading="lazy" decoding="async" />
         </div>
         <div className="chapter-text">
           <span className="chapter-num">Chapter 01 · The House</span>
@@ -336,7 +406,7 @@ export default function Page() {
       <section className="chapter reverse" id="bike">
         <div className="chapter-visual">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={BIKE_IMG} alt="Fat-tire e-bikes parked at Kashiwaya" />
+          <img src={BIKE_IMG} alt="Fat-tire e-bikes parked at Kashiwaya" loading="lazy" decoding="async" />
         </div>
         <div className="chapter-text">
           <span className="chapter-num">Chapter 02 · The Bikes</span>
@@ -364,7 +434,7 @@ export default function Page() {
       <section className="chapter">
         <div className="chapter-visual">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={FOOD_IMG} alt="Local kitchen, seasonal meal" />
+          <img src={FOOD_IMG} alt="Local kitchen, seasonal meal" loading="lazy" decoding="async" />
         </div>
         <div className="chapter-text">
           <span className="chapter-num">Chapter 03 · The Food</span>
@@ -395,7 +465,7 @@ export default function Page() {
       <section className="chapter reverse">
         <div className="chapter-visual">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={DRINK_IMG} alt="Kashiwaya-exclusive craft beer" />
+          <img src={DRINK_IMG} alt="Kashiwaya-exclusive craft beer" loading="lazy" decoding="async" />
         </div>
         <div className="chapter-text">
           <span className="chapter-num">Chapter 04 · The Drink</span>
@@ -438,7 +508,7 @@ export default function Page() {
           </div>
           <div className="activities-cta-visual">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={GORGE_IMG} alt="The Kiso valley off the main road" />
+            <img src={GORGE_IMG} alt="The Kiso valley off the main road" loading="lazy" decoding="async" />
           </div>
         </div>
       </section>
@@ -495,6 +565,15 @@ export default function Page() {
           </p>
         </details>
         <details className="faq-item">
+          <summary>How do I reserve dinner and breakfast?</summary>
+          <p>
+            Meals are booked separately from your room, through the &ldquo;Add
+            your meals&rdquo; link in the booking section. Use the same email as
+            your room booking, and add your room booking confirmation number in
+            the notes field when you order.
+          </p>
+        </details>
+        <details className="faq-item">
           <summary>Can I just use the e-bike during my stay?</summary>
           <p>
             If you&apos;re staying with us, yes — free, between 16:00 and 09:00.
@@ -527,6 +606,9 @@ export default function Page() {
             <h5>Book &amp; ask</h5>
             <a href="#book">
               Check availability &amp; book
+            </a>
+            <a href={MEAL_ORDER_URL} target="_blank" rel="noopener noreferrer">
+              Reserve meals
             </a>
             <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">
               WhatsApp · +81 90-3839-2354
