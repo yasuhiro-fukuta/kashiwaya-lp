@@ -328,6 +328,10 @@ export default function Page() {
 
             <ul className="meal-note">
               <li>
+                Meal orders are accepted up to <strong>3 days before your
+                stay</strong> — please reserve by then.
+              </li>
+              <li>
                 Please order using the <strong>same email address</strong> you
                 used for your room booking.
               </li>
@@ -570,7 +574,8 @@ export default function Page() {
             Meals are booked separately from your room, through the &ldquo;Add
             your meals&rdquo; link in the booking section. Use the same email as
             your room booking, and add your room booking confirmation number in
-            the notes field when you order.
+            the notes field when you order. Meal orders are accepted up to 3 days
+            before your stay, so please reserve in advance.
           </p>
         </details>
         <details className="faq-item">
