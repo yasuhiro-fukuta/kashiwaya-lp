@@ -328,26 +328,33 @@ export default function Page() {
 
             <ul className="meal-note">
               <li>
-                Meal orders are accepted up to <strong>3 days before your
-                stay</strong> — please reserve by then.
+                Please order at least <strong>3 days before your stay</strong>.
               </li>
               <li>
-                Please order using the <strong>same email address</strong> you
-                used for your room booking.
+                Use the <strong>same email address and name</strong> you used
+                for your room booking.
               </li>
               <li>
                 In the <strong>notes / message field</strong> of your meal
                 order, please include:
+                <span className="meal-sub">A. Your room booking date(s)</span>
                 <span className="meal-sub">
-                  ① Your room booking confirmation number
+                  B. Any dietary restrictions, in detail
                 </span>
-                <span className="meal-sub">
-                  ② Any dietary restrictions, in detail
-                </span>
-                <span className="meal-sub">
-                  ③ For multi-night stays, which dish on which day (e.g. Day 1:
-                  …, Day 2: …)
-                </span>
+              </li>
+              <li>
+                For multi-night stays, please place a{" "}
+                <strong>separate order for each night</strong>.
+              </li>
+              <li>
+                <strong>Cancellations:</strong> free (full refund) up to{" "}
+                <strong>4 days before your stay</strong>. From 3 days before
+                onward, orders are non-refundable, as the meals are already
+                being prepared. To cancel, please message us on{" "}
+                <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">
+                  WhatsApp
+                </a>
+                .
               </li>
             </ul>
           </div>
@@ -572,10 +579,20 @@ export default function Page() {
           <summary>How do I reserve dinner and breakfast?</summary>
           <p>
             Meals are booked separately from your room, through the &ldquo;Add
-            your meals&rdquo; link in the booking section. Use the same email as
-            your room booking, and add your room booking confirmation number in
-            the notes field when you order. Meal orders are accepted up to 3 days
-            before your stay, so please reserve in advance.
+            your meals&rdquo; link in the booking section. Use the same email
+            and name as your room booking, and add your room booking date(s) and
+            any dietary restrictions in the notes field when you order. Meal
+            orders are accepted up to 3 days before your stay, so please reserve
+            in advance.
+          </p>
+        </details>
+        <details className="faq-item">
+          <summary>Can I cancel a meal order?</summary>
+          <p>
+            Yes — cancellation is free with a full refund up to 4 days before
+            your stay. From 3 days before onward, meal orders are
+            non-refundable, as the meals are already being prepared. To cancel,
+            please message us on WhatsApp.
           </p>
         </details>
         <details className="faq-item">
