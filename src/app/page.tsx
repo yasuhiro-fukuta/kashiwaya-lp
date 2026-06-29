@@ -21,6 +21,7 @@ const EBIKE_LP_URL = "https://kiso-ebike-lp.vercel.app/";
 const WHATSAPP_URL =
   "https://wa.me/819038392354?text=Hello%20Kashiwaya%2C%20I%27d%20like%20to%20ask%20about%20a%20stay.";
 const MEAL_ORDER_URL = "https://kashiwaya-inn.square.site/s/shop";
+const MEAL_FORM_URL = "https://forms.gle/7fK7JEcQ9yMG2wFu9";
 
 const HERO_IMG = "/gallery/entrance.JPG";
 const HOUSE_IMG = "/gallery/1stfloor.JPG";
@@ -318,7 +319,7 @@ export default function Page() {
             </div>
 
             <a
-              href={MEAL_ORDER_URL}
+              href={MEAL_FORM_URL}
               target="_blank"
               rel="noopener noreferrer"
               className="meal-cta"
@@ -335,26 +336,8 @@ export default function Page() {
                 for your room booking.
               </li>
               <li>
-                In the <strong>notes / message field</strong> of your meal
-                order, please include:
-                <span className="meal-sub">A. Your room booking date(s)</span>
-                <span className="meal-sub">
-                  B. Any dietary restrictions, in detail
-                </span>
-              </li>
-              <li>
                 For multi-night stays, please place a{" "}
                 <strong>separate order for each night</strong>.
-              </li>
-              <li>
-                <strong>Cancellations:</strong> free (full refund) up to{" "}
-                <strong>4 days before your stay</strong>. From 3 days before
-                onward, orders are non-refundable, as the meals are already
-                being prepared. To cancel, please message us on{" "}
-                <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">
-                  WhatsApp
-                </a>
-                .
               </li>
             </ul>
           </div>
