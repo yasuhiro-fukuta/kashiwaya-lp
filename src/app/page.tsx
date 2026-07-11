@@ -200,7 +200,7 @@ export default function Page() {
           style={{ backgroundImage: `url('${HERO_IMG}')` }}
         />
         <div className="hero-inner">
-          <span className="eyebrow">Nagiso · Kiso Valley · Mitsuno-juku</span>
+          <span className="eyebrow">Nagiso · Kiso Valley · Midono-juku</span>
           <h1>
             Dive into the local, <em>join into the history.</em>
           </h1>
@@ -227,12 +227,12 @@ export default function Page() {
       <div className="marquee">
         <div className="marquee-inner">
           <span>
-            Built for samurai &nbsp;·&nbsp; 1885 &nbsp;·&nbsp; Mitsuno-juku, the
+            Built for samurai &nbsp;·&nbsp; 1885 &nbsp;·&nbsp; Midono-juku, the
             41st post town &nbsp;·&nbsp; A kominka still lived in
             &nbsp;·&nbsp; Dive into the local &nbsp;·&nbsp;
           </span>
           <span aria-hidden="true">
-            Built for samurai &nbsp;·&nbsp; 1885 &nbsp;·&nbsp; Mitsuno-juku, the
+            Built for samurai &nbsp;·&nbsp; 1885 &nbsp;·&nbsp; Midono-juku, the
             41st post town &nbsp;·&nbsp; A kominka still lived in
             &nbsp;·&nbsp; Dive into the local &nbsp;·&nbsp;
           </span>
@@ -379,7 +379,7 @@ export default function Page() {
             Built in 1885 in the <em>samurai inn</em> style.
           </h3>
           <p>
-            Kashiwaya sits in Mitsuno-juku — the 41st post town on the
+            Kashiwaya sits in Midono-juku — the 41st post town on the
             Nakasendo, right after Magome and Tsumago. The house was built in
             the same form as the honjin, the official inns where samurai
             travellers stayed when this road carried them between Edo and
@@ -391,7 +391,7 @@ export default function Page() {
             15 minutes on foot from Nagiso Station.
           </p>
           <div className="note">
-            Mitsuno-juku · 三留野宿 · the 41st post town on the Nakasendo
+            Midono-juku · 三留野宿 · the 41st post town on the Nakasendo
           </div>
         </div>
       </section>
@@ -546,7 +546,7 @@ export default function Page() {
           <summary>How do I get there?</summary>
           <p>
             Nagiso Station on the JR Chuo line, then 15 minutes on foot to
-            Kashiwaya in Mitsuno-juku (Nagiso 3993). If you need a ride, the
+            Kashiwaya in Midono-juku (Nagiso 3993). If you need a ride, the
             manager will help you arrange a taxi — just tell us in advance.
           </p>
         </details>
@@ -602,7 +602,7 @@ export default function Page() {
           <div>
             <div className="ft-brand">Kashiwaya Inn</div>
             <p>
-              A 140-year-old kominka in Mitsuno-juku, the 41st post town on
+              A 140-year-old kominka in Midono-juku, the 41st post town on
               the Nakasendo. Nagiso 3993, Kiso, Nagano.
             </p>
             <p>15 minutes&apos; walk from Nagiso Station (JR Chuo line).</p>
@@ -636,7 +636,7 @@ export default function Page() {
           </div>
         </div>
         <div className="ft-bottom">
-          © Kashiwaya Inn · Mitsuno-juku, Nagiso, Kiso Valley.
+          © Kashiwaya Inn · Midono-juku, Nagiso, Kiso Valley.
         </div>
       </footer>
     </>
