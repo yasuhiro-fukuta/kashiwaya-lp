@@ -409,9 +409,14 @@ export default function Page() {
           </h3>
           <p>
             Our house fat-tire e-bikes are free for guests to use in the
-            evenings and mornings. Roll over to the konbini, find a restaurant
-            in the valley, ride to the nearby temples and shrines, or out to
-            Momosuke Bridge before breakfast.
+            evenings and mornings — from 16:00 on your check-in day until
+            09:00 on your check-out day. Roll over to the konbini, find a
+            restaurant in the valley, ride to the nearby temples and shrines,
+            or out to Momosuke Bridge before breakfast.
+          </p>
+          <p>
+            Want a bike during the day too? Daytime use (10:00 — 15:00) is
+            available as a rental at ¥4,000 per bike per day.
           </p>
           <div className="note">
             <Bike
@@ -581,16 +586,17 @@ export default function Page() {
         <details className="faq-item">
           <summary>Can I just use the e-bike during my stay?</summary>
           <p>
-            If you&apos;re staying with us, yes — free, between 16:00 and 09:00.
-            Ring the bell at the desk or message us on WhatsApp before you
-            ride.
+            If you&apos;re staying with us, yes — free, from 16:00 on your
+            check-in day until 09:00 on your check-out day. Ring the bell at
+            the desk or message us on WhatsApp before you ride.
           </p>
         </details>
         <details className="faq-item">
           <summary>What about during the day?</summary>
           <p>
             During the day the bikes are used for guided tours and rentals by
-            Beyond Nakasendo Cycling. If you want a guided ride before
+            Beyond Nakasendo Cycling. Daytime use is ¥4,000 per bike per day
+            (10:00 — 15:00). If you want a rental or a guided ride before
             check-in or after check-out, book through their site.
           </p>
         </details>
