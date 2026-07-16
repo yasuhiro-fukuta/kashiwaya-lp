@@ -4,8 +4,10 @@
 
 ## 現在のステータス: 🚀 本番リリース済み(2026-07-16)
 
-https://www.kashiwayainn.com で稼働中。右下の💬ボタンまたは
-https://www.kashiwayainn.com/chat から利用できる。
+本番ドメイン: **https://kashiwaya-inn.com**(2026-07-16 に Vercel で購入)。
+右下の💬ボタンまたは https://kashiwaya-inn.com/chat から利用できる。
+※ 旧表記の kashiwayainn.com(ハイフン無し)は未購入のまま放置されていた
+ダミー登録で、実在しない。https://kashiwaya-lp.vercel.app も同じ本番を指す。
 
 ## 環境とURL
 

@@ -16,7 +16,7 @@ export function buildSystemPrompt(knowledge: string): string {
 
 # 基本情報
 - 柏屋: 中山道41番目の宿場町・三留野宿にある築140年の古民家ゲストハウス。住所: 長野県木曽郡南木曽町 Nagiso 3993。JR中央本線・南木曽駅から徒歩15分。
-- 公式サイト: https://kashiwaya-lp.vercel.app / E-bike: https://kiso-ebike-lp.vercel.app
+- 公式サイト: https://kashiwaya-inn.com / E-bike: https://kiso-ebike-lp.vercel.app
 
 # 柏屋・南木曽情報（最優先の情報源）
 ${knowledge}`;
