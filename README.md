@@ -34,3 +34,23 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+## Guest chatbot (Ask Kashiwaya)
+
+- Chat page: `/chat` — also available as a floating button on the top page.
+- API: `src/app/api/chat/route.ts` (Claude API, streaming).
+- Knowledge source: the Nagiso information Google Doc, fetched hourly from
+  `src/lib/knowledge.ts`. Edit the doc → the bot updates automatically
+  (no redeploy). If the fetch fails, the bundled snapshot
+  `src/data/knowledge-fallback.ts` is used.
+
+### Setup (required once)
+
+1. In Vercel → Project Settings → Environment Variables, add
+   `ANTHROPIC_API_KEY` (get one at https://console.anthropic.com).
+   Enable it for both Preview and Production.
+2. Set the Google Doc's sharing to "Anyone with the link can view"
+   so `export?format=txt` works.
+
+Optional env vars: `CHAT_MODEL` (default `claude-haiku-4-5`),
+`KNOWLEDGE_DOC_ID` (default: current Nagiso doc).
