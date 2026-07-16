@@ -10,6 +10,7 @@ import {
   UtensilsCrossed,
   Beer,
 } from "lucide-react";
+import ChatWidget from "@/components/ChatWidget";
 
 /** =================== CUSTOMIZE ZONE =====================
  *  Update links and image filenames here. All gallery files
@@ -639,6 +640,7 @@ export default function Page() {
           © Kashiwaya Inn · Midono-juku, Nagiso, Kiso Valley.
         </div>
       </footer>
+      <ChatWidget />
     </>
   );
 }
