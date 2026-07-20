@@ -27,7 +27,10 @@ export const metadata: Metadata = {
     "Nagano guesthouse",
     "e-bike Kiso Valley",
   ],
-  alternates: { canonical: "/" },
+  alternates: {
+    canonical: "/",
+    languages: { en: "/", ja: "/ja", "x-default": "/" },
+  },
   openGraph: {
     type: "website",
     url: SITE_URL,
@@ -75,6 +78,7 @@ const structuredData = {
         "A 140-year-old kominka guesthouse in Midono-juku, the 41st post town on the Nakasendo, in Nagiso, Kiso Valley, Nagano. Built in the style of a samurai inn and still lived in today.",
       url: SITE_URL,
       image: `${SITE_URL}/gallery/entrance.JPG`,
+      telephone: "+81-90-3839-2354",
       address: {
         "@type": "PostalAddress",
         streetAddress: "Nagiso 3993",
@@ -84,7 +88,18 @@ const structuredData = {
       },
       hasMap: "https://maps.app.goo.gl/ViXN6oJNxvjQkv2SA",
       sameAs: ["https://www.instagram.com/kashiwaya_nakasendo"],
+      checkinTime: "16:00",
+      checkoutTime: "10:00",
+      numberOfRooms: 2,
+      petsAllowed: false,
+      smokingAllowed: false,
+      knowsLanguage: ["en", "ja"],
       amenityFeature: [
+        {
+          "@type": "LocationFeatureSpecification",
+          name: "Free Wi-Fi",
+          value: true,
+        },
         {
           "@type": "LocationFeatureSpecification",
           name: "Free fat-tire e-bikes for guests (16:00 on check-in day to 09:00 on check-out day)",
@@ -93,6 +108,16 @@ const structuredData = {
         {
           "@type": "LocationFeatureSpecification",
           name: "Home-style local dinner and breakfast (reservation required)",
+          value: true,
+        },
+        {
+          "@type": "LocationFeatureSpecification",
+          name: "Free pick-up from Nagiso Station, Tsumago and Junikane Station (16:00 — 18:00)",
+          value: true,
+        },
+        {
+          "@type": "LocationFeatureSpecification",
+          name: "Washer-dryer (first-floor room)",
           value: true,
         },
       ],
@@ -147,6 +172,94 @@ const structuredData = {
           acceptedAnswer: {
             "@type": "Answer",
             text: "During the day the bikes are used for guided tours and rentals by Beyond Nakasendo Cycling. Daytime use is ¥4,000 per bike per day (10:00 — 15:00).",
+          },
+        },
+        {
+          "@type": "Question",
+          name: "What are the check-in and check-out times at Kashiwaya Inn?",
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: "Check-in is 16:00 — 18:00. Early arrivals can drop luggage and explore; late arrivals should message us on WhatsApp on arrival. Check-out is by 10:00 with no procedure.",
+          },
+        },
+        {
+          "@type": "Question",
+          name: "Is pick-up from Nagiso Station or Tsumago available?",
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: "Yes — Nagiso Station, Tsumago and Junikane Station are within the free pick-up area between 16:00 and 18:00, arranged in advance. For departures the inn can call a taxi.",
+          },
+        },
+        {
+          "@type": "Question",
+          name: "How much are dinner and breakfast at Kashiwaya Inn?",
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: "Dinner sets serve two people and range from ¥6,000 (chicken hot pot) to ¥10,000 (wagyu BBQ), including shabu-shabu, wagyu sukiyaki and vegan sets. Solo travellers can order one set at half the two-person price. The ochazuke breakfast set (vegan & gluten-free) is ¥3,000.",
+          },
+        },
+        {
+          "@type": "Question",
+          name: "Is there Wi-Fi at Kashiwaya Inn?",
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: "Yes — free Wi-Fi throughout the house.",
+          },
+        },
+        {
+          "@type": "Question",
+          name: "Do I need cash in the Kiso Valley?",
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: "Kashiwaya takes card payments, but most local restaurants and all local buses and trains are cash-only and can't change notes larger than ¥1,000. Bring ¥1,000 notes. The nearest ATM is at the 7-Eleven, about 20 minutes on foot.",
+          },
+        },
+        {
+          "@type": "Question",
+          name: "Are the bathrooms shared? Is there a bath?",
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: "The shower room, sink and kitchen are shared; toilets are private (the second floor's private toilet is on the first floor). There is no bathtub, but a natural day-trip onsen is a short drive away and the inn can arrange a taxi or a lift.",
+          },
+        },
+        {
+          "@type": "Question",
+          name: "Can I do laundry at Kashiwaya Inn?",
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: "First-floor guests have a washer-dryer. Otherwise there is a coin laundry about 15 minutes' walk away.",
+          },
+        },
+        {
+          "@type": "Question",
+          name: "Can luggage be forwarded to the next stop on the Nakasendo?",
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: "Between Magome and Tsumago there is a no-reservation luggage shuttle. Between Nagiso and Nojiri stations Kashiwaya runs one — just ask. For the wider Kiso area (Matsumoto to Nakatsugawa), NLTS and Walk Lite offer booked luggage transfer.",
+          },
+        },
+        {
+          "@type": "Question",
+          name: "Are there bears on the Nakasendo trails?",
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: "Asian black bears live in the mountains, but fixed bells along the Magome Pass trail mean no sightings there for about a decade. Bears avoid people; the main risk is surprising a mother with cubs. Bear bells and bear spray are available to rent at the inn.",
+          },
+        },
+        {
+          "@type": "Question",
+          name: "How hard is the Magome Pass walk?",
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: "Easy — sneakers are fine, sandals are not recommended. In winter, strap-on ice spikes are advised and can be rented at the inn.",
+          },
+        },
+        {
+          "@type": "Question",
+          name: "What are the house rules at Kashiwaya Inn?",
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: "No pets, and no smoking inside the wooden house (the courtyard is fine). Photos and videos are welcome. Quiet hours after 21:00, as local residents rise early.",
           },
         },
       ],

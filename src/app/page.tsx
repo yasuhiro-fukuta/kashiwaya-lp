@@ -10,7 +10,9 @@ import {
   UtensilsCrossed,
   Beer,
 } from "lucide-react";
+import Link from "next/link";
 import ChatWidget from "@/components/ChatWidget";
+import LodgifyBox from "@/components/LodgifyBox";
 
 /** =================== CUSTOMIZE ZONE =====================
  *  Update links and image filenames here. All gallery files
@@ -68,98 +70,6 @@ const PEOPLE = [
   },
 ] as const;
 
-/** Lodgify 予約ボックス。
- *  同一 id="lodgify-book-now-box" を1ページに2個置くと2個目が描画されない
- *  ため、各部屋を別々の iframe（＝別ページ）に入れて公式コードをそのまま
- *  実行させる。高さは固定（JSなし）。 */
-function buildLodgifyDoc(rentalId: string): string {
-  return `<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet" />
-<style>
-  html, body { margin: 0; background: transparent; font-family: "Outfit", Arial, sans-serif; }
-  body { padding-bottom: 30px; }
-  :root {
-    --ldg-bnb-background: #ffffff;
-    --ldg-bnb-border-radius: 0.42em;
-    --ldg-bnb-box-shadow: 0px 24px 54px 0px rgba(0, 0, 0, 0.1);
-    --ldg-bnb-padding: 14px;
-    --ldg-bnb-input-background: #ffffff;
-    --ldg-bnb-button-border-radius: 3.58em;
-    --ldg-bnb-color-primary: #fac600;
-    --ldg-bnb-color-primary-lighter: #fde380;
-    --ldg-bnb-color-primary-darker: #7d6300;
-    --ldg-bnb-color-primary-contrast: #333333;
-    --ldg-component-calendar-cell-selection-bg-color: #fac600;
-    --ldg-component-calendar-cell-selection-color: #333333;
-    --ldg-component-calendar-cell-selected-bg-color: #fde380;
-    --ldg-component-calendar-cell-selected-color: #333333;
-    --ldg-bnb-font-family: inherit;
-  }
-  #lodgify-book-now-box { width: 100%; }
-</style>
-</head>
-<body>
-<div
-  id="lodgify-book-now-box"
-  data-rental-id="${rentalId}"
-  data-website-id="633228"
-  data-slug="yasuo"
-  data-language-code="en"
-  data-new-tab="true"
-  data-version="stable"
-  data-has-guests-breakdown
-  data-check-in-label='Check-in'
-  data-check-out-label='Check-out'
-  data-guests-label='Guests'
-  data-guests-singular-label='{{NumberOfGuests}} guest'
-  data-guests-plural-label='{{NumberOfGuests}} guests'
-  data-location-input-label='Location'
-  data-total-price-label='Total price:'
-  data-select-dates-to-see-price-label='Select dates to see total price'
-  data-minimum-price-per-night-first-label='From'
-  data-minimum-price-per-night-second-label='per night'
-  data-book-button-label='Book Now'
-  data-guests-breakdown-label='Guests'
-  data-adults-label='{"one":"adult","other":"adults"}'
-  data-adults-description='Ages {minAge} or above'
-  data-children-label='{"one":"child","other":"children"}'
-  data-children-description='Ages {minAge}-{maxAge}'
-  data-children-not-allowed-label='Not suitable for children'
-  data-infants-label='{"one":"infant","other":"infants"}'
-  data-infants-description='Under {maxAge}'
-  data-infants-not-allowed-label='Not suitable for infants'
-  data-pets-label='{"one":"pet","other":"pets"}'
-  data-pets-not-allowed-label='Not allowed'
-  data-done-label='Done'
-></div>
-<script src="https://app.lodgify.com/book-now-box/stable/renderBookNowBox.js" defer></script>
-</body>
-</html>`;
-}
-
-function LodgifyBox({ rentalId }: { rentalId: string }) {
-  return (
-    <iframe
-      title={"Booking " + rentalId}
-      srcDoc={buildLodgifyDoc(rentalId)}
-      scrolling="no"
-      style={{
-        display: "block",
-        width: 320,
-        maxWidth: "100%",
-        margin: "1rem auto 0",
-        height: 430, // 固定。上にボックス、下はカレンダーが開くスペース
-        border: "none",
-        background: "transparent",
-      }}
-    />
-  );
-}
-
 export default function Page() {
   const [scrolled, setScrolled] = useState(false);
 
@@ -183,6 +93,7 @@ export default function Page() {
           <a href="#house">House</a>
           <a href="#bike">Bikes</a>
           <a href="#people">People</a>
+          <Link href="/ja">日本語</Link>
         </div>
         <a href="#book" className="nav-book">
           Book <ArrowRight size={14} />
@@ -601,6 +512,102 @@ export default function Page() {
             check-in or after check-out, book through their site.
           </p>
         </details>
+        <details className="faq-item">
+          <summary>What are the check-in and check-out times?</summary>
+          <p>
+            Check-in is 16:00 — 18:00. Arriving early? You can drop your
+            luggage and explore, and we&apos;ll do the house tour and formal
+            check-in after 16:00. Arriving late? Message us on WhatsApp when
+            you reach the entrance — the host lives just across the street.
+            Check-out is by 10:00, with no procedure: leave whenever
+            you&apos;re ready.
+          </p>
+        </details>
+        <details className="faq-item">
+          <summary>Can you pick me up from Nagiso Station or Tsumago?</summary>
+          <p>
+            Yes — Nagiso Station, Tsumago and Junikane Station are within our
+            free pick-up area between 16:00 and 18:00. Just ask in advance.
+            For departures we can call a taxi for you on the day.
+          </p>
+        </details>
+        <details className="faq-item">
+          <summary>How much are dinner and breakfast?</summary>
+          <p>
+            Dinner sets serve two people and range from ¥6,000 (chicken hot
+            pot) to ¥10,000 (wagyu BBQ), with shabu-shabu, wagyu sukiyaki and
+            vegan sets in between. Travelling solo? One set per day can be
+            ordered at half the two-person price. The ochazuke breakfast set
+            (vegan &amp; gluten-free) is ¥3,000.
+          </p>
+        </details>
+        <details className="faq-item">
+          <summary>Is there Wi-Fi?</summary>
+          <p>Yes — free Wi-Fi throughout the house.</p>
+        </details>
+        <details className="faq-item">
+          <summary>Do I need cash?</summary>
+          <p>
+            Kashiwaya itself takes card payments for meals and drinks, but
+            most local restaurants — and all local buses and trains — are
+            cash-only, and can&apos;t change notes larger than ¥1,000. Bring a
+            stack of ¥1,000 notes. The nearest ATM is at the 7-Eleven, about
+            20 minutes on foot.
+          </p>
+        </details>
+        <details className="faq-item">
+          <summary>Are the bathrooms shared? Is there a bath?</summary>
+          <p>
+            The shower room, sink and kitchen are shared; toilets are private
+            (the private toilet for second-floor guests is on the first
+            floor). There&apos;s no bathtub — if you want a proper soak, a
+            natural day-trip onsen is a short drive away and we can arrange a
+            taxi, or drive you ourselves when we&apos;re free.
+          </p>
+        </details>
+        <details className="faq-item">
+          <summary>Can I do laundry?</summary>
+          <p>
+            First-floor guests have a washer-dryer to use. Otherwise
+            there&apos;s a coin laundry about 15 minutes&apos; walk away.
+          </p>
+        </details>
+        <details className="faq-item">
+          <summary>Can you forward my luggage to my next stop?</summary>
+          <p>
+            Between Magome and Tsumago there&apos;s a no-reservation luggage
+            shuttle. Between Nagiso and Nojiri stations we run one ourselves —
+            just ask. For the wider Kiso area (Matsumoto to Nakatsugawa), NLTS
+            and Walk Lite offer luggage transfer with advance booking.
+          </p>
+        </details>
+        <details className="faq-item">
+          <summary>Are there bears on the trails?</summary>
+          <p>
+            Asian black bears do live in these mountains, but fixed bells
+            along the Magome Pass trail mean no sightings there for about a
+            decade. Bears avoid people and almost always run first; the only
+            real risk is surprising a mother with cubs. If you&apos;re
+            worried, we rent bear bells and bear spray.
+          </p>
+        </details>
+        <details className="faq-item">
+          <summary>How hard is the Magome Pass walk?</summary>
+          <p>
+            Easy — sneakers are fine (sandals aren&apos;t recommended). In
+            winter, strap-on spikes for icy patches are a good idea; we rent
+            those too.
+          </p>
+        </details>
+        <details className="faq-item">
+          <summary>House rules — smoking, pets, quiet hours?</summary>
+          <p>
+            No pets, and no smoking inside the wooden house — the courtyard
+            is fine. Photos and videos are all OK (sharing them motivates
+            us!). Local residents rise early, so please keep quiet after
+            21:00.
+          </p>
+        </details>
       </section>
 
       {/* ============ FOOTER ============ */}
@@ -639,6 +646,17 @@ export default function Page() {
             </a>
             <p style={{ marginTop: "0.4rem" }}>
               Guided e-bike rides and rentals, run by the master of the house.
+            </p>
+            <h5 style={{ marginTop: "1.2rem" }}>Guides</h5>
+            <Link href="/guide/tsumago-magome-day-walk">
+              Tsumago–Magome day walk
+            </Link>
+            <Link href="/guide/rainy-day-in-kiso">Rainy days in the Kiso</Link>
+            <Link href="/guide/kiso-valley-ebike-day">
+              Gorges &amp; rivers by e-bike
+            </Link>
+            <p style={{ marginTop: "1.2rem" }}>
+              <Link href="/ja">日本語ページはこちら →</Link>
             </p>
           </div>
         </div>
