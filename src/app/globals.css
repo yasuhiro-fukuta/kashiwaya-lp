@@ -900,3 +900,73 @@ section.full {
 .chatpage-brand em { color: var(--gold); }
 .chatpage-sub { font-size: 0.78rem; color: var(--ink-soft); }
 .chatpage-body { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+
+/* ====================== GUIDE ARTICLES ======================= */
+.article {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 6.5rem 1.5rem 4rem;
+}
+.article-back {
+  display: inline-block;
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--moss);
+  margin-bottom: 2rem;
+}
+.article-back:hover { color: var(--gold); }
+.article .article-eyebrow {
+  display: block;
+  font-size: 0.78rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--rust);
+  margin-bottom: 0.8rem;
+}
+.article h1 {
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: clamp(1.9rem, 4.5vw, 2.8rem);
+  line-height: 1.15;
+  color: var(--moss-deep);
+  margin: 0 0 1rem;
+}
+.article h2 {
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: 1.45rem;
+  color: var(--moss-deep);
+  margin: 2.4rem 0 0.6rem;
+}
+.article p, .article li {
+  color: var(--ink-soft);
+  line-height: 1.8;
+  font-size: 0.98rem;
+}
+.article ul, .article ol { padding-left: 1.3rem; }
+.article .article-note {
+  border-left: 3px solid var(--gold);
+  background: var(--paper-deep);
+  padding: 0.9rem 1.1rem;
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+  margin: 1.6rem 0;
+}
+.article a.inline {
+  color: var(--rust);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.article .article-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--moss-deep);
+  color: var(--paper);
+  padding: 0.8rem 1.5rem;
+  border-radius: 999px;
+  font-size: 0.9rem;
+  margin-top: 1.6rem;
+}
+.article .article-cta:hover { background: var(--moss); }
