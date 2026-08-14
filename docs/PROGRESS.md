@@ -56,6 +56,29 @@
 - [ ] (任意) 会話ログの確認運用 — 答えられなかった質問をGoogleドキュメントに
       追記する改善ループ(Vercel の Logs で確認可能)
 
+## WhatsApp自動応答(構築中 2026-07-17〜)
+
+方針: ゲスト連絡をWhatsAppに統一。Booking.com / Lodgify の初回メールで
+ボット用WhatsApp番号(社用スマホの番号)を案内し、以降の質問はボットが自動応答。
+答えられない質問はやっくん直通 (+81 90 3839 2354) を案内(A案)。
+
+- 実装: `src/app/api/whatsapp/route.ts`(Meta WhatsApp Cloud API の Webhook。
+  チャットボットと同じ知識・プロンプトを再利用。会話履歴は現状保持しない)
+- 必要な Vercel 環境変数:
+  - `WHATSAPP_ACCESS_TOKEN` — Meta System User の永続トークン
+  - `WHATSAPP_PHONE_NUMBER_ID` — Cloud API の電話番号ID
+  - `WHATSAPP_VERIFY_TOKEN` — Webhook検証用の合言葉(任意の文字列)
+- セットアップ状況:
+  - [x] 社用スマホ購入(ボット用番号)
+  - [ ] Meta Business Portfolio 作成
+  - [ ] developers.facebook.com でアプリ作成(WhatsApp追加)
+  - [ ] ボット番号の登録・SMS認証
+  - [ ] 永続アクセストークン発行(System User)
+  - [ ] Vercel に環境変数3つを設定
+  - [ ] Webhook URL 登録・検証(messages を購読)
+  - [ ] テスト送信で自動応答を確認
+  - [ ] Booking.com / Lodgify の初回メールテンプレにボット番号を記載
+
 ## 運用メモ
 
 - FAQの更新 = **Googleドキュメントを編集するだけ**(最大1時間で反映)
