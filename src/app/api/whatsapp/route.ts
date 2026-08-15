@@ -1,5 +1,5 @@
 import { getKnowledge } from "@/lib/knowledge";
-import { buildSystemPrompt } from "@/lib/prompt";
+import { buildStaffSystemPrompt, buildSystemPrompt, STAFF_TAG_PATTERN } from "@/lib/prompt";
 import Anthropic from "@anthropic-ai/sdk";
 
 export const runtime = "nodejs";
@@ -80,7 +80,9 @@ export async function POST(req: Request) {
           {
             type: "text",
             text:
-              buildSystemPrompt(knowledge) +
+              (STAFF_TAG_PATTERN.test(question)
+                ? buildStaffSystemPrompt(knowledge)
+                : buildSystemPrompt(knowledge)) +
               "\n\n# WhatsApp用の追加ルール\n- ここはWhatsAppです。回答は短め(数文〜箇条書き数点)に。\n- マークダウン記法(** や # など)は使わない。\n- 会話の履歴は保持されないため、直前のやり取りを前提にしない。",
             cache_control: { type: "ephemeral" },
           },

@@ -1,6 +1,6 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { getKnowledge } from "@/lib/knowledge";
-import { buildSystemPrompt } from "@/lib/prompt";
+import { buildStaffSystemPrompt, buildSystemPrompt, STAFF_TAG_PATTERN } from "@/lib/prompt";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
@@ -63,6 +63,7 @@ export async function POST(req: Request) {
     return new Response("Invalid request.", { status: 400 });
   }
 
+  const staffMode = STAFF_TAG_PATTERN.test(history[history.length - 1].content);
   const knowledge = await getKnowledge();
   const client = new Anthropic();
 
@@ -72,7 +73,7 @@ export async function POST(req: Request) {
     system: [
       {
         type: "text",
-        text: buildSystemPrompt(knowledge),
+        text: staffMode ? buildStaffSystemPrompt(knowledge) : buildSystemPrompt(knowledge),
         cache_control: { type: "ephemeral" },
       },
     ],
