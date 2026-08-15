@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import {
   ArrowRight,
-  Bike,
   BedDouble,
   Instagram,
   MapPin,
@@ -26,7 +25,6 @@ const HERO_IMG = "/gallery/entrance.JPG";
 const HOUSE_IMG = "/gallery/1stfloor.JPG";
 const FOOD_IMG = "/gallery/somen.jpg";
 const DRINK_IMG = "/gallery/beer.jpg";
-const BIKE_IMG = "/gallery/ebike1.jpg";
 const GORGE_IMG = "/gallery/kakizore.JPG";
 
 const PEOPLE = [
@@ -86,7 +84,6 @@ export default function Page() {
           <a href="#book">予約</a>
           <a href="#concept">コンセプト</a>
           <a href="#house">建物</a>
-          <a href="#bike">自転車</a>
           <a href="#people">人</a>
           <Link href="/">EN</Link>
         </div>
@@ -295,46 +292,14 @@ export default function Page() {
         </div>
       </section>
 
-      {/* ============ BIKE (chapter 2) ============ */}
-      <section className="chapter reverse" id="bike">
-        <div className="chapter-visual">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={BIKE_IMG} alt="柏屋のファットタイヤE-bike" loading="lazy" decoding="async" />
-        </div>
-        <div className="chapter-text">
-          <span className="chapter-num">第二章 · 自転車</span>
-          <h3>
-            宿泊者は無料、<em>16:00 — 翌朝9:00。</em>
-          </h3>
-          <p>
-            柏屋のファットタイヤE-bikeは、チェックイン日の16時から
-            チェックアウト日の朝9時まで、宿泊者は無料でお使いいただけます。
-            コンビニへ、谷あいのレストランへ、近くの寺社へ、
-            朝食前の桃介橋へ。
-          </p>
-          <p>
-            日中も使いたい方には、レンタル(10:00 — 15:00)を
-            1台4,000円/日でご用意しています。
-          </p>
-          <div className="note">
-            <Bike
-              size={14}
-              style={{ display: "inline", verticalAlign: "-2px", marginRight: "0.4rem" }}
-            />
-            ファットタイヤE-bike 2台 · ヘルメット・ロック付き ·
-            ご利用前に呼び鈴かWhatsAppでひと声どうぞ。
-          </div>
-        </div>
-      </section>
-
-      {/* ============ FOOD (chapter 3) ============ */}
-      <section className="chapter">
+      {/* ============ FOOD (chapter 2) ============ */}
+      <section className="chapter reverse">
         <div className="chapter-visual">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={FOOD_IMG} alt="地元の台所、季節の食事" loading="lazy" decoding="async" />
         </div>
         <div className="chapter-text">
-          <span className="chapter-num">第三章 · 食</span>
+          <span className="chapter-num">第二章 · 食</span>
           <h3>
             この谷の家族が<em>ハレの日に食べるもの。</em>
           </h3>
@@ -357,14 +322,14 @@ export default function Page() {
         </div>
       </section>
 
-      {/* ============ DRINK (chapter 4) ============ */}
-      <section className="chapter reverse">
+      {/* ============ DRINK (chapter 3) ============ */}
+      <section className="chapter">
         <div className="chapter-visual">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={DRINK_IMG} alt="柏屋限定クラフトビール" loading="lazy" decoding="async" />
         </div>
         <div className="chapter-text">
-          <span className="chapter-num">第四章 · 酒</span>
+          <span className="chapter-num">第三章 · 酒</span>
           <h3>
             柏屋のためだけに醸された<em>3種のクラフトビール。</em>
           </h3>
@@ -499,18 +464,11 @@ export default function Page() {
           </p>
         </details>
         <details className="faq-item">
-          <summary>E-bikeは宿泊中に使えますか?</summary>
+          <summary>E-bikeをレンタルできますか?</summary>
           <p>
-            はい。宿泊者はチェックイン日の16時からチェックアウト日の朝9時まで
-            無料です。ご利用前に呼び鈴かWhatsAppでひと声かけてください。
-          </p>
-        </details>
-        <details className="faq-item">
-          <summary>日中もE-bikeを使いたいのですが。</summary>
-          <p>
-            日中はBeyond Nakasendo Cyclingのガイドツアー・レンタルで
-            使用しています(10:00 — 15:00、1台4,000円/日)。
-            チェックイン前・チェックアウト後のご利用は同サイトからご予約ください。
+            はい。マスターがBeyond Nakasendo Cyclingとして、ガイド付き
+            E-bikeツアーとレンタルを運営しています(10:00 — 15:00、
+            1台4,000円/日)。同サイトからご予約ください。
           </p>
         </details>
         <details className="faq-item">

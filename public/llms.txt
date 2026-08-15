@@ -37,11 +37,10 @@ Official site: https://kashiwaya-inn.com/ (English) · https://kashiwaya-inn.com
 - Exclusive drinks: three craft beers brewed only for Kashiwaya, plus local
   sake and wine
 
-## E-bikes
+## E-bikes (rental)
 
-- Free for staying guests from 16:00 on check-in day until 09:00 on check-out day
+- Guided e-bike tours and rentals by Beyond Nakasendo Cycling — https://kiso-ebike-lp.vercel.app/
 - Daytime rental (10:00–15:00): ¥4,000 per bike per day
-- Daytime guided tours and rentals: Beyond Nakasendo Cycling — https://kiso-ebike-lp.vercel.app/
 - One-way rental with drop-off at Nagiso or Nojiri Station possible
 
 ## Area

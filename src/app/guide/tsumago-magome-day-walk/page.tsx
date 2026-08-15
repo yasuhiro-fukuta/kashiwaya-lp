@@ -102,9 +102,8 @@ export default function Page() {
       <p>
         Staying two nights gives you the walk without the clock-watching: do
         the pass on your middle day, then roll home to a nabe dinner and a
-        Kashiwaya-exclusive craft beer. The next morning, our free e-bikes
-        (yours until 9 a.m.) are the nicest way to see Momosuke Bridge before
-        the day warms up.
+        Kashiwaya-exclusive craft beer. The next morning, a stroll out to
+        Momosuke Bridge before the day warms up is the nicest send-off.
       </p>
       <Link href="/#book" className="article-cta">
         Stay at Kashiwaya →

@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import {
   ArrowRight,
-  Bike,
   BedDouble,
   Instagram,
   MapPin,
@@ -30,7 +29,6 @@ const HERO_IMG = "/gallery/entrance.JPG";
 const HOUSE_IMG = "/gallery/1stfloor.JPG";
 const FOOD_IMG = "/gallery/somen.jpg";
 const DRINK_IMG = "/gallery/beer.jpg";
-const BIKE_IMG = "/gallery/ebike1.jpg";
 const GORGE_IMG = "/gallery/kakizore.JPG";
 /** ====================================================== */
 
@@ -91,7 +89,6 @@ export default function Page() {
           <a href="#book">Book</a>
           <a href="#concept">Concept</a>
           <a href="#house">House</a>
-          <a href="#bike">Bikes</a>
           <a href="#people">People</a>
           <Link href="/ja">日本語</Link>
         </div>
@@ -308,47 +305,14 @@ export default function Page() {
         </div>
       </section>
 
-      {/* ============ BIKE (chapter 2) ============ */}
-      <section className="chapter reverse" id="bike">
-        <div className="chapter-visual">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={BIKE_IMG} alt="Fat-tire e-bikes parked at Kashiwaya" loading="lazy" decoding="async" />
-        </div>
-        <div className="chapter-text">
-          <span className="chapter-num">Chapter 02 · The Bikes</span>
-          <h3>
-            Free e-bikes for guests, <em>16:00 — 09:00.</em>
-          </h3>
-          <p>
-            Our house fat-tire e-bikes are free for guests to use in the
-            evenings and mornings — from 16:00 on your check-in day until
-            09:00 on your check-out day. Roll over to the konbini, find a
-            restaurant in the valley, ride to the nearby temples and shrines,
-            or out to Momosuke Bridge before breakfast.
-          </p>
-          <p>
-            Want a bike during the day too? Daytime use (10:00 — 15:00) is
-            available as a rental at ¥4,000 per bike per day.
-          </p>
-          <div className="note">
-            <Bike
-              size={14}
-              style={{ display: "inline", verticalAlign: "-2px", marginRight: "0.4rem" }}
-            />
-            Two fat-tire e-bikes · helmet and lock included · just ring the bell
-            or message us on WhatsApp before you ride.
-          </div>
-        </div>
-      </section>
-
-      {/* ============ FOOD (chapter 3) ============ */}
-      <section className="chapter">
+      {/* ============ FOOD (chapter 2) ============ */}
+      <section className="chapter reverse">
         <div className="chapter-visual">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={FOOD_IMG} alt="Local kitchen, seasonal meal" loading="lazy" decoding="async" />
         </div>
         <div className="chapter-text">
-          <span className="chapter-num">Chapter 03 · The Food</span>
+          <span className="chapter-num">Chapter 02 · The Food</span>
           <h3>
             What a Japanese family eats <em>on a special day.</em>
           </h3>
@@ -372,14 +336,14 @@ export default function Page() {
         </div>
       </section>
 
-      {/* ============ DRINK (chapter 4) ============ */}
-      <section className="chapter reverse">
+      {/* ============ DRINK (chapter 3) ============ */}
+      <section className="chapter">
         <div className="chapter-visual">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={DRINK_IMG} alt="Kashiwaya-exclusive craft beer" loading="lazy" decoding="async" />
         </div>
         <div className="chapter-text">
-          <span className="chapter-num">Chapter 04 · The Drink</span>
+          <span className="chapter-num">Chapter 03 · The Drink</span>
           <h3>
             Three craft beers, <em>brewed only for us.</em>
           </h3>
@@ -496,20 +460,11 @@ export default function Page() {
           </p>
         </details>
         <details className="faq-item">
-          <summary>Can I just use the e-bike during my stay?</summary>
+          <summary>Can I rent an e-bike?</summary>
           <p>
-            If you&apos;re staying with us, yes — free, from 16:00 on your
-            check-in day until 09:00 on your check-out day. Ring the bell at
-            the desk or message us on WhatsApp before you ride.
-          </p>
-        </details>
-        <details className="faq-item">
-          <summary>What about during the day?</summary>
-          <p>
-            During the day the bikes are used for guided tours and rentals by
+            Yes — the master runs guided e-bike tours and rentals through
             Beyond Nakasendo Cycling. Daytime use is ¥4,000 per bike per day
-            (10:00 — 15:00). If you want a rental or a guided ride before
-            check-in or after check-out, book through their site.
+            (10:00 — 15:00). Book through their site.
           </p>
         </details>
         <details className="faq-item">
