@@ -11,7 +11,7 @@ export const metadata: Metadata = {
     template: "%s | Kashiwaya Inn",
   },
   description:
-    "Kashiwaya Inn is a 140-year-old kominka guesthouse in Midono-juku, Nagiso — the 41st post town on the Nakasendo trail, near Tsumago and Magome in the Kiso Valley, Nagano. Home-style local dinners, exclusive craft beer, and free fat-tire e-bikes for guests.",
+    "Kashiwaya Inn is a 140-year-old kominka guesthouse in Midono-juku, Nagiso — the 41st post town on the Nakasendo trail, near Tsumago and Magome in the Kiso Valley, Nagano. Home-style local dinners, exclusive craft beer, and a quiet base for the Nakasendo trail.",
   keywords: [
     "Kashiwaya Inn",
     "Kashiwaya",
@@ -52,7 +52,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Kashiwaya Inn — Nakasendo Guesthouse in Nagiso, Kiso Valley",
     description:
-      "A 140-year-old kominka guesthouse on the Nakasendo trail. Local dinners, exclusive craft beer, free e-bikes for guests.",
+      "A 140-year-old kominka guesthouse on the Nakasendo trail. Local dinners, exclusive craft beer, 15 minutes on foot from Nagiso Station.",
     images: ["/gallery/entrance.JPG"],
   },
   robots: {
@@ -98,11 +98,6 @@ const structuredData = {
         {
           "@type": "LocationFeatureSpecification",
           name: "Free Wi-Fi",
-          value: true,
-        },
-        {
-          "@type": "LocationFeatureSpecification",
-          name: "Free fat-tire e-bikes for guests (16:00 on check-in day to 09:00 on check-out day)",
           value: true,
         },
         {
@@ -160,18 +155,10 @@ const structuredData = {
         },
         {
           "@type": "Question",
-          name: "Can guests use the e-bikes during their stay?",
+          name: "Can I rent an e-bike?",
           acceptedAnswer: {
             "@type": "Answer",
-            text: "Yes — free for staying guests from 16:00 on your check-in day until 09:00 on your check-out day. Ring the bell at the desk or message us on WhatsApp before you ride.",
-          },
-        },
-        {
-          "@type": "Question",
-          name: "Can I use an e-bike during the day?",
-          acceptedAnswer: {
-            "@type": "Answer",
-            text: "During the day the bikes are used for guided tours and rentals by Beyond Nakasendo Cycling. Daytime use is ¥4,000 per bike per day (10:00 — 15:00).",
+            text: "Yes — the master runs guided e-bike tours and rentals through Beyond Nakasendo Cycling. Daytime use is ¥4,000 per bike per day (10:00 — 15:00). Book through their site.",
           },
         },
         {

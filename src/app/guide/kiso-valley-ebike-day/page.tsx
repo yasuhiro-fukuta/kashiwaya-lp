@@ -62,9 +62,8 @@ export default function Page() {
 
       <h2>Rentals and gear</h2>
       <p>
-        Kashiwaya guests use the house e-bikes free from 16:00 on check-in day
-        to 09:00 on check-out day; daytime rental (10:00 — 15:00) is ¥4,000
-        per bike per day. Riders get our route navigation, and we lend out
+        E-bike rental (10:00 — 15:00) is ¥4,000 per bike per day through
+        Beyond Nakasendo Cycling. Riders get our route navigation, and we lend out
         rash guards, life jackets and bear bells for the gorges. One-way is
         fine too — you can drop the bike at Nagiso or Nojiri Station and hop
         on the train.

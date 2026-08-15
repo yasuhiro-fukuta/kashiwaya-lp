@@ -78,7 +78,7 @@ export default function Page() {
       <div className="article-note">
         Trains and buses in the valley are cash-only; keep ¥1,000 notes on
         hand. And if the rain lifts by afternoon, the JR Railroad Trail is a
-        flat, quick-drying ride on our e-bikes.
+        flat, quick-drying ride on a rental e-bike.
       </div>
 
       <Link href="/#book" className="article-cta">
