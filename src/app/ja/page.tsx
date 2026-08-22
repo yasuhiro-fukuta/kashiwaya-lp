@@ -208,6 +208,15 @@ export default function Page() {
           </div>
 
           <div className="meal-order">
+            <div className="meal-photo">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/gallery/somen.jpg"
+                alt="柏屋の夕食 — 冷やしそうめんと季節の一皿"
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
             <div className="meal-order-head">
               <UtensilsCrossed size={22} className="meal-icon" />
               <h3>夕食と朝食</h3>

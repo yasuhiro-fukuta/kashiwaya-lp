@@ -217,6 +217,15 @@ export default function Page() {
           </div>
 
           <div className="meal-order">
+            <div className="meal-photo">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/gallery/somen.jpg"
+                alt="Dinner at Kashiwaya — chilled somen and seasonal dishes"
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
             <div className="meal-order-head">
               <UtensilsCrossed size={22} className="meal-icon" />
               <h3>Dinner &amp; breakfast</h3>

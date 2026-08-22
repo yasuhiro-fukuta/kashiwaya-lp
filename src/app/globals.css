@@ -676,6 +676,17 @@ section.full {
   padding: 2rem 1.8rem;
   text-align: left;
 }
+.meal-order .meal-photo {
+  margin: -2rem -1.8rem 1.6rem;
+  border-radius: 6px 6px 0 0;
+  overflow: hidden;
+}
+.meal-order .meal-photo img {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  display: block;
+}
 .meal-order-head { text-align: center; }
 .meal-order-head .meal-icon { color: var(--rust); margin: 0 auto 0.6rem; }
 .meal-order-head h3 {
