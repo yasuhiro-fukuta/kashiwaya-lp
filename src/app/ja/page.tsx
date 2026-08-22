@@ -14,6 +14,7 @@ import {
 import Link from "next/link";
 import ChatWidget from "@/components/ChatWidget";
 import LodgifyBox from "@/components/LodgifyBox";
+import PhotoGallery from "@/components/PhotoGallery";
 
 /** 日本語版LP。構成は英語版(/)と同一。リンク・画像は英語版と共通。 */
 const INSTAGRAM_URL = "https://www.instagram.com/kashiwaya_nakasendo";
@@ -115,6 +116,7 @@ export default function Page() {
             <a href="#book" onClick={() => setMenuOpen(false)}>宿泊予約</a>
             <a href="#concept" onClick={() => setMenuOpen(false)}>コンセプト</a>
             <a href="#house" onClick={() => setMenuOpen(false)}>建物</a>
+            <a href="#gallery" onClick={() => setMenuOpen(false)}>ギャラリー</a>
             <a href="#people" onClick={() => setMenuOpen(false)}>人</a>
             <a href="#facilities" onClick={() => setMenuOpen(false)}>
               設備・ご案内
@@ -355,6 +357,17 @@ export default function Page() {
             三留野宿 · Midono-juku · 中山道41番目の宿場
           </div>
         </div>
+      </section>
+
+      {/* ============ GALLERY ============ */}
+      <section className="gallery" id="gallery">
+        <div className="section-head">
+          <span className="eyebrow-dark">ギャラリー</span>
+          <h2>
+            部屋から部屋へ、<em>家を歩く。</em>
+          </h2>
+        </div>
+        <PhotoGallery lang="ja" />
       </section>
 
       {/* ============ FOOD (chapter 2) ============ */}

@@ -14,6 +14,7 @@ import {
 import Link from "next/link";
 import ChatWidget from "@/components/ChatWidget";
 import LodgifyBox from "@/components/LodgifyBox";
+import PhotoGallery from "@/components/PhotoGallery";
 
 /** =================== CUSTOMIZE ZONE =====================
  *  Update links and image filenames here. All gallery files
@@ -120,6 +121,7 @@ export default function Page() {
             <a href="#book" onClick={() => setMenuOpen(false)}>Book a stay</a>
             <a href="#concept" onClick={() => setMenuOpen(false)}>Concept</a>
             <a href="#house" onClick={() => setMenuOpen(false)}>The house</a>
+            <a href="#gallery" onClick={() => setMenuOpen(false)}>Gallery</a>
             <a href="#people" onClick={() => setMenuOpen(false)}>The people</a>
             <a href="#facilities" onClick={() => setMenuOpen(false)}>
               Facilities &amp; good to know
@@ -368,6 +370,17 @@ export default function Page() {
             Midono-juku · 三留野宿 · the 41st post town on the Nakasendo
           </div>
         </div>
+      </section>
+
+      {/* ============ GALLERY ============ */}
+      <section className="gallery" id="gallery">
+        <div className="section-head">
+          <span className="eyebrow-dark">Gallery</span>
+          <h2>
+            Walk the house, <em>room by room.</em>
+          </h2>
+        </div>
+        <PhotoGallery lang="en" />
       </section>
 
       {/* ============ FOOD (chapter 2) ============ */}
