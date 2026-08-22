@@ -177,8 +177,9 @@ export default function Page() {
                 <h3>和室</h3>
                 <div className="room-sub">歴史ある1階</div>
                 <ul className="room-feats">
-                  <li>歴史ある1階をまるごと貸切</li>
-                  <li>布団 · プライベートトイレ · 洗濯乾燥機</li>
+                  <li>80㎡ · 歴史ある1階をまるごと貸切</li>
+                  <li>畳の和室 · 中庭向き · 布団</li>
+                  <li>プライベートトイレ · 洗濯乾燥機 · ボードゲーム</li>
                 </ul>
                 <LodgifyBox rentalId="793793" language="ja" />
               </div>
@@ -445,10 +446,10 @@ export default function Page() {
             <h4>客室</h4>
             <ul>
               <li>布団・リネン</li>
-              <li>タオル・スリッパ・バスアメニティ</li>
+              <li>タオル・スリッパ・耳栓・バスアメニティ</li>
               <li>エアコン・暖房</li>
               <li>ドライヤー・扇風機</li>
-              <li>デスク・シーティングエリア</li>
+              <li>ダイニングテーブル・ワイングラス</li>
               <li>枕元コンセント・衣類ラック・物干し</li>
             </ul>
           </div>
@@ -469,6 +470,7 @@ export default function Page() {
               <li>洗濯乾燥機(1階客室)</li>
               <li>ボードゲーム・パズル</li>
               <li>荷物預かり</li>
+              <li>各室に火災警報器・消火器</li>
               <li>屋内禁煙</li>
             </ul>
           </div>
@@ -478,7 +480,6 @@ export default function Page() {
               <li>無料専用駐車場(要事前予約)</li>
               <li>庭・テラス</li>
               <li>バルコニー・山の眺め(2階)</li>
-              <li>BBQ設備</li>
             </ul>
           </div>
           <div className="amenity-group">
@@ -497,7 +498,7 @@ export default function Page() {
           <ul>
             <li>チェックイン 16:00〜18:00 · チェックアウト 10:00まで</li>
             <li>チェックイン時に写真付き身分証と予約時のクレジットカードをご提示ください</li>
-            <li>到着予定時刻を事前にお知らせください</li>
+            <li>到着予定時刻を事前にお知らせください(キーボックスによるセルフチェックインも相談可)</li>
             <li>お子様歓迎(年齢制限なし)· ベビーベッドなし・追加布団は数に限りあり</li>
             <li>ペット不可 · パーティー等不可 · 屋内禁煙(中庭は可)</li>
             <li>2階客室へは階段のみ</li>

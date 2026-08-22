@@ -183,8 +183,9 @@ export default function Page() {
                 <h3>Japanese-Style Room</h3>
                 <div className="room-sub">1st historic floor</div>
                 <ul className="room-feats">
-                  <li>The whole historic floor for your group</li>
-                  <li>Futon bedding &middot; private toilet &middot; washer-dryer</li>
+                  <li>80 m&sup2; &middot; the whole historic floor for your group</li>
+                  <li>Tatami rooms &middot; courtyard-facing &middot; futon bedding</li>
+                  <li>Private toilet &middot; washer-dryer &middot; board games</li>
                 </ul>
                 <LodgifyBox rentalId="793793" />
               </div>
@@ -467,10 +468,10 @@ export default function Page() {
             <h4>The rooms</h4>
             <ul>
               <li>Futon bedding &amp; linens</li>
-              <li>Towels, slippers &amp; bath amenities</li>
+              <li>Towels, slippers, earplugs &amp; bath amenities</li>
               <li>Air-conditioning &amp; heating</li>
               <li>Hairdryer &amp; fan</li>
-              <li>Desk &amp; seating area</li>
+              <li>Dining table &amp; wine glasses</li>
               <li>Bedside outlets, clothes rack &amp; drying stand</li>
             </ul>
           </div>
@@ -491,6 +492,7 @@ export default function Page() {
               <li>Washer-dryer (1st-floor room)</li>
               <li>Board games &amp; puzzles</li>
               <li>Luggage storage</li>
+              <li>Smoke alarms &amp; fire extinguishers in every room</li>
               <li>No smoking indoors</li>
             </ul>
           </div>
@@ -500,7 +502,6 @@ export default function Page() {
               <li>Free private on-site parking (please reserve ahead)</li>
               <li>Garden &amp; terrace</li>
               <li>Balcony &amp; mountain view (2nd floor)</li>
-              <li>BBQ equipment</li>
             </ul>
           </div>
           <div className="amenity-group">
@@ -522,7 +523,10 @@ export default function Page() {
               Photo ID and the credit card used for booking are required at
               check-in
             </li>
-            <li>Please let us know your arrival time in advance</li>
+            <li>
+              Please let us know your arrival time in advance &mdash;
+              self-check-in via key box can also be arranged
+            </li>
             <li>
               Children welcome (no age limit) &middot; no cots, and extra
               futons are limited
