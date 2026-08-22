@@ -25,8 +25,6 @@ const GOOGLE_MAP_URL = "https://maps.app.goo.gl/ViXN6oJNxvjQkv2SA?g_st=ac";
 const EBIKE_LP_URL = "https://kiso-ebike-lp.vercel.app/";
 const WHATSAPP_URL =
   "https://wa.me/819038392354?text=Hello%20Kashiwaya%2C%20I%27d%20like%20to%20ask%20about%20a%20stay.";
-const MEAL_ORDER_URL = "https://kashiwaya-inn.square.site/s/shop";
-const MEAL_FORM_URL = "https://forms.gle/7fK7JEcQ9yMG2wFu9";
 const PRE_ARRIVAL_FORM_URL = "https://forms.gle/KqYFZBWuiVnAshAF9";
 
 const HERO_IMG = "/gallery/entrance.JPG";
@@ -119,6 +117,7 @@ export default function Page() {
           <nav className="drawer-group">
             <span className="drawer-label">Kashiwaya Inn</span>
             <a href="#book" onClick={() => setMenuOpen(false)}>Book a stay</a>
+            <a href="#food" onClick={() => setMenuOpen(false)}>Food option</a>
             <a href="#concept" onClick={() => setMenuOpen(false)}>Concept</a>
             <a href="#house" onClick={() => setMenuOpen(false)}>The house</a>
             <a href="#gallery" onClick={() => setMenuOpen(false)}>Gallery</a>
@@ -210,11 +209,6 @@ export default function Page() {
             last morning. Two rooms in one kominka; pick the one that suits you.
           </p>
 
-          {/* ----- Step 1 · the room ----- */}
-          <div className="book-step">
-            <span className="step-num">1</span> Book your room
-          </div>
-
           <div className="room-grid">
             {/* ===== Room 1: Japanese-Style Room (1F) ===== */}
             <div className="room-card">
@@ -262,61 +256,10 @@ export default function Page() {
             </div>
           </div>
 
-          {/* ----- bridge note → meals ----- */}
           <p className="meal-lead">
-            Staying with us? Reserve your meals in step 2 below — and please keep
-            your room booking confirmation number handy, you&apos;ll need it when
-            you order.
+            Staying with us? Dinner and breakfast are reserved separately —
+            see the <a href="#food">Food option</a> section just below.
           </p>
-
-          {/* ----- Step 2 · the meals (Square) ----- */}
-          <div className="book-step">
-            <span className="step-num">2</span> Add your meals
-          </div>
-
-          <div className="meal-order">
-            <div className="meal-photo">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="/gallery/somen.jpg"
-                alt="Dinner at Kashiwaya — chilled somen and seasonal dishes"
-                loading="lazy"
-                decoding="async"
-              />
-            </div>
-            <div className="meal-order-head">
-              <UtensilsCrossed size={22} className="meal-icon" />
-              <h3>Dinner &amp; breakfast</h3>
-              <p>
-                Rooms and meals are booked separately. Once your room is set
-                above, reserve your meals here — a traditional nabe for dinner,
-                ochazuke for breakfast, cooked around any dietary needs.
-              </p>
-            </div>
-
-            <a
-              href={MEAL_FORM_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="meal-cta"
-            >
-              Reserve meals <ArrowRight size={16} />
-            </a>
-
-            <ul className="meal-note">
-              <li>
-                Please order at least <strong>3 days before your stay</strong>.
-              </li>
-              <li>
-                Use the <strong>same email address and name</strong> you used
-                for your room booking.
-              </li>
-              <li>
-                For multi-night stays, please place a{" "}
-                <strong>separate order for each night</strong>.
-              </li>
-            </ul>
-          </div>
 
           <p className="book-direct-foot">
             Questions? Message us on{" "}
@@ -324,6 +267,84 @@ export default function Page() {
               WhatsApp →
             </a>
           </p>
+        </div>
+      </section>
+
+      {/* ============ FOOD OPTION ============ */}
+      <section className="food-option" id="food">
+        <div className="section-head">
+          <span className="eyebrow-dark">Food option</span>
+          <h2>
+            Dinner &amp; breakfast, <em>cooked in the house.</em>
+          </h2>
+          <p>
+            Meals at Kashiwaya are optional and reserved in advance — a
+            traditional nabe dinner and an ochazuke breakfast, cooked around
+            any dietary needs. Reserve through our pre-arrival form.
+          </p>
+        </div>
+        <div className="meal-order">
+          <div className="meal-photo">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/gallery/somen.jpg"
+              alt="Dinner at Kashiwaya — chilled somen and seasonal dishes"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+          <ul className="food-menu">
+            <li>
+              <span>Chicken hot pot dinner (serves 2)</span>
+              <span>¥6,000</span>
+            </li>
+            <li>
+              <span>Pork shabu-shabu dinner (serves 2)</span>
+              <span>¥8,000</span>
+            </li>
+            <li>
+              <span>Wagyu sukiyaki dinner (serves 2)</span>
+              <span>¥9,000</span>
+            </li>
+            <li>
+              <span>Vegan dinner set (serves 2)</span>
+              <span>¥9,000</span>
+            </li>
+            <li>
+              <span>Wagyu BBQ dinner (serves 2)</span>
+              <span>¥10,000</span>
+            </li>
+            <li>
+              <span>Ochazuke breakfast set (vegan &amp; gluten-free)</span>
+              <span>¥3,000</span>
+            </li>
+          </ul>
+          <a
+            href={PRE_ARRIVAL_FORM_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="meal-cta"
+          >
+            Reserve meals &amp; more <ArrowRight size={16} />
+          </a>
+          <ul className="meal-note">
+            <li>
+              Order at least <strong>3 days before your stay</strong> — one
+              form per date for multi-night stays.
+            </li>
+            <li>
+              Travelling solo? One dinner set per day at{" "}
+              <strong>half the two-person price</strong>.
+            </li>
+            <li>
+              Cancellation is free until 4 days before your stay;
+              non-refundable from 3 days before.
+            </li>
+            <li>
+              The same form also covers <strong>luggage transport</strong> and{" "}
+              <strong>activities</strong> before check-in / after check-out.
+            </li>
+          </ul>
         </div>
       </section>
 
@@ -687,12 +708,12 @@ export default function Page() {
         <details className="faq-item">
           <summary>How do I reserve dinner and breakfast?</summary>
           <p>
-            Meals are booked separately from your room, through the &ldquo;Add
-            your meals&rdquo; link in the booking section. Use the same email
-            and name as your room booking, and add your room booking date(s) and
-            any dietary restrictions in the notes field when you order. Meal
-            orders are accepted up to 3 days before your stay, so please reserve
-            in advance.
+            Meals are booked separately from your room, through the
+            pre-arrival form in the <a href="#food">Food option</a> section.
+            Use the same email and name as your room booking, add your stay
+            date(s) and any dietary restrictions, and fill it in once per
+            date for multi-night stays. Orders are accepted up to 3 days
+            before your stay.
           </p>
         </details>
         <details className="faq-item">
@@ -858,7 +879,11 @@ export default function Page() {
             <a href="#book">
               Check availability &amp; book
             </a>
-            <a href={MEAL_ORDER_URL} target="_blank" rel="noopener noreferrer">
+            <a
+              href={PRE_ARRIVAL_FORM_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               Reserve meals
             </a>
             <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">

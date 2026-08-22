@@ -1343,3 +1343,32 @@ section.full {
   .gallery-grid { grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); }
   .lb-nav { width: 38px; height: 38px; }
 }
+
+/* ======================== FOOD OPTION ======================= */
+.food-option {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 4.5rem 1.5rem;
+}
+.food-option .meal-order { max-width: 560px; }
+.food-menu {
+  list-style: none;
+  margin: 0 0 1.4rem;
+  padding: 0;
+}
+.food-menu li {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  padding: 0.5rem 0;
+  border-bottom: 1px dashed var(--line);
+  font-size: 0.92rem;
+  font-weight: 300;
+  color: var(--ink-soft);
+}
+.food-menu li span:last-child {
+  font-weight: 500;
+  color: var(--moss-deep);
+  white-space: nowrap;
+}

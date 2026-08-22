@@ -22,7 +22,6 @@ const GOOGLE_MAP_URL = "https://maps.app.goo.gl/ViXN6oJNxvjQkv2SA?g_st=ac";
 const EBIKE_LP_URL = "https://kiso-ebike-lp.vercel.app/";
 const WHATSAPP_URL =
   "https://wa.me/819038392354?text=%E6%9F%8F%E5%B1%8B%E3%81%95%E3%82%93%E3%80%81%E5%AE%BF%E6%B3%8A%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6%E8%B3%AA%E5%95%8F%E3%81%8C%E3%81%82%E3%82%8A%E3%81%BE%E3%81%99%E3%80%82";
-const MEAL_FORM_URL = "https://forms.gle/7fK7JEcQ9yMG2wFu9";
 const PRE_ARRIVAL_FORM_URL = "https://forms.gle/KqYFZBWuiVnAshAF9";
 
 const HERO_IMG = "/gallery/entrance.JPG";
@@ -114,6 +113,7 @@ export default function Page() {
           <nav className="drawer-group">
             <span className="drawer-label">柏屋 Kashiwaya Inn</span>
             <a href="#book" onClick={() => setMenuOpen(false)}>宿泊予約</a>
+            <a href="#food" onClick={() => setMenuOpen(false)}>お食事オプション</a>
             <a href="#concept" onClick={() => setMenuOpen(false)}>コンセプト</a>
             <a href="#house" onClick={() => setMenuOpen(false)}>建物</a>
             <a href="#gallery" onClick={() => setMenuOpen(false)}>ギャラリー</a>
@@ -205,11 +205,6 @@ export default function Page() {
             お好みの方をお選びください。
           </p>
 
-          {/* ----- Step 1 · 部屋 ----- */}
-          <div className="book-step">
-            <span className="step-num">1</span> お部屋の予約
-          </div>
-
           <div className="room-grid">
             <div className="room-card">
               <div className="room-photo">
@@ -256,56 +251,9 @@ export default function Page() {
           </div>
 
           <p className="meal-lead">
-            ご宿泊の方は、下のステップ2からお食事もご予約ください。
-            ご注文の際に宿泊予約の確認番号が必要になります。
+            ご宿泊の方は、お食事を別途ご予約ください — すぐ下の
+            「<a href="#food">お食事オプション</a>」をご覧ください。
           </p>
-
-          {/* ----- Step 2 · 食事 ----- */}
-          <div className="book-step">
-            <span className="step-num">2</span> お食事の予約
-          </div>
-
-          <div className="meal-order">
-            <div className="meal-photo">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="/gallery/somen.jpg"
-                alt="柏屋の夕食 — 冷やしそうめんと季節の一皿"
-                loading="lazy"
-                decoding="async"
-              />
-            </div>
-            <div className="meal-order-head">
-              <UtensilsCrossed size={22} className="meal-icon" />
-              <h3>夕食と朝食</h3>
-              <p>
-                お部屋とお食事は別々のご予約です。お部屋が決まったら、
-                こちらからお食事をどうぞ — 夕食は伝統の鍋、朝食はお茶漬け。
-                食事制限にも合わせてお作りします。
-              </p>
-            </div>
-
-            <a
-              href={MEAL_FORM_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="meal-cta"
-            >
-              お食事を予約 <ArrowRight size={16} />
-            </a>
-
-            <ul className="meal-note">
-              <li>
-                ご注文は<strong>ご宿泊の3日前まで</strong>にお願いします。
-              </li>
-              <li>
-                宿泊予約と<strong>同じメールアドレス・お名前</strong>でご注文ください。
-              </li>
-              <li>
-                連泊の場合は<strong>1泊ごとに別々のご注文</strong>をお願いします。
-              </li>
-            </ul>
-          </div>
 
           <p className="book-direct-foot">
             ご質問は{" "}
@@ -314,6 +262,81 @@ export default function Page() {
             </a>{" "}
             へお気軽に。
           </p>
+        </div>
+      </section>
+
+      {/* ============ FOOD OPTION ============ */}
+      <section className="food-option" id="food">
+        <div className="section-head">
+          <span className="eyebrow-dark">お食事オプション</span>
+          <h2>
+            この家で仕込む、<em>夕食と朝食。</em>
+          </h2>
+          <p>
+            柏屋のお食事はすべて事前予約制のオプションです。夕食は伝統の鍋、
+            朝食はお茶漬け。食事制限にも合わせてお作りします。
+            ご予約は事前リクエストフォームからどうぞ。
+          </p>
+        </div>
+        <div className="meal-order">
+          <div className="meal-photo">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/gallery/somen.jpg"
+              alt="柏屋の夕食 — 冷やしそうめんと季節の一皿"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+          <ul className="food-menu">
+            <li>
+              <span>鶏鍋の夕食(2名分)</span>
+              <span>¥6,000</span>
+            </li>
+            <li>
+              <span>豚しゃぶしゃぶの夕食(2名分)</span>
+              <span>¥8,000</span>
+            </li>
+            <li>
+              <span>和牛すき焼きの夕食(2名分)</span>
+              <span>¥9,000</span>
+            </li>
+            <li>
+              <span>ビーガンセットの夕食(2名分)</span>
+              <span>¥9,000</span>
+            </li>
+            <li>
+              <span>和牛BBQの夕食(2名分)</span>
+              <span>¥10,000</span>
+            </li>
+            <li>
+              <span>朝食お茶漬けセット(ビーガン&グルテンフリー)</span>
+              <span>¥3,000</span>
+            </li>
+          </ul>
+          <a
+            href={PRE_ARRIVAL_FORM_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="meal-cta"
+          >
+            お食事・オプションを予約 <ArrowRight size={16} />
+          </a>
+          <ul className="meal-note">
+            <li>
+              ご注文は<strong>ご宿泊の3日前まで</strong>。連泊の場合は
+              日付ごとにフォームをご記入ください。
+            </li>
+            <li>
+              お一人でのご利用は1日1組まで、<strong>2名分の半額</strong>で
+              ご案内します。
+            </li>
+            <li>キャンセルは4日前まで無料・全額返金。3日前以降は返金不可です。</li>
+            <li>
+              同じフォームで<strong>荷物の配送</strong>や、チェックイン前後の
+              <strong>アクティビティ</strong>もリクエストできます。
+            </li>
+          </ul>
         </div>
       </section>
 
@@ -668,10 +691,11 @@ export default function Page() {
         <details className="faq-item">
           <summary>食事の予約方法は?</summary>
           <p>
-            お食事はお部屋とは別のご予約です。予約セクションの
-            「お食事を予約」から、宿泊予約と同じメールアドレス・お名前で、
-            宿泊日と食事制限を添えてご注文ください。
-            ご宿泊の3日前まで受け付けています。
+            お食事はお部屋とは別のご予約です。
+            「<a href="#food">お食事オプション</a>」セクションの
+            事前リクエストフォームから、宿泊予約と同じメールアドレス・
+            お名前で、宿泊日と食事制限を添えてご注文ください(連泊は
+            日付ごとに記入)。ご宿泊の3日前まで受け付けています。
           </p>
         </details>
         <details className="faq-item">
@@ -805,7 +829,11 @@ export default function Page() {
           <div>
             <h5>予約・お問い合わせ</h5>
             <a href="#book">空室確認・宿泊予約</a>
-            <a href={MEAL_FORM_URL} target="_blank" rel="noopener noreferrer">
+            <a
+              href={PRE_ARRIVAL_FORM_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               お食事の予約
             </a>
             <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">

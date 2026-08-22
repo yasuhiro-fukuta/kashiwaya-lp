@@ -162,7 +162,7 @@ const structuredData = {
           name: "How do I reserve dinner and breakfast?",
           acceptedAnswer: {
             "@type": "Answer",
-            text: "Meals are booked separately from your room through the “Add your meals” link in the booking section. Use the same email and name as your room booking. Meal orders are accepted up to 3 days before your stay.",
+            text: "Meals are booked separately from your room through the pre-arrival form in the Food option section. Use the same email and name as your room booking, and fill in the form once per date for multi-night stays. Orders are accepted up to 3 days before your stay.",
           },
         },
         {
