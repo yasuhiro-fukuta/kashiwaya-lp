@@ -80,35 +80,31 @@ export default function Page() {
   return (
     <>
       {/* ============ NAV ============ */}
-      <nav className={`nav ${scrolled ? "scrolled" : ""}`}>
+      <nav className={`nav ${scrolled ? "scrolled" : ""} ${menuOpen ? "menu-open" : ""}`}>
         <a href="#top" className="brand">
           柏屋 <em>Kashiwaya</em>
         </a>
         <div className="nav-right">
-          <a href="#book" className="nav-book">
+          <a
+            href="#book"
+            className="nav-book"
+            onClick={() => setMenuOpen(false)}
+          >
             予約する <ArrowRight size={14} />
           </a>
           <button
             type="button"
             className="menu-btn"
-            aria-label="メニューを開く"
-            onClick={() => setMenuOpen(true)}
+            aria-label={menuOpen ? "メニューを閉じる" : "メニューを開く"}
+            onClick={() => setMenuOpen((o) => !o)}
           >
-            <Menu size={22} />
+            {menuOpen ? <X size={22} /> : <Menu size={22} />}
           </button>
         </div>
       </nav>
 
       {/* ============ MENU DRAWER ============ */}
       <div className={`nav-drawer ${menuOpen ? "open" : ""}`}>
-        <button
-          type="button"
-          className="drawer-close"
-          aria-label="メニューを閉じる"
-          onClick={() => setMenuOpen(false)}
-        >
-          <X size={26} />
-        </button>
         <div className="drawer-inner">
           <nav className="drawer-group">
             <span className="drawer-label">柏屋 Kashiwaya Inn</span>

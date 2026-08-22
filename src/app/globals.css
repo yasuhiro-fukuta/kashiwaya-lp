@@ -1372,3 +1372,7 @@ section.full {
   color: var(--moss-deep);
   white-space: nowrap;
 }
+
+/* nav sits above the open drawer — restyle it for the paper backdrop */
+.nav.menu-open .brand,
+.nav.menu-open .menu-btn { color: var(--moss-deep); }
