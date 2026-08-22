@@ -115,6 +115,26 @@ const structuredData = {
           name: "Washer-dryer (first-floor room)",
           value: true,
         },
+        {
+          "@type": "LocationFeatureSpecification",
+          name: "Free private on-site parking (reservation required)",
+          value: true,
+        },
+        {
+          "@type": "LocationFeatureSpecification",
+          name: "Garden and terrace",
+          value: true,
+        },
+        {
+          "@type": "LocationFeatureSpecification",
+          name: "Shared kitchen",
+          value: true,
+        },
+        {
+          "@type": "LocationFeatureSpecification",
+          name: "Luggage storage",
+          value: true,
+        },
       ],
     },
     {

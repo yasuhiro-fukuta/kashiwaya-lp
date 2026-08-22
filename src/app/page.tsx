@@ -90,6 +90,7 @@ export default function Page() {
           <a href="#concept">Concept</a>
           <a href="#house">House</a>
           <a href="#people">People</a>
+          <a href="#access">Access</a>
           <Link href="/ja">日本語</Link>
         </div>
         <a href="#book" className="nav-book">
@@ -181,6 +182,10 @@ export default function Page() {
               <div className="room-body">
                 <h3>Japanese-Style Room</h3>
                 <div className="room-sub">1st historic floor</div>
+                <ul className="room-feats">
+                  <li>The whole historic floor for your group</li>
+                  <li>Futon bedding &middot; private toilet &middot; washer-dryer</li>
+                </ul>
                 <LodgifyBox rentalId="793793" />
               </div>
             </div>
@@ -199,6 +204,10 @@ export default function Page() {
               <div className="room-body">
                 <h3>Superior Family Room</h3>
                 <div className="room-sub">2nd modern floor</div>
+                <ul className="room-feats">
+                  <li>60 m&sup2; &middot; up to 3 adults &middot; 4 futons</li>
+                  <li>Balcony &amp; mountain view &middot; private toilet on 1F &middot; stairs only</li>
+                </ul>
                 <LodgifyBox rentalId="793801" />
               </div>
             </div>
@@ -420,6 +429,154 @@ export default function Page() {
                 ))}
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ============ GOOD TO KNOW (facilities & rules) ============ */}
+      <section className="facilities" id="facilities">
+        <div className="section-head">
+          <span className="eyebrow-dark">Good to know</span>
+          <h2>
+            The details, <em>at a glance.</em>
+          </h2>
+        </div>
+        <div className="quote-grid">
+          <div className="quote-card">
+            <blockquote>
+              &ldquo;I had the whole second floor to myself &mdash; very
+              spacious and lovely. The house is old, so I was afraid it
+              wasn&apos;t going to be very nice, but it was clean and I was
+              really pleasantly surprised.&rdquo;
+            </blockquote>
+            <cite>Katerina &middot; Japan</cite>
+          </div>
+          <div className="quote-card">
+            <blockquote>
+              &ldquo;The house is spectacular &mdash; an actual old Japanese
+              house. It is almost magical to walk the rooms, open the
+              traditional sliding doors or enjoy a peaceful dinner in the
+              dining room.&rdquo;
+            </blockquote>
+            <cite>Fabrizio &middot; United Kingdom</cite>
+          </div>
+        </div>
+        <p className="quote-source">From guest reviews on Booking.com</p>
+        <div className="amenities-grid">
+          <div className="amenity-group">
+            <h4>The rooms</h4>
+            <ul>
+              <li>Futon bedding &amp; linens</li>
+              <li>Towels, slippers &amp; bath amenities</li>
+              <li>Air-conditioning &amp; heating</li>
+              <li>Hairdryer &amp; fan</li>
+              <li>Desk &amp; seating area</li>
+              <li>Bedside outlets, clothes rack &amp; drying stand</li>
+            </ul>
+          </div>
+          <div className="amenity-group">
+            <h4>Bath &amp; water</h4>
+            <ul>
+              <li>Private toilet for each room</li>
+              <li>Shared shower room</li>
+              <li>Shared sink &amp; kitchen</li>
+              <li>No bathtub &mdash; a day-trip onsen is a short drive away</li>
+            </ul>
+          </div>
+          <div className="amenity-group">
+            <h4>The house</h4>
+            <ul>
+              <li>Free Wi-Fi throughout</li>
+              <li>One group per floor &mdash; just two rooms in the house</li>
+              <li>Washer-dryer (1st-floor room)</li>
+              <li>Board games &amp; puzzles</li>
+              <li>Luggage storage</li>
+              <li>No smoking indoors</li>
+            </ul>
+          </div>
+          <div className="amenity-group">
+            <h4>Outdoors &amp; parking</h4>
+            <ul>
+              <li>Free private on-site parking (please reserve ahead)</li>
+              <li>Garden &amp; terrace</li>
+              <li>Balcony &amp; mountain view (2nd floor)</li>
+              <li>BBQ equipment</li>
+            </ul>
+          </div>
+          <div className="amenity-group">
+            <h4>Activities &amp; services</h4>
+            <ul>
+              <li>E-bike rentals &amp; guided tours (paid)</li>
+              <li>Hiking &amp; cycling from the door</li>
+              <li>Calligraphy sessions (schedule permitting)</li>
+              <li>Station pick-up &amp; luggage forwarding</li>
+              <li>English &amp; Japanese spoken</li>
+            </ul>
+          </div>
+        </div>
+        <div className="rules-card">
+          <h4>House rules</h4>
+          <ul>
+            <li>Check-in 16:00 &mdash; 18:00 &middot; check-out by 10:00</li>
+            <li>
+              Photo ID and the credit card used for booking are required at
+              check-in
+            </li>
+            <li>Please let us know your arrival time in advance</li>
+            <li>
+              Children welcome (no age limit) &middot; no cots, and extra
+              futons are limited
+            </li>
+            <li>
+              No pets &middot; no parties or events &middot; no smoking
+              indoors (the courtyard is fine)
+            </li>
+            <li>The 2nd-floor room is reached by stairs only</li>
+          </ul>
+        </div>
+      </section>
+
+      {/* ============ LOCATION ============ */}
+      <section className="location" id="access">
+        <div className="section-head">
+          <span className="eyebrow-dark">Where we are</span>
+          <h2>
+            One quiet street <em>on the old road.</em>
+          </h2>
+          <p>
+            Nagiso 3993 &mdash; Midono-juku, Nagiso, Kiso District, Nagano.
+            About 1 km (15 minutes on foot) from JR Nagiso Station.
+          </p>
+        </div>
+        <div className="map-embed">
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d6487.241362023977!2d137.6134136005096!3d35.61242230192019!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x601cc792f7fe924b%3A0xa2f12b3f1d333f0d!2zS2FzaGl3YXlhIElubiBOYWdpc28g5p-P5bGL44Kk44Oz!5e0!3m2!1sja!2sjp!4v1787387096800!5m2!1sja!2sjp"
+            title="Map — Kashiwaya Inn, Nagiso"
+            allowFullScreen
+            loading="lazy"
+            referrerPolicy="strict-origin-when-cross-origin"
+          />
+        </div>
+        <div className="dist-grid">
+          <div className="dist-item">
+            <span className="dist-name">JR Nagiso Station</span>
+            <span className="dist-km">1 km &middot; 15 min on foot</span>
+          </div>
+          <div className="dist-item">
+            <span className="dist-name">Tsumago-juku</span>
+            <span className="dist-km">4 km</span>
+          </div>
+          <div className="dist-item">
+            <span className="dist-name">Magome-juku</span>
+            <span className="dist-km">13 km</span>
+          </div>
+          <div className="dist-item">
+            <span className="dist-name">Atera Valley &amp; Kakizore Gorge</span>
+            <span className="dist-km">about 10 km</span>
+          </div>
+          <div className="dist-item">
+            <span className="dist-name">Matsumoto Airport</span>
+            <span className="dist-km">82 km</span>
           </div>
         </div>
       </section>
