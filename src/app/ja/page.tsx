@@ -6,8 +6,10 @@ import {
   BedDouble,
   Instagram,
   MapPin,
+  Menu,
   UtensilsCrossed,
   Beer,
+  X,
 } from "lucide-react";
 import Link from "next/link";
 import ChatWidget from "@/components/ChatWidget";
@@ -20,6 +22,7 @@ const EBIKE_LP_URL = "https://kiso-ebike-lp.vercel.app/";
 const WHATSAPP_URL =
   "https://wa.me/819038392354?text=%E6%9F%8F%E5%B1%8B%E3%81%95%E3%82%93%E3%80%81%E5%AE%BF%E6%B3%8A%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6%E8%B3%AA%E5%95%8F%E3%81%8C%E3%81%82%E3%82%8A%E3%81%BE%E3%81%99%E3%80%82";
 const MEAL_FORM_URL = "https://forms.gle/7fK7JEcQ9yMG2wFu9";
+const PRE_ARRIVAL_FORM_URL = "https://forms.gle/KqYFZBWuiVnAshAF9";
 
 const HERO_IMG = "/gallery/entrance.JPG";
 const HOUSE_IMG = "/gallery/1stfloor.JPG";
@@ -65,6 +68,7 @@ const PEOPLE = [
 
 export default function Page() {
   const [scrolled, setScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 80);
@@ -80,18 +84,60 @@ export default function Page() {
         <a href="#top" className="brand">
           柏屋 <em>Kashiwaya</em>
         </a>
-        <div className="nav-links">
-          <a href="#book">予約</a>
-          <a href="#concept">コンセプト</a>
-          <a href="#house">建物</a>
-          <a href="#people">人</a>
-          <a href="#access">アクセス</a>
-          <Link href="/">EN</Link>
+        <div className="nav-right">
+          <a href="#book" className="nav-book">
+            予約する <ArrowRight size={14} />
+          </a>
+          <button
+            type="button"
+            className="menu-btn"
+            aria-label="メニューを開く"
+            onClick={() => setMenuOpen(true)}
+          >
+            <Menu size={22} />
+          </button>
         </div>
-        <a href="#book" className="nav-book">
-          予約する <ArrowRight size={14} />
-        </a>
       </nav>
+
+      {/* ============ MENU DRAWER ============ */}
+      <div className={`nav-drawer ${menuOpen ? "open" : ""}`}>
+        <button
+          type="button"
+          className="drawer-close"
+          aria-label="メニューを閉じる"
+          onClick={() => setMenuOpen(false)}
+        >
+          <X size={26} />
+        </button>
+        <div className="drawer-inner">
+          <nav className="drawer-group">
+            <span className="drawer-label">柏屋 Kashiwaya Inn</span>
+            <a href="#book" onClick={() => setMenuOpen(false)}>宿泊予約</a>
+            <a href="#concept" onClick={() => setMenuOpen(false)}>コンセプト</a>
+            <a href="#house" onClick={() => setMenuOpen(false)}>建物</a>
+            <a href="#people" onClick={() => setMenuOpen(false)}>人</a>
+            <a href="#facilities" onClick={() => setMenuOpen(false)}>
+              設備・ご案内
+            </a>
+            <a href="#access" onClick={() => setMenuOpen(false)}>アクセス</a>
+            <a href="#faq" onClick={() => setMenuOpen(false)}>よくある質問</a>
+          </nav>
+          <nav className="drawer-group drawer-sub">
+            <span className="drawer-label">ガイド(英語)</span>
+            <Link href="/guide/tsumago-magome-day-walk">
+              妻籠・馬籠 日帰りウォーク
+            </Link>
+            <Link href="/guide/rainy-day-in-kiso">雨の日の木曽</Link>
+            <Link href="/guide/kiso-valley-ebike-day">
+              渓谷と川をE-bikeで
+            </Link>
+          </nav>
+          <nav className="drawer-group drawer-sub">
+            <span className="drawer-label">Language</span>
+            <Link href="/">English</Link>
+          </nav>
+        </div>
+      </div>
 
       {/* ============ FLOATING BOOK ============ */}
       <a href="#book" className="float-book">
@@ -567,6 +613,21 @@ export default function Page() {
           </p>
         </details>
         <details className="faq-item">
+          <summary>到着前にやっておくことはありますか?</summary>
+          <p>
+            <a
+              href={PRE_ARRIVAL_FORM_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              事前リクエストフォーム
+            </a>
+            のご記入をお願いしています。夕食・朝食の予約、荷物の配送、
+            チェックイン前後のアクティビティをまとめてリクエストできます。
+            連泊の場合は日付ごとにご記入ください。
+          </p>
+        </details>
+        <details className="faq-item">
           <summary>チェックイン・チェックアウトの時間は?</summary>
           <p>
             チェックインは16:00〜18:00です。早く着いた場合は荷物を置いて
@@ -574,6 +635,13 @@ export default function Page() {
             遅くなる場合は、到着時にWhatsAppでご連絡ください —
             スタッフはすぐ向かいの家におります。チェックアウトは10:00まで、
             手続きは不要です。
+          </p>
+        </details>
+        <details className="faq-item">
+          <summary>チェックイン前・チェックアウト後に荷物を置けますか?</summary>
+          <p>
+            はい。エントランスを入ってすぐの棚に置いてください。
+            お預かり中の荷物の賠償はお一人様10万円までとさせていただきます。
           </p>
         </details>
         <details className="faq-item">
@@ -600,6 +668,25 @@ export default function Page() {
             (しゃぶしゃぶ、和牛すき焼き、ビーガンセットなど)。
             お一人でのご利用は1日1組まで、2名分の半額でご案内します。
             朝食のお茶漬けセット(ビーガン&グルテンフリー)は3,000円です。
+          </p>
+        </details>
+        <details className="faq-item">
+          <summary>Booking.comのGenius特典で「朝食無料」と表示されました。</summary>
+          <p>
+            申し訳ありませんが、朝食は無料ではありません。Genius レベル2〜3の
+            ご予約では、当宿との取り決めなくBooking.com側のシステムが
+            「朝食無料」特典を表示することがあります。柏屋には朝食付きプランは
+            なく、お食事(夕食・朝食)はすべて事前予約制の有料サービスです。
+            紛らわしい表示となりご迷惑をおかけします。
+          </p>
+        </details>
+        <details className="faq-item">
+          <summary>夕食は外で食べられますか?</summary>
+          <p>
+            ご注意ください — 周辺のレストランは夜の営業が不定期です。
+            当宿の夕食(3日前まで予約可)か、当日注文できるデリバリーの
+            ご利用をおすすめします。ご滞在日にどこが開いているかは
+            お気軽にお尋ねください。
           </p>
         </details>
         <details className="faq-item">
@@ -642,9 +729,11 @@ export default function Page() {
           <summary>水回りは共用ですか?お風呂はありますか?</summary>
           <p>
             シャワー・シンク・キッチンは共用、トイレは各室プライベートです
-            (2階のお客様専用トイレは1階にあります)。バスタブはありませんが、
-            車で少し行ったところに天然の日帰り温泉があります。
-            タクシー手配のほか、手が空いていれば送迎も可能です。
+            (2階のお客様専用トイレは1階にあります。他のお客様のスペースを
+            通らずにご利用いただけます)。バスタブはありませんが、車で約15分の
+            ところに天然の日帰り温泉があります(水曜定休)。他のお客様の
+            チェックインやお食事の状況によりますが、送迎も可能です。
+            タクシー手配もできます。
           </p>
         </details>
         <details className="faq-item">

@@ -6,8 +6,10 @@ import {
   BedDouble,
   Instagram,
   MapPin,
+  Menu,
   UtensilsCrossed,
   Beer,
+  X,
 } from "lucide-react";
 import Link from "next/link";
 import ChatWidget from "@/components/ChatWidget";
@@ -24,6 +26,7 @@ const WHATSAPP_URL =
   "https://wa.me/819038392354?text=Hello%20Kashiwaya%2C%20I%27d%20like%20to%20ask%20about%20a%20stay.";
 const MEAL_ORDER_URL = "https://kashiwaya-inn.square.site/s/shop";
 const MEAL_FORM_URL = "https://forms.gle/7fK7JEcQ9yMG2wFu9";
+const PRE_ARRIVAL_FORM_URL = "https://forms.gle/KqYFZBWuiVnAshAF9";
 
 const HERO_IMG = "/gallery/entrance.JPG";
 const HOUSE_IMG = "/gallery/1stfloor.JPG";
@@ -70,6 +73,7 @@ const PEOPLE = [
 
 export default function Page() {
   const [scrolled, setScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 80);
@@ -85,18 +89,60 @@ export default function Page() {
         <a href="#top" className="brand">
           Kashiwaya <em>Inn</em>
         </a>
-        <div className="nav-links">
-          <a href="#book">Book</a>
-          <a href="#concept">Concept</a>
-          <a href="#house">House</a>
-          <a href="#people">People</a>
-          <a href="#access">Access</a>
-          <Link href="/ja">日本語</Link>
+        <div className="nav-right">
+          <a href="#book" className="nav-book">
+            Book <ArrowRight size={14} />
+          </a>
+          <button
+            type="button"
+            className="menu-btn"
+            aria-label="Open menu"
+            onClick={() => setMenuOpen(true)}
+          >
+            <Menu size={22} />
+          </button>
         </div>
-        <a href="#book" className="nav-book">
-          Book <ArrowRight size={14} />
-        </a>
       </nav>
+
+      {/* ============ MENU DRAWER ============ */}
+      <div className={`nav-drawer ${menuOpen ? "open" : ""}`}>
+        <button
+          type="button"
+          className="drawer-close"
+          aria-label="Close menu"
+          onClick={() => setMenuOpen(false)}
+        >
+          <X size={26} />
+        </button>
+        <div className="drawer-inner">
+          <nav className="drawer-group">
+            <span className="drawer-label">Kashiwaya Inn</span>
+            <a href="#book" onClick={() => setMenuOpen(false)}>Book a stay</a>
+            <a href="#concept" onClick={() => setMenuOpen(false)}>Concept</a>
+            <a href="#house" onClick={() => setMenuOpen(false)}>The house</a>
+            <a href="#people" onClick={() => setMenuOpen(false)}>The people</a>
+            <a href="#facilities" onClick={() => setMenuOpen(false)}>
+              Facilities &amp; good to know
+            </a>
+            <a href="#access" onClick={() => setMenuOpen(false)}>Access &amp; map</a>
+            <a href="#faq" onClick={() => setMenuOpen(false)}>FAQ</a>
+          </nav>
+          <nav className="drawer-group drawer-sub">
+            <span className="drawer-label">Guides</span>
+            <Link href="/guide/tsumago-magome-day-walk">
+              Tsumago–Magome day walk
+            </Link>
+            <Link href="/guide/rainy-day-in-kiso">Rainy days in the Kiso</Link>
+            <Link href="/guide/kiso-valley-ebike-day">
+              Gorges &amp; rivers by e-bike
+            </Link>
+          </nav>
+          <nav className="drawer-group drawer-sub">
+            <span className="drawer-label">Language</span>
+            <Link href="/ja">日本語</Link>
+          </nav>
+        </div>
+      </div>
 
       {/* ============ FLOATING BOOK ============ */}
       <a href="#book" className="float-book">
@@ -602,6 +648,22 @@ export default function Page() {
           </p>
         </details>
         <details className="faq-item">
+          <summary>Is there anything to do before I arrive?</summary>
+          <p>
+            Yes — please fill in our{" "}
+            <a
+              href={PRE_ARRIVAL_FORM_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              pre-arrival form
+            </a>
+            . It covers dinner and breakfast reservations, luggage transport,
+            and activities before check-in or after check-out. For
+            multi-night stays, please fill it in once per date.
+          </p>
+        </details>
+        <details className="faq-item">
           <summary>I have a dietary restriction (vegan, gluten-free, etc.).</summary>
           <p>
             Tell us when you book on our site, or send us a WhatsApp message.
@@ -649,6 +711,14 @@ export default function Page() {
           </p>
         </details>
         <details className="faq-item">
+          <summary>Can I leave my luggage before check-in or after check-out?</summary>
+          <p>
+            Yes — place it at the entrance, on the shelf just inside. Please
+            note our liability for stored luggage is limited to ¥100,000 per
+            person.
+          </p>
+        </details>
+        <details className="faq-item">
           <summary>Can you pick me up from Nagiso Station or Tsumago?</summary>
           <p>
             Yes — Nagiso Station, Tsumago and Junikane Station are within our
@@ -664,6 +734,28 @@ export default function Page() {
             vegan sets in between. Travelling solo? One set per day can be
             ordered at half the two-person price. The ochazuke breakfast set
             (vegan &amp; gluten-free) is ¥3,000.
+          </p>
+        </details>
+        <details className="faq-item">
+          <summary>
+            I booked on Booking.com with Genius — is breakfast free?
+          </summary>
+          <p>
+            No — some Genius Level 2–3 reservations show a &ldquo;free
+            breakfast&rdquo; benefit that Booking.com&apos;s system displays
+            without any arrangement with us. Kashiwaya has no
+            breakfast-included plans: all meals are optional, paid, and
+            reserved in advance. We&apos;re sorry for the confusion this
+            causes.
+          </p>
+        </details>
+        <details className="faq-item">
+          <summary>Can I just eat out in the evening instead?</summary>
+          <p>
+            Be careful — restaurants near us don&apos;t keep regular evening
+            hours. The safe plan is to reserve dinner at the inn (up to 3
+            days ahead) or ask us about same-day meal delivery. We&apos;ll
+            gladly check what&apos;s open on your dates.
           </p>
         </details>
         <details className="faq-item">
@@ -685,9 +777,11 @@ export default function Page() {
           <p>
             The shower room, sink and kitchen are shared; toilets are private
             (the private toilet for second-floor guests is on the first
-            floor). There&apos;s no bathtub — if you want a proper soak, a
-            natural day-trip onsen is a short drive away and we can arrange a
-            taxi, or drive you ourselves when we&apos;re free.
+            floor — you won&apos;t pass through any other guest&apos;s area
+            to reach it). There&apos;s no bathtub — if you want a proper
+            soak, a day-use natural hot spring is about 15 minutes away by
+            car (closed Wednesdays). We can shuttle you there when our
+            schedule allows, or arrange a taxi.
           </p>
         </details>
         <details className="faq-item">

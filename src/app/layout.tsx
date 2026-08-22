@@ -226,7 +226,7 @@ const structuredData = {
           name: "Are the bathrooms shared? Is there a bath?",
           acceptedAnswer: {
             "@type": "Answer",
-            text: "The shower room, sink and kitchen are shared; toilets are private (the second floor's private toilet is on the first floor). There is no bathtub, but a natural day-trip onsen is a short drive away and the inn can arrange a taxi or a lift.",
+            text: "The shower room, sink and kitchen are shared; toilets are private (the second floor's private toilet is on the first floor, reached without passing through any other guest's area). There is no bathtub; a day-use natural hot spring is about 15 minutes away by car (closed Wednesdays) and the inn can shuttle guests when the schedule allows, or arrange a taxi.",
           },
         },
         {
@@ -259,6 +259,30 @@ const structuredData = {
           acceptedAnswer: {
             "@type": "Answer",
             text: "Easy — sneakers are fine, sandals are not recommended. In winter, strap-on ice spikes are advised and can be rented at the inn.",
+          },
+        },
+        {
+          "@type": "Question",
+          name: "Is breakfast free with Booking.com Genius at Kashiwaya Inn?",
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: "No. Some Genius Level 2-3 reservations display a free-breakfast benefit added by Booking.com's system without any arrangement with the inn. Kashiwaya has no breakfast-included plans; all meals are optional, paid services reserved in advance.",
+          },
+        },
+        {
+          "@type": "Question",
+          name: "Can luggage be stored before check-in or after check-out?",
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: "Yes — luggage can be left at the entrance on the shelf just inside. Liability for stored luggage is limited to ¥100,000 per person.",
+          },
+        },
+        {
+          "@type": "Question",
+          name: "Can guests eat out in the evening near Kashiwaya Inn?",
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: "Nearby restaurants do not keep regular evening hours, so reserving dinner at the inn (up to 3 days ahead) or same-day meal delivery is recommended.",
           },
         },
         {
