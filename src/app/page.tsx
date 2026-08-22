@@ -6,12 +6,15 @@ import {
   BedDouble,
   Instagram,
   MapPin,
+  Menu,
   UtensilsCrossed,
   Beer,
+  X,
 } from "lucide-react";
 import Link from "next/link";
 import ChatWidget from "@/components/ChatWidget";
 import LodgifyBox from "@/components/LodgifyBox";
+import PhotoGallery from "@/components/PhotoGallery";
 
 /** =================== CUSTOMIZE ZONE =====================
  *  Update links and image filenames here. All gallery files
@@ -22,8 +25,7 @@ const GOOGLE_MAP_URL = "https://maps.app.goo.gl/ViXN6oJNxvjQkv2SA?g_st=ac";
 const EBIKE_LP_URL = "https://kiso-ebike-lp.vercel.app/";
 const WHATSAPP_URL =
   "https://wa.me/819038392354?text=Hello%20Kashiwaya%2C%20I%27d%20like%20to%20ask%20about%20a%20stay.";
-const MEAL_ORDER_URL = "https://kashiwaya-inn.square.site/s/shop";
-const MEAL_FORM_URL = "https://forms.gle/7fK7JEcQ9yMG2wFu9";
+const PRE_ARRIVAL_FORM_URL = "https://forms.gle/KqYFZBWuiVnAshAF9";
 
 const HERO_IMG = "/gallery/entrance.JPG";
 const HOUSE_IMG = "/gallery/1stfloor.JPG";
@@ -70,6 +72,7 @@ const PEOPLE = [
 
 export default function Page() {
   const [scrolled, setScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 80);
@@ -81,21 +84,62 @@ export default function Page() {
   return (
     <>
       {/* ============ NAV ============ */}
-      <nav className={`nav ${scrolled ? "scrolled" : ""}`}>
+      <nav className={`nav ${scrolled ? "scrolled" : ""} ${menuOpen ? "menu-open" : ""}`}>
         <a href="#top" className="brand">
           Kashiwaya <em>Inn</em>
         </a>
-        <div className="nav-links">
-          <a href="#book">Book</a>
-          <a href="#concept">Concept</a>
-          <a href="#house">House</a>
-          <a href="#people">People</a>
-          <Link href="/ja">日本語</Link>
+        <div className="nav-right">
+          <a
+            href="#book"
+            className="nav-book"
+            onClick={() => setMenuOpen(false)}
+          >
+            Book <ArrowRight size={14} />
+          </a>
+          <button
+            type="button"
+            className="menu-btn"
+            aria-label={menuOpen ? "Close menu" : "Open menu"}
+            onClick={() => setMenuOpen((o) => !o)}
+          >
+            {menuOpen ? <X size={22} /> : <Menu size={22} />}
+          </button>
         </div>
-        <a href="#book" className="nav-book">
-          Book <ArrowRight size={14} />
-        </a>
       </nav>
+
+      {/* ============ MENU DRAWER ============ */}
+      <div className={`nav-drawer ${menuOpen ? "open" : ""}`}>
+        <div className="drawer-inner">
+          <nav className="drawer-group">
+            <span className="drawer-label">Kashiwaya Inn</span>
+            <a href="#book" onClick={() => setMenuOpen(false)}>Book a stay</a>
+            <a href="#food" onClick={() => setMenuOpen(false)}>Food option</a>
+            <a href="#concept" onClick={() => setMenuOpen(false)}>Concept</a>
+            <a href="#house" onClick={() => setMenuOpen(false)}>The house</a>
+            <a href="#gallery" onClick={() => setMenuOpen(false)}>Gallery</a>
+            <a href="#people" onClick={() => setMenuOpen(false)}>The people</a>
+            <a href="#facilities" onClick={() => setMenuOpen(false)}>
+              Facilities &amp; good to know
+            </a>
+            <a href="#access" onClick={() => setMenuOpen(false)}>Access &amp; map</a>
+            <a href="#faq" onClick={() => setMenuOpen(false)}>FAQ</a>
+          </nav>
+          <nav className="drawer-group drawer-sub">
+            <span className="drawer-label">Guides</span>
+            <Link href="/guide/tsumago-magome-day-walk">
+              Tsumago–Magome day walk
+            </Link>
+            <Link href="/guide/rainy-day-in-kiso">Rainy days in the Kiso</Link>
+            <Link href="/guide/kiso-valley-ebike-day">
+              Gorges &amp; rivers by e-bike
+            </Link>
+          </nav>
+          <nav className="drawer-group drawer-sub">
+            <span className="drawer-label">Language</span>
+            <Link href="/ja">日本語</Link>
+          </nav>
+        </div>
+      </div>
 
       {/* ============ FLOATING BOOK ============ */}
       <a href="#book" className="float-book">
@@ -161,11 +205,6 @@ export default function Page() {
             last morning. Two rooms in one kominka; pick the one that suits you.
           </p>
 
-          {/* ----- Step 1 · the room ----- */}
-          <div className="book-step">
-            <span className="step-num">1</span> Book your room
-          </div>
-
           <div className="room-grid">
             {/* ===== Room 1: Japanese-Style Room (1F) ===== */}
             <div className="room-card">
@@ -181,6 +220,11 @@ export default function Page() {
               <div className="room-body">
                 <h3>Japanese-Style Room</h3>
                 <div className="room-sub">1st historic floor</div>
+                <ul className="room-feats">
+                  <li>80 m&sup2; &middot; the whole historic floor for your group</li>
+                  <li>Tatami rooms &middot; courtyard-facing &middot; futon bedding</li>
+                  <li>Private toilet &middot; washer-dryer &middot; board games</li>
+                </ul>
                 <LodgifyBox rentalId="793793" />
               </div>
             </div>
@@ -199,57 +243,19 @@ export default function Page() {
               <div className="room-body">
                 <h3>Superior Family Room</h3>
                 <div className="room-sub">2nd modern floor</div>
+                <ul className="room-feats">
+                  <li>60 m&sup2; &middot; up to 3 adults &middot; 4 futons</li>
+                  <li>Balcony &amp; mountain view &middot; private toilet on 1F &middot; stairs only</li>
+                </ul>
                 <LodgifyBox rentalId="793801" />
               </div>
             </div>
           </div>
 
-          {/* ----- bridge note → meals ----- */}
           <p className="meal-lead">
-            Staying with us? Reserve your meals in step 2 below — and please keep
-            your room booking confirmation number handy, you&apos;ll need it when
-            you order.
+            Staying with us? Dinner and breakfast are reserved separately —
+            see the <a href="#food">Food option</a> section just below.
           </p>
-
-          {/* ----- Step 2 · the meals (Square) ----- */}
-          <div className="book-step">
-            <span className="step-num">2</span> Add your meals
-          </div>
-
-          <div className="meal-order">
-            <div className="meal-order-head">
-              <UtensilsCrossed size={22} className="meal-icon" />
-              <h3>Dinner &amp; breakfast</h3>
-              <p>
-                Rooms and meals are booked separately. Once your room is set
-                above, reserve your meals here — a traditional nabe for dinner,
-                ochazuke for breakfast, cooked around any dietary needs.
-              </p>
-            </div>
-
-            <a
-              href={MEAL_FORM_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="meal-cta"
-            >
-              Reserve meals <ArrowRight size={16} />
-            </a>
-
-            <ul className="meal-note">
-              <li>
-                Please order at least <strong>3 days before your stay</strong>.
-              </li>
-              <li>
-                Use the <strong>same email address and name</strong> you used
-                for your room booking.
-              </li>
-              <li>
-                For multi-night stays, please place a{" "}
-                <strong>separate order for each night</strong>.
-              </li>
-            </ul>
-          </div>
 
           <p className="book-direct-foot">
             Questions? Message us on{" "}
@@ -257,6 +263,84 @@ export default function Page() {
               WhatsApp →
             </a>
           </p>
+        </div>
+      </section>
+
+      {/* ============ FOOD OPTION ============ */}
+      <section className="food-option" id="food">
+        <div className="section-head">
+          <span className="eyebrow-dark">Food option</span>
+          <h2>
+            Dinner &amp; breakfast, <em>cooked in the house.</em>
+          </h2>
+          <p>
+            Meals at Kashiwaya are optional and reserved in advance — a
+            traditional nabe dinner and an ochazuke breakfast, cooked around
+            any dietary needs. Reserve through our pre-arrival form.
+          </p>
+        </div>
+        <div className="meal-order">
+          <div className="meal-photo">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/gallery/somen.jpg"
+              alt="Dinner at Kashiwaya — chilled somen and seasonal dishes"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+          <ul className="food-menu">
+            <li>
+              <span>Chicken hot pot dinner (serves 2)</span>
+              <span>¥6,000</span>
+            </li>
+            <li>
+              <span>Pork shabu-shabu dinner (serves 2)</span>
+              <span>¥8,000</span>
+            </li>
+            <li>
+              <span>Wagyu sukiyaki dinner (serves 2)</span>
+              <span>¥9,000</span>
+            </li>
+            <li>
+              <span>Vegan dinner set (serves 2)</span>
+              <span>¥9,000</span>
+            </li>
+            <li>
+              <span>Wagyu BBQ dinner (serves 2)</span>
+              <span>¥10,000</span>
+            </li>
+            <li>
+              <span>Ochazuke breakfast set (vegan &amp; gluten-free)</span>
+              <span>¥3,000</span>
+            </li>
+          </ul>
+          <a
+            href={PRE_ARRIVAL_FORM_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="meal-cta"
+          >
+            Reserve meals &amp; more <ArrowRight size={16} />
+          </a>
+          <ul className="meal-note">
+            <li>
+              Order at least <strong>3 days before your stay</strong> — one
+              form per date for multi-night stays.
+            </li>
+            <li>
+              Travelling solo? One dinner set per day at{" "}
+              <strong>half the two-person price</strong>.
+            </li>
+            <li>
+              Cancellation is free until 4 days before your stay;
+              non-refundable from 3 days before.
+            </li>
+            <li>
+              The same form also covers <strong>luggage transport</strong> and{" "}
+              <strong>activities</strong> before check-in / after check-out.
+            </li>
+          </ul>
         </div>
       </section>
 
@@ -303,6 +387,17 @@ export default function Page() {
             Midono-juku · 三留野宿 · the 41st post town on the Nakasendo
           </div>
         </div>
+      </section>
+
+      {/* ============ GALLERY ============ */}
+      <section className="gallery" id="gallery">
+        <div className="section-head">
+          <span className="eyebrow-dark">Gallery</span>
+          <h2>
+            Walk the house, <em>room by room.</em>
+          </h2>
+        </div>
+        <PhotoGallery lang="en" />
       </section>
 
       {/* ============ FOOD (chapter 2) ============ */}
@@ -415,6 +510,157 @@ export default function Page() {
         </div>
       </section>
 
+      {/* ============ GOOD TO KNOW (facilities & rules) ============ */}
+      <section className="facilities" id="facilities">
+        <div className="section-head">
+          <span className="eyebrow-dark">Good to know</span>
+          <h2>
+            The details, <em>at a glance.</em>
+          </h2>
+        </div>
+        <div className="quote-grid">
+          <div className="quote-card">
+            <blockquote>
+              &ldquo;I had the whole second floor to myself &mdash; very
+              spacious and lovely. The house is old, so I was afraid it
+              wasn&apos;t going to be very nice, but it was clean and I was
+              really pleasantly surprised.&rdquo;
+            </blockquote>
+            <cite>Katerina &middot; Japan</cite>
+          </div>
+          <div className="quote-card">
+            <blockquote>
+              &ldquo;The house is spectacular &mdash; an actual old Japanese
+              house. It is almost magical to walk the rooms, open the
+              traditional sliding doors or enjoy a peaceful dinner in the
+              dining room.&rdquo;
+            </blockquote>
+            <cite>Fabrizio &middot; United Kingdom</cite>
+          </div>
+        </div>
+        <p className="quote-source">From guest reviews on Booking.com</p>
+        <div className="amenities-grid">
+          <div className="amenity-group">
+            <h4>The rooms</h4>
+            <ul>
+              <li>Futon bedding &amp; linens</li>
+              <li>Towels, slippers, earplugs &amp; bath amenities</li>
+              <li>Air-conditioning &amp; heating</li>
+              <li>Hairdryer &amp; fan</li>
+              <li>Dining table &amp; wine glasses</li>
+              <li>Bedside outlets, clothes rack &amp; drying stand</li>
+            </ul>
+          </div>
+          <div className="amenity-group">
+            <h4>Bath &amp; water</h4>
+            <ul>
+              <li>Private toilet for each room</li>
+              <li>Shared shower room</li>
+              <li>Shared sink &amp; kitchen</li>
+              <li>No bathtub &mdash; a day-trip onsen is a short drive away</li>
+            </ul>
+          </div>
+          <div className="amenity-group">
+            <h4>The house</h4>
+            <ul>
+              <li>Free Wi-Fi throughout</li>
+              <li>One group per floor &mdash; just two rooms in the house</li>
+              <li>Washer-dryer (1st-floor room)</li>
+              <li>Board games &amp; puzzles</li>
+              <li>Luggage storage</li>
+              <li>Smoke alarms &amp; fire extinguishers in every room</li>
+              <li>No smoking indoors</li>
+            </ul>
+          </div>
+          <div className="amenity-group">
+            <h4>Outdoors &amp; parking</h4>
+            <ul>
+              <li>Free private on-site parking (please reserve ahead)</li>
+              <li>Garden &amp; terrace</li>
+              <li>Balcony &amp; mountain view (2nd floor)</li>
+            </ul>
+          </div>
+          <div className="amenity-group">
+            <h4>Activities &amp; services</h4>
+            <ul>
+              <li>E-bike rentals &amp; guided tours (paid)</li>
+              <li>Hiking &amp; cycling from the door</li>
+              <li>Calligraphy sessions (schedule permitting)</li>
+              <li>Station pick-up &amp; luggage forwarding</li>
+              <li>English &amp; Japanese spoken</li>
+            </ul>
+          </div>
+        </div>
+        <div className="rules-card">
+          <h4>House rules</h4>
+          <ul>
+            <li>Check-in 16:00 &mdash; 18:00 &middot; check-out by 10:00</li>
+            <li>
+              Photo ID and the credit card used for booking are required at
+              check-in
+            </li>
+            <li>
+              Please let us know your arrival time in advance &mdash;
+              self-check-in via key box can also be arranged
+            </li>
+            <li>
+              Children welcome (no age limit) &middot; no cots, and extra
+              futons are limited
+            </li>
+            <li>
+              No pets &middot; no parties or events &middot; no smoking
+              indoors (the courtyard is fine)
+            </li>
+            <li>The 2nd-floor room is reached by stairs only</li>
+          </ul>
+        </div>
+      </section>
+
+      {/* ============ LOCATION ============ */}
+      <section className="location" id="access">
+        <div className="section-head">
+          <span className="eyebrow-dark">Where we are</span>
+          <h2>
+            One quiet street <em>on the old road.</em>
+          </h2>
+          <p>
+            Nagiso 3993 &mdash; Midono-juku, Nagiso, Kiso District, Nagano.
+            About 1 km (15 minutes on foot) from JR Nagiso Station.
+          </p>
+        </div>
+        <div className="map-embed">
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d6487.241362023977!2d137.6134136005096!3d35.61242230192019!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x601cc792f7fe924b%3A0xa2f12b3f1d333f0d!2zS2FzaGl3YXlhIElubiBOYWdpc28g5p-P5bGL44Kk44Oz!5e0!3m2!1sja!2sjp!4v1787387096800!5m2!1sja!2sjp"
+            title="Map — Kashiwaya Inn, Nagiso"
+            allowFullScreen
+            loading="lazy"
+            referrerPolicy="strict-origin-when-cross-origin"
+          />
+        </div>
+        <div className="dist-grid">
+          <div className="dist-item">
+            <span className="dist-name">JR Nagiso Station</span>
+            <span className="dist-km">1 km &middot; 15 min on foot</span>
+          </div>
+          <div className="dist-item">
+            <span className="dist-name">Tsumago-juku</span>
+            <span className="dist-km">4 km</span>
+          </div>
+          <div className="dist-item">
+            <span className="dist-name">Magome-juku</span>
+            <span className="dist-km">13 km</span>
+          </div>
+          <div className="dist-item">
+            <span className="dist-name">Atera Valley &amp; Kakizore Gorge</span>
+            <span className="dist-km">about 10 km</span>
+          </div>
+          <div className="dist-item">
+            <span className="dist-name">Matsumoto Airport</span>
+            <span className="dist-km">82 km</span>
+          </div>
+        </div>
+      </section>
+
       {/* ============ FAQ ============ */}
       <section className="faq" id="faq">
         <div className="section-head">
@@ -432,6 +678,22 @@ export default function Page() {
           </p>
         </details>
         <details className="faq-item">
+          <summary>Is there anything to do before I arrive?</summary>
+          <p>
+            Yes — please fill in our{" "}
+            <a
+              href={PRE_ARRIVAL_FORM_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              pre-arrival form
+            </a>
+            . It covers dinner and breakfast reservations, luggage transport,
+            and activities before check-in or after check-out. For
+            multi-night stays, please fill it in once per date.
+          </p>
+        </details>
+        <details className="faq-item">
           <summary>I have a dietary restriction (vegan, gluten-free, etc.).</summary>
           <p>
             Tell us when you book on our site, or send us a WhatsApp message.
@@ -442,12 +704,12 @@ export default function Page() {
         <details className="faq-item">
           <summary>How do I reserve dinner and breakfast?</summary>
           <p>
-            Meals are booked separately from your room, through the &ldquo;Add
-            your meals&rdquo; link in the booking section. Use the same email
-            and name as your room booking, and add your room booking date(s) and
-            any dietary restrictions in the notes field when you order. Meal
-            orders are accepted up to 3 days before your stay, so please reserve
-            in advance.
+            Meals are booked separately from your room, through the
+            pre-arrival form in the <a href="#food">Food option</a> section.
+            Use the same email and name as your room booking, add your stay
+            date(s) and any dietary restrictions, and fill it in once per
+            date for multi-night stays. Orders are accepted up to 3 days
+            before your stay.
           </p>
         </details>
         <details className="faq-item">
@@ -479,6 +741,14 @@ export default function Page() {
           </p>
         </details>
         <details className="faq-item">
+          <summary>Can I leave my luggage before check-in or after check-out?</summary>
+          <p>
+            Yes — place it at the entrance, on the shelf just inside. Please
+            note our liability for stored luggage is limited to ¥100,000 per
+            person.
+          </p>
+        </details>
+        <details className="faq-item">
           <summary>Can you pick me up from Nagiso Station or Tsumago?</summary>
           <p>
             Yes — Nagiso Station, Tsumago and Junikane Station are within our
@@ -494,6 +764,28 @@ export default function Page() {
             vegan sets in between. Travelling solo? One set per day can be
             ordered at half the two-person price. The ochazuke breakfast set
             (vegan &amp; gluten-free) is ¥3,000.
+          </p>
+        </details>
+        <details className="faq-item">
+          <summary>
+            I booked on Booking.com with Genius — is breakfast free?
+          </summary>
+          <p>
+            No — some Genius Level 2–3 reservations show a &ldquo;free
+            breakfast&rdquo; benefit that Booking.com&apos;s system displays
+            without any arrangement with us. Kashiwaya has no
+            breakfast-included plans: all meals are optional, paid, and
+            reserved in advance. We&apos;re sorry for the confusion this
+            causes.
+          </p>
+        </details>
+        <details className="faq-item">
+          <summary>Can I just eat out in the evening instead?</summary>
+          <p>
+            Be careful — restaurants near us don&apos;t keep regular evening
+            hours. The safe plan is to reserve dinner at the inn (up to 3
+            days ahead) or ask us about same-day meal delivery. We&apos;ll
+            gladly check what&apos;s open on your dates.
           </p>
         </details>
         <details className="faq-item">
@@ -515,9 +807,11 @@ export default function Page() {
           <p>
             The shower room, sink and kitchen are shared; toilets are private
             (the private toilet for second-floor guests is on the first
-            floor). There&apos;s no bathtub — if you want a proper soak, a
-            natural day-trip onsen is a short drive away and we can arrange a
-            taxi, or drive you ourselves when we&apos;re free.
+            floor — you won&apos;t pass through any other guest&apos;s area
+            to reach it). There&apos;s no bathtub — if you want a proper
+            soak, a day-use natural hot spring is about 15 minutes away by
+            car (closed Wednesdays). We can shuttle you there when our
+            schedule allows, or arrange a taxi.
           </p>
         </details>
         <details className="faq-item">
@@ -581,7 +875,11 @@ export default function Page() {
             <a href="#book">
               Check availability &amp; book
             </a>
-            <a href={MEAL_ORDER_URL} target="_blank" rel="noopener noreferrer">
+            <a
+              href={PRE_ARRIVAL_FORM_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               Reserve meals
             </a>
             <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">
