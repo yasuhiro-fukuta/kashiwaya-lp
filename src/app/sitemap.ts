@@ -13,6 +13,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.9,
     },
     {
+      url: `${BASE}/ja/guide/atera-ebike`,
+      lastModified,
+      changeFrequency: "yearly",
+      priority: 0.7,
+    },
+    {
       url: `${BASE}/guide/tsumago-magome-day-walk`,
       lastModified,
       changeFrequency: "yearly",

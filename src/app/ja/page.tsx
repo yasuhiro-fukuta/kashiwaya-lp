@@ -121,6 +121,12 @@ export default function Page() {
             <a href="#faq" onClick={() => setMenuOpen(false)}>よくある質問</a>
           </nav>
           <nav className="drawer-group drawer-sub">
+            <span className="drawer-label">ガイド</span>
+            <Link href="/ja/guide/atera-ebike">
+              阿寺渓谷へは、電車&E-bikeがおすすめ!
+            </Link>
+          </nav>
+          <nav className="drawer-group drawer-sub">
             <span className="drawer-label">ガイド(英語)</span>
             <Link href="/guide/tsumago-magome-day-walk">
               妻籠・馬籠 日帰りウォーク

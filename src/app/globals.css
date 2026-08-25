@@ -1376,3 +1376,40 @@ section.full {
 /* nav sits above the open drawer — restyle it for the paper backdrop */
 .nav.menu-open .brand,
 .nav.menu-open .menu-btn { color: var(--moss-deep); }
+
+/* ================= ARTICLE PHOTOS & PLACEHOLDERS ================= */
+.article figure.article-photo {
+  margin: 1.8rem 0;
+}
+.article figure.article-photo img {
+  width: 100%;
+  border-radius: 6px;
+  display: block;
+}
+.article figure.article-photo figcaption {
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+  opacity: 0.75;
+  margin-top: 0.5rem;
+  text-align: center;
+}
+.article .photo-ph {
+  margin: 1.8rem 0;
+  border: 2px dashed var(--line);
+  border-radius: 6px;
+  background: var(--paper-deep);
+  min-height: 180px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ink-soft);
+  opacity: 0.8;
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+}
+.article .cta-row {
+  display: flex;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+  margin-top: 1.6rem;
+}
