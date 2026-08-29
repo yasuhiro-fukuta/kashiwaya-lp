@@ -15,6 +15,7 @@ import Link from "next/link";
 import ChatWidget from "@/components/ChatWidget";
 import LodgifyBox from "@/components/LodgifyBox";
 import PhotoGallery from "@/components/PhotoGallery";
+import CouponBanner from "@/components/CouponBanner";
 
 /** 日本語版LP。構成は英語版(/)と同一。リンク・画像は英語版と共通。 */
 const INSTAGRAM_URL = "https://www.instagram.com/kashiwaya_nakasendo";
@@ -200,6 +201,8 @@ export default function Page() {
             私たちが直接おもてなしします。1軒の古民家に客室は2部屋。
             お好みの方をお選びください。
           </p>
+
+          <CouponBanner lang="ja" />
 
           <div className="room-grid">
             <div className="room-card">
