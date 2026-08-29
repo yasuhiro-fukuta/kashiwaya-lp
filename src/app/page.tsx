@@ -15,6 +15,7 @@ import Link from "next/link";
 import ChatWidget from "@/components/ChatWidget";
 import LodgifyBox from "@/components/LodgifyBox";
 import PhotoGallery from "@/components/PhotoGallery";
+import CouponBanner from "@/components/CouponBanner";
 
 /** =================== CUSTOMIZE ZONE =====================
  *  Update links and image filenames here. All gallery files
@@ -204,6 +205,8 @@ export default function Page() {
             front desk. We host you ourselves, from the first message to the
             last morning. Two rooms in one kominka; pick the one that suits you.
           </p>
+
+          <CouponBanner lang="en" />
 
           <div className="room-grid">
             {/* ===== Room 1: Japanese-Style Room (1F) ===== */}
