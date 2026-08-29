@@ -6,7 +6,7 @@ import { Send } from "lucide-react";
 type ChatMessage = { role: "user" | "assistant"; content: string };
 
 const GREETING =
-  "Hello! I'm the Kashiwaya guest assistant. Ask me anything about your stay, meals, e-bikes, or exploring Nagiso — in any language.\n\nこんにちは！柏屋のご案内チャットです。ご滞在・お食事・E-bike・南木曽の観光など、何でもお尋ねください。";
+  "Hello! I'm an AI trained on everything Yakkun — Kashiwaya's manager — has learned from three years of traveling around Nagiso and a year of living here. Almost anything he knows, I can answer! Ask me anything, in any language.\n\nこんにちは！私は柏屋の支配人『やっくん』が、３年ほど南木曽を旅してきた知識とこちらに移住してきてから１年住んだ知識から学習したAIです。彼の知っている事のほとんどは私も答えられます！";
 
 const QUICK_QUESTIONS = [
   "How do I check out?",
