@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Send } from "lucide-react";
+import { Check, Copy, Send } from "lucide-react";
 
 type ChatMessage = { role: "user" | "assistant"; content: string };
 
@@ -35,16 +35,42 @@ export default function Chat() {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState("");
   const [busy, setBusy] = useState(false);
+  const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight });
   }, [messages]);
 
+  function autoGrow() {
+    const el = inputRef.current;
+    if (!el) return;
+    el.style.height = "auto";
+    el.style.height = Math.min(el.scrollHeight, 140) + "px";
+  }
+
+  async function copyAnswer(text: string, index: number) {
+    try {
+      await navigator.clipboard.writeText(text);
+    } catch {
+      // Older browsers / non-HTTPS: fall back to a hidden textarea.
+      const ta = document.createElement("textarea");
+      ta.value = text;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand("copy");
+      document.body.removeChild(ta);
+    }
+    setCopiedIndex(index);
+    setTimeout(() => setCopiedIndex((v) => (v === index ? null : v)), 2000);
+  }
+
   async function send(text: string) {
     const question = text.trim();
     if (!question || busy) return;
     setInput("");
+    requestAnimationFrame(autoGrow);
     setBusy(true);
 
     const history: ChatMessage[] = [...messages, { role: "user", content: question }];
@@ -84,6 +110,17 @@ export default function Chat() {
     }
   }
 
+  function onInputKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
+    // Desktop: Enter sends, Shift+Enter inserts a newline. On touch devices the
+    // Enter key inserts a newline and sending is done with the button. Never
+    // send while the IME is composing (Japanese input confirms with Enter).
+    if (e.key !== "Enter" || e.shiftKey) return;
+    if (e.nativeEvent.isComposing) return;
+    if (typeof window !== "undefined" && window.matchMedia("(pointer: coarse)").matches) return;
+    e.preventDefault();
+    send(input);
+  }
+
   return (
     <div className="chat">
       <div className="chat-scroll" ref={scrollRef}>
@@ -107,7 +144,27 @@ export default function Chat() {
             {m.content === "" && m.role === "assistant" ? (
               <span className="chat-typing">…</span>
             ) : (
-              renderWithLinks(m.content)
+              <>
+                {renderWithLinks(m.content)}
+                {m.role === "assistant" && !(busy && i === messages.length - 1) && (
+                  <button
+                    className="chat-copy"
+                    onClick={() => copyAnswer(m.content, i)}
+                    aria-label="Copy answer"
+                    title="Copy"
+                  >
+                    {copiedIndex === i ? (
+                      <>
+                        <Check size={13} /> Copied
+                      </>
+                    ) : (
+                      <>
+                        <Copy size={13} /> Copy
+                      </>
+                    )}
+                  </button>
+                )}
+              </>
             )}
           </div>
         ))}
@@ -120,12 +177,18 @@ export default function Chat() {
           send(input);
         }}
       >
-        <input
+        <textarea
+          ref={inputRef}
           className="chat-input"
           value={input}
-          onChange={(e) => setInput(e.target.value)}
+          onChange={(e) => {
+            setInput(e.target.value);
+            autoGrow();
+          }}
+          onKeyDown={onInputKeyDown}
           placeholder="Ask a question… / 質問をどうぞ…"
           maxLength={2000}
+          rows={1}
           aria-label="Your question"
         />
         <button className="chat-send" type="submit" disabled={busy || !input.trim()} aria-label="Send">

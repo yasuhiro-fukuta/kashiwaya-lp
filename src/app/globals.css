@@ -784,6 +784,22 @@ section.full {
   border-bottom-right-radius: 4px;
 }
 .chat-typing { opacity: 0.5; }
+.chat-copy {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin-top: 0.5rem;
+  padding: 0.15rem 0.5rem 0.15rem 0.35rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ink-soft);
+  font-size: 0.7rem;
+  font-family: var(--sans);
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s;
+}
+.chat-copy:hover { color: var(--moss-deep); border-color: var(--moss); }
 .chat-chips { display: flex; flex-wrap: wrap; gap: 0.4rem; }
 .chat-chip {
   border: 1px solid var(--line);
@@ -806,13 +822,17 @@ section.full {
 .chat-input {
   flex: 1;
   border: 1px solid var(--line);
-  border-radius: 999px;
+  border-radius: 18px;
   padding: 0.55rem 1rem;
   font-size: 0.9rem;
+  line-height: 1.4;
   font-family: var(--sans);
   background: #fff;
   color: var(--ink);
   outline: none;
+  resize: none;
+  overflow-y: auto;
+  max-height: 140px;
 }
 .chat-input:focus { border-color: var(--moss); }
 .chat-send {
