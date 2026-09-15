@@ -1,5 +1,6 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { getKnowledge } from "@/lib/knowledge";
+import { getMealFormBlock } from "@/lib/mealform";
 import { getScheduleBlock } from "@/lib/schedule";
 import { buildStaffSystemPrompt, buildSystemPrompt, STAFF_TAG_PATTERN } from "@/lib/prompt";
 
@@ -67,6 +68,7 @@ export async function POST(req: Request) {
   const staffMode = STAFF_TAG_PATTERN.test(history[history.length - 1].content);
   const knowledge = await getKnowledge();
   const schedule = staffMode ? await getScheduleBlock() : null;
+  const meals = await getMealFormBlock();
   const client = new Anthropic();
 
   const system: Anthropic.TextBlockParam[] = [
@@ -76,6 +78,7 @@ export async function POST(req: Request) {
       cache_control: { type: "ephemeral" },
     },
   ];
+  if (meals) system.push({ type: "text", text: meals });
   if (schedule) system.push({ type: "text", text: schedule });
 
   const stream = client.messages.stream({
