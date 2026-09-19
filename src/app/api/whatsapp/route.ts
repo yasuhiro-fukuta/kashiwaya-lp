@@ -102,6 +102,7 @@ export async function POST(req: Request) {
         .filter((b) => b.type === "text")
         .map((b) => b.text)
         .join("")
+        .replace(/<<COPY>>|<<END>>/g, "")
         .trim();
       if (answer) await sendWhatsAppText(phoneNumberId, token, m.from, answer);
     } catch (err) {

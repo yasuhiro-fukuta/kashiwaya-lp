@@ -180,6 +180,42 @@ export default function Chat() {
     }
   }
 
+  // Reply-draft answers wrap the send-ready text in <<COPY>>..<<END>>;
+  // render that part as its own box with a dedicated copy button.
+  function renderAssistantContent(m: ChatMessage, i: number) {
+    const match = /<<COPY>>([\s\S]*?)(?:<<END>>|$)/.exec(m.content);
+    if (!match) return renderWithLinks(m.content);
+    const before = m.content.slice(0, match.index).trim();
+    const reply = match[1].trim();
+    const after = m.content.slice(match.index + match[0].length).trim();
+    const key = 100000 + i;
+    return (
+      <>
+        {before && <div>{renderWithLinks(before)}</div>}
+        <div className="chat-replybox">
+          <div className="chat-replybox-label">送信用 / Ready to send</div>
+          {renderWithLinks(reply)}
+          <button
+            className="chat-copy"
+            onClick={() => copyAnswer(reply, key)}
+            aria-label="Copy reply"
+          >
+            {copiedIndex === key ? (
+              <>
+                <Check size={13} /> Copied
+              </>
+            ) : (
+              <>
+                <Copy size={13} /> 返信文をコピー
+              </>
+            )}
+          </button>
+        </div>
+        {after && <div>{renderWithLinks(after)}</div>}
+      </>
+    );
+  }
+
   function onInputKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
     if (e.key !== "Enter" || e.shiftKey) return;
     if (e.nativeEvent.isComposing) return;
@@ -220,11 +256,11 @@ export default function Chat() {
               <span className="chat-typing">…</span>
             ) : (
               <>
-                {renderWithLinks(m.content)}
+                {m.role === "assistant" ? renderAssistantContent(m, i) : renderWithLinks(m.content)}
                 {m.role === "assistant" && !(busy && i === messages.length - 1) && (
                   <button
                     className="chat-copy"
-                    onClick={() => copyAnswer(m.content, i)}
+                    onClick={() => copyAnswer(m.content.replace(/<<COPY>>|<<END>>/g, "").trim(), i)}
                     aria-label="Copy answer"
                     title="Copy"
                   >
