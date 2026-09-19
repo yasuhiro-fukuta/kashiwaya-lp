@@ -26,7 +26,11 @@ function isRateLimited(ip: string): boolean {
   return recent.length > MAX_REQUESTS_PER_WINDOW;
 }
 
-type ChatMessage = { role: "user" | "assistant"; content: string };
+type ChatMessage = { role: "user" | "assistant"; content: string; images?: string[] };
+
+const MAX_IMAGES = 3;
+const MAX_IMAGE_CHARS = 2_500_000; // ~1.8MB per image after base64
+const IMAGE_DATA_URL = /^data:(image\/(?:jpeg|png|webp|gif));base64,([A-Za-z0-9+/=]+)$/;
 
 function isValidHistory(value: unknown): value is ChatMessage[] {
   return (
@@ -38,11 +42,42 @@ function isValidHistory(value: unknown): value is ChatMessage[] {
         m &&
         (m.role === "user" || m.role === "assistant") &&
         typeof m.content === "string" &&
-        m.content.length > 0 &&
-        m.content.length <= MAX_MESSAGE_CHARS,
+        m.content.length <= MAX_MESSAGE_CHARS &&
+        (m.images === undefined ||
+          (Array.isArray(m.images) &&
+            m.images.length <= MAX_IMAGES &&
+            m.images.every(
+              (img: unknown) =>
+                typeof img === "string" && img.length <= MAX_IMAGE_CHARS,
+            ))) &&
+        (m.content.trim().length > 0 || (m.images?.length ?? 0) > 0),
     ) &&
     value[value.length - 1].role === "user"
   );
+}
+
+// Convert to API content blocks; image attachments become vision input.
+function toApiMessages(history: ChatMessage[]): Anthropic.MessageParam[] {
+  return history.map((m) => {
+    const blocks: Anthropic.ContentBlockParam[] = [];
+    for (const img of (m.images ?? []).slice(0, MAX_IMAGES)) {
+      const match = IMAGE_DATA_URL.exec(img);
+      if (!match) continue;
+      blocks.push({
+        type: "image",
+        source: {
+          type: "base64",
+          media_type: match[1] as "image/jpeg" | "image/png" | "image/webp" | "image/gif",
+          data: match[2],
+        },
+      });
+    }
+    blocks.push({
+      type: "text",
+      text: m.content.trim() || "(See attached image / 画像を確認してください)",
+    });
+    return { role: m.role, content: blocks };
+  });
 }
 
 export async function POST(req: Request) {
@@ -85,7 +120,7 @@ export async function POST(req: Request) {
     model: MODEL,
     max_tokens: 1024,
     system,
-    messages: history,
+    messages: toApiMessages(history),
   });
 
   const encoder = new TextEncoder();
