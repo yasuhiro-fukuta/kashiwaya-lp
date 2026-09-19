@@ -825,11 +825,11 @@ section.full {
   gap: 0.45rem;
   max-width: 100%;
 }
-.chat-row .chat-msg-bot { max-width: calc(88% - 2.4rem); }
+.chat-row .chat-msg-bot { max-width: calc(88% - 3.4rem); }
 .chat-row-user { display: flex; justify-content: flex-end; }
 .chat-avatar {
-  width: 34px;
-  height: 34px;
+  width: 52px;
+  height: 52px;
   border-radius: 50%;
   object-fit: cover;
   border: 1px solid var(--line);
@@ -839,8 +839,8 @@ section.full {
 }
 .chatw-title { display: inline-flex; align-items: center; gap: 0.5rem; }
 .chatw-avatar {
-  width: 28px;
-  height: 28px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   object-fit: cover;
   background: #fff;
