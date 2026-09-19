@@ -6,7 +6,9 @@ import { Check, Copy, Paperclip, Send, X } from "lucide-react";
 type ChatMessage = { role: "user" | "assistant"; content: string; images?: string[] };
 
 const GREETING =
-  "Hello! I'm an AI trained on everything Yakkun — Kashiwaya's manager — has learned from three years of traveling around Nagiso and a year of living here. Almost anything he knows, I can answer! Ask me anything, in any language.\n\nこんにちは！私は柏屋の支配人『やっくん』が、３年ほど南木曽を旅してきた知識とこちらに移住してきてから１年住んだ知識から学習したAIです。彼の知っている事のほとんどは私も答えられます！";
+  "Hello! I'm the zashiki-warashi of Kashiwaya — a little house spirit who has lived in the attic for 140 years. I learned everything about this house and the area by eavesdropping on Master Yakkun, so ask me anything, in any language!\n\nはじめまして、わたしは『柏屋の座敷童』。この家の天井裏に140年住んでいます。この家のことや観光のアドバイスは、マスターのやっくんから盗み聞きしたので、何でも聞いてください！";
+
+const AVATAR = "/zashikiwarashi.png";
 
 const QUICK_QUESTIONS = [
   "How do I check out?",
@@ -227,7 +229,11 @@ export default function Chat() {
   return (
     <div className="chat">
       <div className="chat-scroll" ref={scrollRef}>
-        <div className="chat-msg chat-msg-bot">{renderWithLinks(GREETING)}</div>
+        <div className="chat-row">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img className="chat-avatar" src={AVATAR} alt="柏屋の座敷童" />
+          <div className="chat-msg chat-msg-bot">{renderWithLinks(GREETING)}</div>
+        </div>
 
         {messages.length === 0 && (
           <div className="chat-chips">
@@ -240,8 +246,12 @@ export default function Chat() {
         )}
 
         {messages.map((m, i) => (
+          <div key={i} className={m.role === "assistant" ? "chat-row" : "chat-row-user"}>
+            {m.role === "assistant" && (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img className="chat-avatar" src={AVATAR} alt="" />
+            )}
           <div
-            key={i}
             className={`chat-msg ${m.role === "user" ? "chat-msg-user" : "chat-msg-bot"}`}
           >
             {m.images && m.images.length > 0 && (
@@ -277,6 +287,7 @@ export default function Chat() {
                 )}
               </>
             )}
+          </div>
           </div>
         ))}
       </div>

@@ -16,7 +16,7 @@ export default function ChatPage() {
         <Link href="/" className="chatpage-brand">
           Kashiwaya <em>Inn</em>
         </Link>
-        <span className="chatpage-sub">Guest assistant · ご案内チャット</span>
+        <span className="chatpage-sub">柏屋の座敷童 · Zashiki-warashi guest assistant</span>
       </header>
       <div className="chatpage-body">
         <Chat />

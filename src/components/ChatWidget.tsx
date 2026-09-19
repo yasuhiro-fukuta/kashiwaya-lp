@@ -12,8 +12,10 @@ export default function ChatWidget() {
       {open && (
         <div className="chatw-panel" role="dialog" aria-label="Kashiwaya guest assistant">
           <div className="chatw-head">
-            <span>
-              Ask <em>Kashiwaya</em>
+            <span className="chatw-title">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img className="chatw-avatar" src="/zashikiwarashi.png" alt="" />
+              柏屋の<em>座敷童</em>
             </span>
             <button className="chatw-close" onClick={() => setOpen(false)} aria-label="Close chat">
               <X size={18} />

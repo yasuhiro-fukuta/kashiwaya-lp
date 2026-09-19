@@ -818,6 +818,35 @@ section.full {
   margin-bottom: 0.4rem;
 }
 
+/* zashiki-warashi avatar */
+.chat-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.45rem;
+  max-width: 100%;
+}
+.chat-row .chat-msg-bot { max-width: calc(88% - 2.4rem); }
+.chat-row-user { display: flex; justify-content: flex-end; }
+.chat-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid var(--line);
+  background: #fff;
+  flex-shrink: 0;
+  margin-bottom: 2px;
+}
+.chatw-title { display: inline-flex; align-items: center; gap: 0.5rem; }
+.chatw-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: #fff;
+  border: 1px solid rgba(245,239,226,0.4);
+}
+
 /* image attachments */
 .chat-attach {
   display: inline-flex;
