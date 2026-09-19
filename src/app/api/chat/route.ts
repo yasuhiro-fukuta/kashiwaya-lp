@@ -2,7 +2,7 @@ import Anthropic from "@anthropic-ai/sdk";
 import { getKnowledge } from "@/lib/knowledge";
 import { getMealFormBlock } from "@/lib/mealform";
 import { getScheduleBlock } from "@/lib/schedule";
-import { buildStaffSystemPrompt, buildSystemPrompt, STAFF_TAG_PATTERN } from "@/lib/prompt";
+import { buildStaffSystemPrompt, buildSystemPrompt, STAFF_REPLY_RULES, STAFF_REPLY_TAG_PATTERN, STAFF_TAG_PATTERN } from "@/lib/prompt";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
@@ -100,7 +100,9 @@ export async function POST(req: Request) {
     return new Response("Invalid request.", { status: 400 });
   }
 
-  const staffMode = STAFF_TAG_PATTERN.test(history[history.length - 1].content);
+  const lastContent = history[history.length - 1].content;
+  const replyMode = STAFF_REPLY_TAG_PATTERN.test(lastContent);
+  const staffMode = replyMode || STAFF_TAG_PATTERN.test(lastContent);
   const knowledge = await getKnowledge();
   const schedule = staffMode ? await getScheduleBlock() : null;
   const meals = await getMealFormBlock();
@@ -109,7 +111,9 @@ export async function POST(req: Request) {
   const system: Anthropic.TextBlockParam[] = [
     {
       type: "text",
-      text: staffMode ? buildStaffSystemPrompt(knowledge) : buildSystemPrompt(knowledge),
+      text:
+        (staffMode ? buildStaffSystemPrompt(knowledge) : buildSystemPrompt(knowledge)) +
+        (replyMode ? "\n" + STAFF_REPLY_RULES : ""),
       cache_control: { type: "ephemeral" },
     },
   ];

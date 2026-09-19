@@ -1,7 +1,7 @@
 import { getKnowledge } from "@/lib/knowledge";
 import { getMealFormBlock } from "@/lib/mealform";
 import { getScheduleBlock } from "@/lib/schedule";
-import { buildStaffSystemPrompt, buildSystemPrompt, STAFF_TAG_PATTERN } from "@/lib/prompt";
+import { buildStaffSystemPrompt, buildSystemPrompt, STAFF_REPLY_RULES, STAFF_REPLY_TAG_PATTERN, STAFF_TAG_PATTERN } from "@/lib/prompt";
 import Anthropic from "@anthropic-ai/sdk";
 
 export const runtime = "nodejs";
@@ -73,7 +73,8 @@ export async function POST(req: Request) {
     const question = m.text.body.slice(0, 2000);
 
     try {
-      const staffMode = STAFF_TAG_PATTERN.test(question);
+      const replyMode = STAFF_REPLY_TAG_PATTERN.test(question);
+      const staffMode = replyMode || STAFF_TAG_PATTERN.test(question);
       const knowledge = await getKnowledge();
       const schedule = staffMode ? await getScheduleBlock() : null;
       const meals = await getMealFormBlock();
@@ -83,6 +84,7 @@ export async function POST(req: Request) {
           type: "text",
           text:
             (staffMode ? buildStaffSystemPrompt(knowledge) : buildSystemPrompt(knowledge)) +
+            (replyMode ? "\n" + STAFF_REPLY_RULES : "") +
             "\n\n# WhatsApp用の追加ルール\n- ここはWhatsAppです。回答は短め(数文〜箇条書き数点)に。\n- マークダウン記法(** や # など)は使わない。\n- 会話の履歴は保持されないため、直前のやり取りを前提にしない。",
           cache_control: { type: "ephemeral" },
         },
