@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { Check, Copy, Paperclip, Send, X } from "lucide-react";
+import AvatarLightbox from "./AvatarLightbox";
 
 type ChatMessage = { role: "user" | "assistant"; content: string; images?: string[] };
 
@@ -69,6 +70,7 @@ export default function Chat() {
   const [images, setImages] = useState<string[]>([]);
   const [busy, setBusy] = useState(false);
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
+  const [avatarZoom, setAvatarZoom] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const fileRef = useRef<HTMLInputElement>(null);
@@ -230,8 +232,15 @@ export default function Chat() {
     <div className="chat">
       <div className="chat-scroll" ref={scrollRef}>
         <div className="chat-row">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img className="chat-avatar" src={AVATAR} alt="柏屋の座敷童" />
+          <button
+            type="button"
+            className="chat-avatar-btn"
+            onClick={() => setAvatarZoom(true)}
+            aria-label="座敷童の画像を拡大 / Enlarge image"
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img className="chat-avatar" src={AVATAR} alt="柏屋の座敷童" />
+          </button>
           <div className="chat-msg chat-msg-bot">{renderWithLinks(GREETING)}</div>
         </div>
 
@@ -248,8 +257,15 @@ export default function Chat() {
         {messages.map((m, i) => (
           <div key={i} className={m.role === "assistant" ? "chat-row" : "chat-row-user"}>
             {m.role === "assistant" && (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img className="chat-avatar" src={AVATAR} alt="" />
+              <button
+                type="button"
+                className="chat-avatar-btn"
+                onClick={() => setAvatarZoom(true)}
+                aria-label="座敷童の画像を拡大 / Enlarge image"
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img className="chat-avatar" src={AVATAR} alt="" />
+              </button>
             )}
           <div
             className={`chat-msg ${m.role === "user" ? "chat-msg-user" : "chat-msg-bot"}`}
@@ -365,6 +381,8 @@ export default function Chat() {
         </a>
         .
       </div>
+
+      {avatarZoom && <AvatarLightbox src={AVATAR} onClose={() => setAvatarZoom(false)} />}
     </div>
   );
 }
