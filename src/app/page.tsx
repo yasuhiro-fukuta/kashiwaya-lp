@@ -203,7 +203,8 @@ export default function Page() {
           <p className="book-direct-lede">
             Book direct, skip the platforms — and deal with real people, not a
             front desk. We host you ourselves, from the first message to the
-            last morning. Two rooms in one kominka; pick the one that suits you.
+            last morning. Two rooms in one kominka — and on select dates,
+            the whole house to yourselves.
           </p>
 
           <CouponBanner lang="en" />
@@ -253,7 +254,36 @@ export default function Page() {
                 <LodgifyBox rentalId="793801" />
               </div>
             </div>
+
+            {/* ===== Room 3: Whole-House Rental ===== */}
+            <div className="room-card">
+              <div className="room-photo">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src="/gallery/tour/common-exterior.jpg"
+                  alt="Whole-house rental — the entire 140-year-old kominka"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </div>
+              <div className="room-body">
+                <h3>The Whole House</h3>
+                <div className="room-sub">Vacation house rental &middot; both floors</div>
+                <ul className="room-feats">
+                  <li>The entire 140-year-old kominka, for one group</li>
+                  <li>Both floors (140 m&sup2;) &middot; garden &amp; kitchen all to yourselves</li>
+                  <li>Offered on select dates only &mdash; about one night a week</li>
+                </ul>
+                <LodgifyBox rentalId="850548" />
+              </div>
+            </div>
           </div>
+
+          <p className="meal-lead">
+            On whole-house dates the individual rooms are closed (and vice
+            versa), so the calendars never overlap &mdash; if your date shows
+            no availability on one listing, check the other.
+          </p>
 
           <p className="meal-lead">
             Staying with us? Dinner and breakfast are reserved separately —
@@ -749,6 +779,16 @@ export default function Page() {
             Yes — place it at the entrance, on the shelf just inside. Please
             note our liability for stored luggage is limited to ¥100,000 per
             person.
+          </p>
+        </details>
+        <details className="faq-item">
+          <summary>Can we rent the whole house?</summary>
+          <p>
+            Yes — on select dates (about one night a week) we list the whole
+            kominka for a single group: both floors, garden and kitchen
+            included. On those dates the individual rooms are closed, so the
+            whole-house calendar only opens on the days it&apos;s available.
+            Book it from the booking section like any room.
           </p>
         </details>
         <details className="faq-item">

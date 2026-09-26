@@ -199,7 +199,7 @@ export default function Page() {
           <p className="book-direct-lede">
             予約サイトを介さず、最初のメッセージから最後の朝まで、
             私たちが直接おもてなしします。1軒の古民家に客室は2部屋。
-            お好みの方をお選びください。
+            さらに日によっては、一棟貸しもご用意しています。
           </p>
 
           <CouponBanner lang="ja" />
@@ -247,7 +247,35 @@ export default function Page() {
                 <LodgifyBox rentalId="793801" language="ja" />
               </div>
             </div>
+
+            {/* ===== Room 3: 一棟貸し ===== */}
+            <div className="room-card">
+              <div className="room-photo">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src="/gallery/tour/common-exterior.jpg"
+                  alt="一棟貸し — 築140年の古民家をまるごと"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </div>
+              <div className="room-body">
+                <h3>一棟貸し</h3>
+                <div className="room-sub">1階+2階 まるごと</div>
+                <ul className="room-feats">
+                  <li>築140年の家を、1組様で貸切</li>
+                  <li>両フロア(計140㎡)· 庭もキッチンも独占</li>
+                  <li>週に1日ほどの限定販売</li>
+                </ul>
+                <LodgifyBox rentalId="850548" language="ja" />
+              </div>
+            </div>
           </div>
+
+          <p className="meal-lead">
+            一棟貸しの日は各部屋の販売を止めています(逆も同様)。
+            ご希望日に空きが見えない場合は、もう一方の掲載もご確認ください。
+          </p>
 
           <p className="meal-lead">
             ご宿泊の方は、お食事を別途ご予約ください — すぐ下の
@@ -677,6 +705,16 @@ export default function Page() {
           <p>
             はい。エントランスを入ってすぐの棚に置いてください。
             お預かり中の荷物の賠償はお一人様10万円までとさせていただきます。
+          </p>
+        </details>
+        <details className="faq-item">
+          <summary>一棟貸しはできますか?</summary>
+          <p>
+            はい。週に1日ほど、家をまるごと1組様に貸し切る「一棟貸し」の日を
+            設けています。両フロア・庭・キッチンすべてお使いいただけます。
+            その日は各部屋の販売を止めているため、一棟貸しのカレンダーに
+            空きが出ている日が対象です。予約セクションからお部屋と同じように
+            ご予約ください。
           </p>
         </details>
         <details className="faq-item">

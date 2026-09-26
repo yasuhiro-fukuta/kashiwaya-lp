@@ -279,6 +279,14 @@ const structuredData = {
         },
         {
           "@type": "Question",
+          name: "Can guests rent the whole house at Kashiwaya Inn?",
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: "Yes — on select dates (about one night a week) the whole kominka is listed for a single group: both floors, garden and kitchen included. On those dates the individual rooms are closed, so the whole-house calendar only opens on available days.",
+          },
+        },
+        {
+          "@type": "Question",
           name: "Can guests eat out in the evening near Kashiwaya Inn?",
           acceptedAnswer: {
             "@type": "Answer",
