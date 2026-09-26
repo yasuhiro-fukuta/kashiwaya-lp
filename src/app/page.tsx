@@ -371,8 +371,11 @@ export default function Page() {
           <ul className="meal-note">
             <li>
               <strong>Booking direct on this site?</strong> Choose your meals
-              as add-ons at checkout. One dinner set per stay — for dinner on
-              more than one evening, message us on WhatsApp.
+              as add-ons at checkout (each menu once per stay). Staying one
+              night? Nothing more to do. Staying longer? Message us on
+              WhatsApp to say which evening you&apos;d like each dinner —
+              e.g. staying Oct 3–6: sukiyaki on the 3rd, shabu-shabu on
+              the 5th.
             </li>
             <li>
               <strong>Booked via Booking.com?</strong> Meal add-ons aren&apos;t
@@ -770,9 +773,11 @@ export default function Page() {
           <summary>How do I reserve dinner and breakfast?</summary>
           <p>
             Booking direct on this site? Simply choose your meals as add-ons
-            at checkout when you book your room (one dinner set per stay —
-            for more evenings, message us on WhatsApp). Booked via
-            Booking.com? Use the pre-arrival form in the{" "}
+            at checkout when you book your room. For one-night stays
+            there&apos;s nothing more to do. Staying multiple nights? Message
+            us on WhatsApp to say which menu you&apos;d like on which evening
+            (e.g. staying Oct 3–6: sukiyaki on the 3rd, shabu-shabu on the
+            5th). Booked via Booking.com? Use the pre-arrival form in the{" "}
             <a href="#food">Food option</a> section — same email and name as
             your room booking, one form per date for multi-night stays.
             Orders are accepted up to 3 days before your stay.

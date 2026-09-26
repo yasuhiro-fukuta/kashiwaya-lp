@@ -162,7 +162,7 @@ const structuredData = {
           name: "How do I reserve dinner and breakfast?",
           acceptedAnswer: {
             "@type": "Answer",
-            text: "Booking direct on the official site, guests choose meals as add-ons at checkout (one dinner set per stay; for more evenings, contact the inn on WhatsApp). Guests booked via Booking.com reserve through the pre-arrival form in the Food option section, using the same email and name as the room booking, one form per date for multi-night stays. Orders are accepted up to 3 days before the stay.",
+            text: "Booking direct on the official site, guests choose meals as add-ons at checkout. One-night stays need nothing more; guests staying multiple nights message the inn on WhatsApp to say which menu they'd like on which evening. Guests booked via Booking.com reserve through the pre-arrival form in the Food option section, using the same email and name as the room booking, one form per date for multi-night stays. Orders are accepted up to 3 days before the stay.",
           },
         },
         {
