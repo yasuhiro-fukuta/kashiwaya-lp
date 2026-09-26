@@ -372,10 +372,12 @@ export default function Page() {
             <li>
               <strong>Booking direct on this site?</strong> Choose your meals
               as add-ons at checkout (each menu once per stay). Staying one
-              night? Nothing more to do. Staying longer? Message us on
-              WhatsApp to say which evening you&apos;d like each dinner —
-              e.g. staying Oct 3–6: sukiyaki on the 3rd, shabu-shabu on
-              the 5th.
+              night? Nothing more to do. Staying longer? Tell us on WhatsApp
+              which order you&apos;d like on which date — e.g. staying
+              Oct 3–6 and you&apos;d like sukiyaki on the 3rd and shabu-shabu
+              on the 5th: add both sets at checkout, then message us
+              &quot;Sukiyaki on the 3rd, Shabu-shabu on the 5th&quot;. Same
+              for breakfast mornings.
             </li>
             <li>
               <strong>Booked via Booking.com?</strong> Meal add-ons aren&apos;t
@@ -774,10 +776,13 @@ export default function Page() {
           <p>
             Booking direct on this site? Simply choose your meals as add-ons
             at checkout when you book your room. For one-night stays
-            there&apos;s nothing more to do. Staying multiple nights? Message
-            us on WhatsApp to say which menu you&apos;d like on which evening
-            (e.g. staying Oct 3–6: sukiyaki on the 3rd, shabu-shabu on the
-            5th). Booked via Booking.com? Use the pre-arrival form in the{" "}
+            there&apos;s nothing more to do. Staying multiple nights? Tell us
+            on WhatsApp which order you&apos;d like on which date — e.g.
+            staying Oct 3–6 and you&apos;d like sukiyaki on the 3rd and
+            shabu-shabu on the 5th: add both sets at checkout, then message
+            us &quot;Sukiyaki on the 3rd, Shabu-shabu on the 5th&quot;. The
+            same goes for breakfast mornings. Booked via Booking.com? Use
+            the pre-arrival form in the{" "}
             <a href="#food">Food option</a> section — same email and name as
             your room booking, one form per date for multi-night stays.
             Orders are accepted up to 3 days before your stay.
