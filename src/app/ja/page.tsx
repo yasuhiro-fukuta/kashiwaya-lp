@@ -266,6 +266,8 @@ export default function Page() {
                   <li>築140年の家を、1組様で貸切</li>
                   <li>両フロア(計140㎡)· 庭もキッチンも独占</li>
                   <li>週に1日ほどの限定販売</li>
+                  <li>無人運営 — キーボックスでセルフチェックイン</li>
+                  <li>仕出し(夕食・朝食)のご提供はありません — 代替はWhatsAppでご相談を</li>
                 </ul>
                 <LodgifyBox rentalId="850548" language="ja" />
               </div>
@@ -362,6 +364,10 @@ export default function Page() {
             <li>
               同じフォームで<strong>荷物の配送</strong>や、チェックイン前後の
               <strong>アクティビティ</strong>もリクエストできます。
+            </li>
+            <li>
+              <strong>無人一棟貸しではお食事はご利用いただけません</strong> —
+              WhatsAppでご相談いただければ、代替サービスをご案内します。
             </li>
           </ul>
         </div>
@@ -715,7 +721,9 @@ export default function Page() {
             設けています。両フロア・庭・キッチンすべてお使いいただけます。
             その日は各部屋の販売を止めているため、一棟貸しのカレンダーに
             空きが出ている日が対象です。予約セクションからお部屋と同じように
-            ご予約ください。
+            ご予約ください。なお、一棟貸しは無人運営(キーボックスでの
+            セルフチェックイン)で、仕出し(夕食・朝食)のご提供はありません。
+            お食事はWhatsAppでご相談いただければ代替サービスをご案内します。
           </p>
         </details>
         <details className="faq-item">

@@ -273,6 +273,11 @@ export default function Page() {
                   <li>The entire 140-year-old kominka, for one group</li>
                   <li>Both floors (140 m&sup2;) &middot; garden &amp; kitchen all to yourselves</li>
                   <li>Offered on select dates only &mdash; about one night a week</li>
+                  <li>Unmanned stay &mdash; self check-in via key box</li>
+                  <li>
+                    Dinner &amp; breakfast service not available &mdash; ask
+                    us on WhatsApp for alternatives
+                  </li>
                 </ul>
                 <LodgifyBox rentalId="850548" />
               </div>
@@ -372,6 +377,11 @@ export default function Page() {
             <li>
               The same form also covers <strong>luggage transport</strong> and{" "}
               <strong>activities</strong> before check-in / after check-out.
+            </li>
+            <li>
+              Meals are <strong>not available for the unmanned whole-house
+              rental</strong> &mdash; message us on WhatsApp and we&apos;ll
+              suggest alternatives.
             </li>
           </ul>
         </div>
@@ -792,7 +802,10 @@ export default function Page() {
             kominka for a single group: both floors, garden and kitchen
             included. On those dates the individual rooms are closed, so the
             whole-house calendar only opens on the days it&apos;s available.
-            Book it from the booking section like any room.
+            Book it from the booking section like any room. Please note the
+            whole-house stay is unmanned (self check-in via key box), and
+            dinner and breakfast service is not available &mdash; message us
+            on WhatsApp and we&apos;ll suggest meal alternatives.
           </p>
         </details>
         <details className="faq-item">
