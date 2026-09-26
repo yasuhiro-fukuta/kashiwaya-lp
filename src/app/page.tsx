@@ -26,7 +26,6 @@ const GOOGLE_MAP_URL = "https://maps.app.goo.gl/ViXN6oJNxvjQkv2SA?g_st=ac";
 const EBIKE_LP_URL = "https://kiso-ebike-lp.vercel.app/";
 const WHATSAPP_URL =
   "https://wa.me/819038392354?text=Hello%20Kashiwaya%2C%20I%27d%20like%20to%20ask%20about%20a%20stay.";
-const PRE_ARRIVAL_FORM_URL = "https://forms.gle/KqYFZBWuiVnAshAF9";
 
 const HERO_IMG = "/gallery/entrance.JPG";
 const HOUSE_IMG = "/gallery/1stfloor.JPG";
@@ -203,7 +202,8 @@ export default function Page() {
           <p className="book-direct-lede">
             Book direct, skip the platforms — and deal with real people, not a
             front desk. We host you ourselves, from the first message to the
-            last morning. Two rooms in one kominka; pick the one that suits you.
+            last morning. Two rooms in one kominka — and on select dates,
+            the whole house to yourselves.
           </p>
 
           <CouponBanner lang="en" />
@@ -253,11 +253,46 @@ export default function Page() {
                 <LodgifyBox rentalId="793801" />
               </div>
             </div>
+
+            {/* ===== Room 3: Whole-House Rental ===== */}
+            <div className="room-card">
+              <div className="room-photo">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src="/gallery/tour/common-exterior.jpg"
+                  alt="Whole-house rental — the entire 140-year-old kominka"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </div>
+              <div className="room-body">
+                <h3>The Whole House</h3>
+                <div className="room-sub">Vacation house rental &middot; both floors</div>
+                <ul className="room-feats">
+                  <li>The entire 140-year-old kominka, for one group</li>
+                  <li>Both floors (140 m&sup2;) &middot; garden &amp; kitchen all to yourselves</li>
+                  <li>Offered on select dates only &mdash; about one night a week</li>
+                  <li>Unmanned stay &mdash; self check-in via key box</li>
+                  <li>
+                    Dinner &amp; breakfast service not available &mdash; ask
+                    us on WhatsApp for alternatives
+                  </li>
+                </ul>
+                <LodgifyBox rentalId="850548" />
+              </div>
+            </div>
           </div>
 
           <p className="meal-lead">
-            Staying with us? Dinner and breakfast are reserved separately —
-            see the <a href="#food">Food option</a> section just below.
+            On whole-house dates the individual rooms are closed (and vice
+            versa), so the calendars never overlap &mdash; if your date shows
+            no availability on one listing, check the other.
+          </p>
+
+          <p className="meal-lead">
+            Booking direct? You can add dinner and breakfast right at
+            checkout &mdash; see the <a href="#food">Food option</a> section
+            just below for the menu.
           </p>
 
           <p className="book-direct-foot">
@@ -279,7 +314,9 @@ export default function Page() {
           <p>
             Meals at Kashiwaya are optional and reserved in advance — a
             traditional nabe dinner and an ochazuke breakfast, cooked around
-            any dietary needs. Reserve through our pre-arrival form.
+            any dietary needs. Booking direct on this site? Add them at
+            checkout when you book your room. Booked via Booking.com?
+            Order your meals on WhatsApp.
           </p>
         </div>
         <div className="meal-order">
@@ -294,54 +331,77 @@ export default function Page() {
           </div>
           <ul className="food-menu">
             <li>
-              <span>Chicken hot pot dinner (serves 2)</span>
-              <span>¥6,000</span>
+              <span>Chicken hot pot dinner (serves 2 / 3)</span>
+              <span>¥6,000 / ¥8,000</span>
             </li>
             <li>
-              <span>Pork shabu-shabu dinner (serves 2)</span>
-              <span>¥8,000</span>
+              <span>Pork shabu-shabu hot pot dinner (serves 2 / 3)</span>
+              <span>¥8,000 / ¥11,000</span>
             </li>
             <li>
-              <span>Wagyu sukiyaki dinner (serves 2)</span>
-              <span>¥9,000</span>
+              <span>Pork chilled shabu (rei-shabu) dinner (serves 2 / 3)</span>
+              <span>¥8,000 / ¥11,000</span>
             </li>
             <li>
-              <span>Vegan dinner set (serves 2)</span>
-              <span>¥9,000</span>
+              <span>Wagyu sukiyaki dinner (serves 2 / 3)</span>
+              <span>¥10,000 / ¥14,000</span>
             </li>
             <li>
-              <span>Wagyu BBQ dinner (serves 2)</span>
-              <span>¥10,000</span>
+              <span>Vegan gluten-free hot pot dinner (serves 2 / 3)</span>
+              <span>¥8,000 / ¥11,000</span>
+            </li>
+            <li>
+              <span>Vegan gluten-free chilled pot dinner (serves 2 / 3)</span>
+              <span>¥8,000 / ¥11,000</span>
             </li>
             <li>
               <span>Ochazuke breakfast set (vegan &amp; gluten-free)</span>
-              <span>¥3,000</span>
+              <span>¥1,500 / person</span>
             </li>
           </ul>
-          <a
-            href={PRE_ARRIVAL_FORM_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="meal-cta"
-          >
-            Reserve meals &amp; more <ArrowRight size={16} />
+          <a href="#book" className="meal-cta">
+            Book your stay &amp; add meals at checkout <ArrowRight size={16} />
           </a>
           <ul className="meal-note">
             <li>
-              Order at least <strong>3 days before your stay</strong> — one
-              form per date for multi-night stays.
+              <strong>Booking direct on this site?</strong> Choose your meals
+              as add-ons at checkout (each menu once per stay). Staying one
+              night? Nothing more to do. Staying longer? Tell us on WhatsApp
+              which order you&apos;d like on which date — e.g. staying
+              Oct 3–6 and you&apos;d like sukiyaki on the 3rd and shabu-shabu
+              on the 5th: add both sets at checkout, then message us
+              &quot;Sukiyaki on the 3rd, Shabu-shabu on the 5th&quot;. Same
+              for breakfast mornings.
+            </li>
+            <li>
+              <strong>Booked via Booking.com?</strong> Meal add-ons aren&apos;t
+              available there — order your meals on{" "}
+              <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">
+                WhatsApp
+              </a>{" "}
+              instead.
+            </li>
+            <li>
+              Order at least <strong>3 days before your stay</strong>.
             </li>
             <li>
               Travelling solo? One dinner set per day at{" "}
-              <strong>half the two-person price</strong>.
+              <strong>half the two-person price</strong> — message us on
+              WhatsApp.
             </li>
             <li>
               Cancellation is free until 4 days before your stay;
               non-refundable from 3 days before.
             </li>
             <li>
-              The same form also covers <strong>luggage transport</strong> and{" "}
-              <strong>activities</strong> before check-in / after check-out.
+              <strong>Luggage transport</strong> and <strong>activities</strong>{" "}
+              before check-in / after check-out can also be arranged on
+              WhatsApp.
+            </li>
+            <li>
+              Meals are <strong>not available for the unmanned whole-house
+              rental</strong> &mdash; message us on WhatsApp and we&apos;ll
+              suggest alternatives.
             </li>
           </ul>
         </div>
@@ -614,6 +674,10 @@ export default function Page() {
               No pets &middot; no parties or events &middot; no smoking
               indoors (the courtyard is fine)
             </li>
+            <li>
+              Cancellation: 100% of prepayments refunded up to 7 days before
+              arrival &middot; non-refundable after
+            </li>
             <li>The 2nd-floor room is reached by stairs only</li>
           </ul>
         </div>
@@ -683,17 +747,14 @@ export default function Page() {
         <details className="faq-item">
           <summary>Is there anything to do before I arrive?</summary>
           <p>
-            Yes — please fill in our{" "}
-            <a
-              href={PRE_ARRIVAL_FORM_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              pre-arrival form
-            </a>
-            . It covers dinner and breakfast reservations, luggage transport,
-            and activities before check-in or after check-out. For
-            multi-night stays, please fill it in once per date.
+            Yes — message us on{" "}
+            <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">
+              WhatsApp
+            </a>{" "}
+            with your arrival time, plus any luggage transport or activities
+            you&apos;d like before check-in or after check-out. Meals are
+            added at checkout when you book direct — or ordered on WhatsApp
+            if you booked via Booking.com.
           </p>
         </details>
         <details className="faq-item">
@@ -707,12 +768,17 @@ export default function Page() {
         <details className="faq-item">
           <summary>How do I reserve dinner and breakfast?</summary>
           <p>
-            Meals are booked separately from your room, through the
-            pre-arrival form in the <a href="#food">Food option</a> section.
-            Use the same email and name as your room booking, add your stay
-            date(s) and any dietary restrictions, and fill it in once per
-            date for multi-night stays. Orders are accepted up to 3 days
-            before your stay.
+            Booking direct on this site? Simply choose your meals as add-ons
+            at checkout when you book your room. For one-night stays
+            there&apos;s nothing more to do. Staying multiple nights? Tell us
+            on WhatsApp which order you&apos;d like on which date — e.g.
+            staying Oct 3–6 and you&apos;d like sukiyaki on the 3rd and
+            shabu-shabu on the 5th: add both sets at checkout, then message
+            us &quot;Sukiyaki on the 3rd, Shabu-shabu on the 5th&quot;. The
+            same goes for breakfast mornings. Booked via Booking.com? Order
+            your meals on WhatsApp, with the same name as your room booking.
+            Orders are accepted up to 3 days before your stay — see the{" "}
+            <a href="#food">Food option</a> section for the menu.
           </p>
         </details>
         <details className="faq-item">
@@ -752,6 +818,28 @@ export default function Page() {
           </p>
         </details>
         <details className="faq-item">
+          <summary>Can we rent the whole house?</summary>
+          <p>
+            Yes — on select dates (about one night a week) we list the whole
+            kominka for a single group: both floors, garden and kitchen
+            included. On those dates the individual rooms are closed, so the
+            whole-house calendar only opens on the days it&apos;s available.
+            Book it from the booking section like any room. Please note the
+            whole-house stay is unmanned (self check-in via key box), and
+            dinner and breakfast service is not available &mdash; message us
+            on WhatsApp and we&apos;ll suggest meal alternatives.
+          </p>
+        </details>
+        <details className="faq-item">
+          <summary>What is the cancellation policy for room bookings?</summary>
+          <p>
+            Prepayments are 100% refundable if you cancel 7 days before
+            arrival or earlier; cancellations after that are non-refundable.
+            (Meal orders follow their own policy — free until 4 days before
+            your stay, non-refundable from 3 days before.)
+          </p>
+        </details>
+        <details className="faq-item">
           <summary>Can you pick me up from Nagiso Station or Tsumago?</summary>
           <p>
             Yes — Nagiso Station, Tsumago and Junikane Station are within our
@@ -762,11 +850,13 @@ export default function Page() {
         <details className="faq-item">
           <summary>How much are dinner and breakfast?</summary>
           <p>
-            Dinner sets serve two people and range from ¥6,000 (chicken hot
-            pot) to ¥10,000 (wagyu BBQ), with shabu-shabu, wagyu sukiyaki and
-            vegan sets in between. Travelling solo? One set per day can be
-            ordered at half the two-person price. The ochazuke breakfast set
-            (vegan &amp; gluten-free) is ¥3,000.
+            Dinner sets come in two sizes (serves 2 / serves 3): chicken hot
+            pot ¥6,000 / ¥8,000, pork shabu-shabu or chilled rei-shabu
+            ¥8,000 / ¥11,000, wagyu sukiyaki ¥10,000 / ¥14,000, and vegan
+            gluten-free hot or chilled pots ¥8,000 / ¥11,000. Travelling
+            solo? One set per day can be ordered at half the two-person
+            price. The ochazuke breakfast set (vegan &amp; gluten-free) is
+            ¥1,500 per person.
           </p>
         </details>
         <details className="faq-item">
@@ -878,13 +968,7 @@ export default function Page() {
             <a href="#book">
               Check availability &amp; book
             </a>
-            <a
-              href={PRE_ARRIVAL_FORM_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Reserve meals
-            </a>
+            <a href="#food">Food option</a>
             <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">
               WhatsApp · +81 90-3839-2354
             </a>

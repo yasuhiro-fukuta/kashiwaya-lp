@@ -23,7 +23,6 @@ const GOOGLE_MAP_URL = "https://maps.app.goo.gl/ViXN6oJNxvjQkv2SA?g_st=ac";
 const EBIKE_LP_URL = "https://kiso-ebike-lp.vercel.app/";
 const WHATSAPP_URL =
   "https://wa.me/819038392354?text=%E6%9F%8F%E5%B1%8B%E3%81%95%E3%82%93%E3%80%81%E5%AE%BF%E6%B3%8A%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6%E8%B3%AA%E5%95%8F%E3%81%8C%E3%81%82%E3%82%8A%E3%81%BE%E3%81%99%E3%80%82";
-const PRE_ARRIVAL_FORM_URL = "https://forms.gle/KqYFZBWuiVnAshAF9";
 
 const HERO_IMG = "/gallery/entrance.JPG";
 const HOUSE_IMG = "/gallery/1stfloor.JPG";
@@ -199,7 +198,7 @@ export default function Page() {
           <p className="book-direct-lede">
             予約サイトを介さず、最初のメッセージから最後の朝まで、
             私たちが直接おもてなしします。1軒の古民家に客室は2部屋。
-            お好みの方をお選びください。
+            さらに日によっては、一棟貸しもご用意しています。
           </p>
 
           <CouponBanner lang="ja" />
@@ -247,10 +246,41 @@ export default function Page() {
                 <LodgifyBox rentalId="793801" language="ja" />
               </div>
             </div>
+
+            {/* ===== Room 3: 一棟貸し ===== */}
+            <div className="room-card">
+              <div className="room-photo">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src="/gallery/tour/common-exterior.jpg"
+                  alt="一棟貸し — 築140年の古民家をまるごと"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </div>
+              <div className="room-body">
+                <h3>一棟貸し</h3>
+                <div className="room-sub">1階+2階 まるごと</div>
+                <ul className="room-feats">
+                  <li>築140年の家を、1組様で貸切</li>
+                  <li>両フロア(計140㎡)· 庭もキッチンも独占</li>
+                  <li>週に1日ほどの限定販売</li>
+                  <li>無人運営 — キーボックスでセルフチェックイン</li>
+                  <li>仕出し(夕食・朝食)のご提供はありません — 代替はWhatsAppでご相談を</li>
+                </ul>
+                <LodgifyBox rentalId="850548" language="ja" />
+              </div>
+            </div>
           </div>
 
           <p className="meal-lead">
-            ご宿泊の方は、お食事を別途ご予約ください — すぐ下の
+            一棟貸しの日は各部屋の販売を止めています(逆も同様)。
+            ご希望日に空きが見えない場合は、もう一方の掲載もご確認ください。
+          </p>
+
+          <p className="meal-lead">
+            公式サイトからのご予約なら、予約手続きの画面でそのまま
+            お食事を追加できます — メニューはすぐ下の
             「<a href="#food">お食事オプション</a>」をご覧ください。
           </p>
 
@@ -274,7 +304,8 @@ export default function Page() {
           <p>
             柏屋のお食事はすべて事前予約制のオプションです。夕食は伝統の鍋、
             朝食はお茶漬け。食事制限にも合わせてお作りします。
-            ご予約は事前リクエストフォームからどうぞ。
+            公式サイトからの直接予約なら予約手続きの画面でそのまま追加、
+            Booking.com経由の方はWhatsAppでご注文ください。
           </p>
         </div>
         <div className="meal-order">
@@ -289,51 +320,71 @@ export default function Page() {
           </div>
           <ul className="food-menu">
             <li>
-              <span>鶏鍋の夕食(2名分)</span>
-              <span>¥6,000</span>
+              <span>鶏鍋の夕食(2名分 / 3名分)</span>
+              <span>¥6,000 / ¥8,000</span>
             </li>
             <li>
-              <span>豚しゃぶしゃぶの夕食(2名分)</span>
-              <span>¥8,000</span>
+              <span>豚しゃぶしゃぶの夕食(2名分 / 3名分)</span>
+              <span>¥8,000 / ¥11,000</span>
             </li>
             <li>
-              <span>和牛すき焼きの夕食(2名分)</span>
-              <span>¥9,000</span>
+              <span>豚冷しゃぶの夕食(2名分 / 3名分)</span>
+              <span>¥8,000 / ¥11,000</span>
             </li>
             <li>
-              <span>ビーガンセットの夕食(2名分)</span>
-              <span>¥9,000</span>
+              <span>和牛すき焼きの夕食(2名分 / 3名分)</span>
+              <span>¥10,000 / ¥14,000</span>
             </li>
             <li>
-              <span>和牛BBQの夕食(2名分)</span>
-              <span>¥10,000</span>
+              <span>ビーガン&グルテンフリー鍋の夕食(2名分 / 3名分)</span>
+              <span>¥8,000 / ¥11,000</span>
+            </li>
+            <li>
+              <span>ビーガン&グルテンフリー冷製鍋の夕食(2名分 / 3名分)</span>
+              <span>¥8,000 / ¥11,000</span>
             </li>
             <li>
               <span>朝食お茶漬けセット(ビーガン&グルテンフリー)</span>
-              <span>¥3,000</span>
+              <span>¥1,500 / 人</span>
             </li>
           </ul>
-          <a
-            href={PRE_ARRIVAL_FORM_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="meal-cta"
-          >
-            お食事・オプションを予約 <ArrowRight size={16} />
+          <a href="#book" className="meal-cta">
+            宿泊予約へ — お食事は予約時に追加 <ArrowRight size={16} />
           </a>
           <ul className="meal-note">
             <li>
-              ご注文は<strong>ご宿泊の3日前まで</strong>。連泊の場合は
-              日付ごとにフォームをご記入ください。
+              <strong>公式サイトからの直接予約の方:</strong>{" "}
+              予約手続きの画面でお食事をアドオンとして追加できます
+              (各メニュー1滞在につき1回分)。1泊の場合はご連絡不要です。
+              連泊の方は、どの日付にどの仕出しがご希望か、WhatsAppで
+              ご連絡ください。例: 10月3日〜6日ご宿泊で、3日の夜に
+              すき焼き(3名分)・5日の夜に豚しゃぶ(3名分)をご希望なら、
+              両方をアドオンして「すき焼きを3日の夜、豚しゃぶを5日の夜に」
+              とご連絡を。朝食も同様です。
+            </li>
+            <li>
+              <strong>Booking.com経由の方:</strong>{" "}
+              アドオンはご利用いただけないため、
+              <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">
+                WhatsApp
+              </a>
+              でご注文ください。
+            </li>
+            <li>
+              ご注文は<strong>ご宿泊の3日前まで</strong>。
             </li>
             <li>
               お一人でのご利用は1日1組まで、<strong>2名分の半額</strong>で
-              ご案内します。
+              ご案内します — WhatsAppでご相談ください。
             </li>
             <li>キャンセルは4日前まで無料・全額返金。3日前以降は返金不可です。</li>
             <li>
-              同じフォームで<strong>荷物の配送</strong>や、チェックイン前後の
-              <strong>アクティビティ</strong>もリクエストできます。
+              <strong>荷物の配送</strong>や、チェックイン前後の
+              <strong>アクティビティ</strong>もWhatsAppでご相談いただけます。
+            </li>
+            <li>
+              <strong>無人一棟貸しではお食事はご利用いただけません</strong> —
+              WhatsAppでご相談いただければ、代替サービスをご案内します。
             </li>
           </ul>
         </div>
@@ -582,6 +633,7 @@ export default function Page() {
             <li>到着予定時刻を事前にお知らせください(キーボックスによるセルフチェックインも相談可)</li>
             <li>お子様歓迎(年齢制限なし)· ベビーベッドなし・追加布団は数に限りあり</li>
             <li>ペット不可 · パーティー等不可 · 屋内禁煙(中庭は可)</li>
+            <li>キャンセル: 到着7日前まで前払い金を全額返金 · 以降は返金不可</li>
             <li>2階客室へは階段のみ</li>
           </ul>
         </div>
@@ -650,16 +702,13 @@ export default function Page() {
         <details className="faq-item">
           <summary>到着前にやっておくことはありますか?</summary>
           <p>
-            <a
-              href={PRE_ARRIVAL_FORM_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              事前リクエストフォーム
+            <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">
+              WhatsApp
             </a>
-            のご記入をお願いしています。夕食・朝食の予約、荷物の配送、
-            チェックイン前後のアクティビティをまとめてリクエストできます。
-            連泊の場合は日付ごとにご記入ください。
+            で到着時刻をお知らせください。荷物の配送や、チェックイン前後の
+            アクティビティのご希望もあわせてどうぞ。お食事は公式サイトなら
+            予約時にアドオンで追加、Booking.com経由の方はWhatsAppで
+            ご注文ください。
           </p>
         </details>
         <details className="faq-item">
@@ -680,6 +729,27 @@ export default function Page() {
           </p>
         </details>
         <details className="faq-item">
+          <summary>一棟貸しはできますか?</summary>
+          <p>
+            はい。週に1日ほど、家をまるごと1組様に貸し切る「一棟貸し」の日を
+            設けています。両フロア・庭・キッチンすべてお使いいただけます。
+            その日は各部屋の販売を止めているため、一棟貸しのカレンダーに
+            空きが出ている日が対象です。予約セクションからお部屋と同じように
+            ご予約ください。なお、一棟貸しは無人運営(キーボックスでの
+            セルフチェックイン)で、仕出し(夕食・朝食)のご提供はありません。
+            お食事はWhatsAppでご相談いただければ代替サービスをご案内します。
+          </p>
+        </details>
+        <details className="faq-item">
+          <summary>宿泊のキャンセルポリシーは?</summary>
+          <p>
+            到着7日前までのキャンセルは、前払い金を全額(100%)返金します。
+            それ以降のキャンセルは返金できません。
+            (お食事のご注文は別ポリシーです — ご宿泊の4日前まで無料、
+            3日前以降は返金不可。)
+          </p>
+        </details>
+        <details className="faq-item">
           <summary>駅や妻籠から送迎はありますか?</summary>
           <p>
             はい。南木曽駅・妻籠宿・十二兼駅は、16時から18時の間、
@@ -690,20 +760,27 @@ export default function Page() {
         <details className="faq-item">
           <summary>食事の予約方法は?</summary>
           <p>
-            お食事はお部屋とは別のご予約です。
-            「<a href="#food">お食事オプション</a>」セクションの
-            事前リクエストフォームから、宿泊予約と同じメールアドレス・
-            お名前で、宿泊日と食事制限を添えてご注文ください(連泊は
-            日付ごとに記入)。ご宿泊の3日前まで受け付けています。
+            公式サイトからの直接予約なら、予約手続きの画面でお食事を
+            アドオンとして追加できます。1泊の場合はそれだけでOK。
+            連泊の方は、どの日付にどの仕出しがご希望か、WhatsAppで
+            ご連絡ください。例: 10月3日〜6日ご宿泊で、3日の夜に
+            すき焼き・5日の夜に豚しゃぶをご希望なら、両方をアドオンして
+            「すき焼きを3日の夜、豚しゃぶを5日の夜に」とご連絡を。
+            朝食も同様です。Booking.com経由の方は、宿泊予約と同じ
+            お名前で、宿泊日と食事制限を添えてWhatsAppでご注文ください。
+            ご宿泊の3日前まで受け付けています。メニューは
+            「<a href="#food">お食事オプション</a>」セクションをご覧ください。
           </p>
         </details>
         <details className="faq-item">
           <summary>食事の料金は?</summary>
           <p>
-            夕食セットは2名分で、鶏鍋の6,000円から和牛BBQの10,000円まで
-            (しゃぶしゃぶ、和牛すき焼き、ビーガンセットなど)。
-            お一人でのご利用は1日1組まで、2名分の半額でご案内します。
-            朝食のお茶漬けセット(ビーガン&グルテンフリー)は3,000円です。
+            夕食セットは2名分と3名分をご用意:鶏鍋 6,000円/8,000円、
+            豚しゃぶしゃぶ・豚冷しゃぶ 8,000円/11,000円、和牛すき焼き
+            10,000円/14,000円、ビーガン&グルテンフリーの鍋・冷製鍋
+            8,000円/11,000円(2名分/3名分)。お一人でのご利用は1日1組まで、
+            2名分の半額でご案内します。朝食のお茶漬けセット
+            (ビーガン&グルテンフリー)はお一人1,500円です。
           </p>
         </details>
         <details className="faq-item">
@@ -828,13 +905,7 @@ export default function Page() {
           <div>
             <h5>予約・お問い合わせ</h5>
             <a href="#book">空室確認・宿泊予約</a>
-            <a
-              href={PRE_ARRIVAL_FORM_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              お食事の予約
-            </a>
+            <a href="#food">お食事オプション</a>
             <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">
               WhatsApp · +81 90-3839-2354
             </a>

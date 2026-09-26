@@ -162,7 +162,7 @@ const structuredData = {
           name: "How do I reserve dinner and breakfast?",
           acceptedAnswer: {
             "@type": "Answer",
-            text: "Meals are booked separately from your room through the pre-arrival form in the Food option section. Use the same email and name as your room booking, and fill in the form once per date for multi-night stays. Orders are accepted up to 3 days before your stay.",
+            text: "Booking direct on the official site, guests choose meals as add-ons at checkout. One-night stays need nothing more; guests staying multiple nights message the inn on WhatsApp to say which order they'd like on which date — for example, staying Oct 3–6 with sukiyaki on the 3rd and shabu-shabu on the 5th: add both sets at checkout, then message \"Sukiyaki on the 3rd, Shabu-shabu on the 5th\". The same applies to breakfast mornings. Guests booked via Booking.com order their meals on WhatsApp, using the same name as the room booking. Orders are accepted up to 3 days before the stay.",
           },
         },
         {
@@ -202,7 +202,7 @@ const structuredData = {
           name: "How much are dinner and breakfast at Kashiwaya Inn?",
           acceptedAnswer: {
             "@type": "Answer",
-            text: "Dinner sets serve two people and range from ¥6,000 (chicken hot pot) to ¥10,000 (wagyu BBQ), including shabu-shabu, wagyu sukiyaki and vegan sets. Solo travellers can order one set at half the two-person price. The ochazuke breakfast set (vegan & gluten-free) is ¥3,000.",
+            text: "Dinner sets come in two sizes (serves 2 / serves 3): chicken hot pot ¥6,000 / ¥8,000, pork shabu-shabu or chilled rei-shabu ¥8,000 / ¥11,000, wagyu sukiyaki ¥10,000 / ¥14,000, and vegan gluten-free hot or chilled pots ¥8,000 / ¥11,000. Solo travellers can order one set at half the two-person price. The ochazuke breakfast set (vegan & gluten-free) is ¥1,500 per person.",
           },
         },
         {
@@ -275,6 +275,22 @@ const structuredData = {
           acceptedAnswer: {
             "@type": "Answer",
             text: "Yes — luggage can be left at the entrance on the shelf just inside. Liability for stored luggage is limited to ¥100,000 per person.",
+          },
+        },
+        {
+          "@type": "Question",
+          name: "What is the cancellation policy for room bookings at Kashiwaya Inn?",
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: "100% of paid prepayments are refundable when canceled 7 days before arrival or earlier; 0% refundable if canceled after. Meal orders follow their own policy: free until 4 days before the stay, non-refundable from 3 days before.",
+          },
+        },
+        {
+          "@type": "Question",
+          name: "Can guests rent the whole house at Kashiwaya Inn?",
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: "Yes — on select dates (about one night a week) the whole kominka is listed for a single group: both floors, garden and kitchen included. On those dates the individual rooms are closed, so the whole-house calendar only opens on available days. The whole-house stay is unmanned (self check-in via key box) and dinner/breakfast service is not available — message the inn on WhatsApp for meal alternatives.",
           },
         },
         {
