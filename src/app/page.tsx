@@ -291,8 +291,9 @@ export default function Page() {
           </p>
 
           <p className="meal-lead">
-            Staying with us? Dinner and breakfast are reserved separately —
-            see the <a href="#food">Food option</a> section just below.
+            Booking direct? You can add dinner and breakfast right at
+            checkout &mdash; see the <a href="#food">Food option</a> section
+            just below for the menu.
           </p>
 
           <p className="book-direct-foot">
@@ -314,7 +315,9 @@ export default function Page() {
           <p>
             Meals at Kashiwaya are optional and reserved in advance — a
             traditional nabe dinner and an ochazuke breakfast, cooked around
-            any dietary needs. Reserve through our pre-arrival form.
+            any dietary needs. Booking direct on this site? Add them at
+            checkout when you book your room. Booked via Booking.com?
+            Reserve through our pre-arrival form.
           </p>
         </div>
         <div className="meal-order">
@@ -329,28 +332,32 @@ export default function Page() {
           </div>
           <ul className="food-menu">
             <li>
-              <span>Chicken hot pot dinner (serves 2)</span>
-              <span>¥6,000</span>
+              <span>Chicken hot pot dinner (serves 2 / 3)</span>
+              <span>¥6,000 / ¥8,000</span>
             </li>
             <li>
-              <span>Pork shabu-shabu dinner (serves 2)</span>
-              <span>¥8,000</span>
+              <span>Pork shabu-shabu hot pot dinner (serves 2 / 3)</span>
+              <span>¥8,000 / ¥11,000</span>
             </li>
             <li>
-              <span>Wagyu sukiyaki dinner (serves 2)</span>
-              <span>¥9,000</span>
+              <span>Pork chilled shabu (rei-shabu) dinner (serves 2 / 3)</span>
+              <span>¥8,000 / ¥11,000</span>
             </li>
             <li>
-              <span>Vegan dinner set (serves 2)</span>
-              <span>¥9,000</span>
+              <span>Wagyu sukiyaki dinner (serves 2 / 3)</span>
+              <span>¥10,000 / ¥14,000</span>
             </li>
             <li>
-              <span>Wagyu BBQ dinner (serves 2)</span>
-              <span>¥10,000</span>
+              <span>Vegan gluten-free hot pot dinner (serves 2 / 3)</span>
+              <span>¥8,000 / ¥11,000</span>
+            </li>
+            <li>
+              <span>Vegan gluten-free chilled pot dinner (serves 2 / 3)</span>
+              <span>¥8,000 / ¥11,000</span>
             </li>
             <li>
               <span>Ochazuke breakfast set (vegan &amp; gluten-free)</span>
-              <span>¥3,000</span>
+              <span>¥1,500 / person</span>
             </li>
           </ul>
           <a
@@ -359,16 +366,26 @@ export default function Page() {
             rel="noopener noreferrer"
             className="meal-cta"
           >
-            Reserve meals &amp; more <ArrowRight size={16} />
+            Pre-arrival form &mdash; meals &amp; more <ArrowRight size={16} />
           </a>
           <ul className="meal-note">
             <li>
-              Order at least <strong>3 days before your stay</strong> — one
-              form per date for multi-night stays.
+              <strong>Booking direct on this site?</strong> Choose your meals
+              as add-ons at checkout. One dinner set per stay — for dinner on
+              more than one evening, message us on WhatsApp.
+            </li>
+            <li>
+              <strong>Booked via Booking.com?</strong> Meal add-ons aren&apos;t
+              available there — reserve through the form above, one form per
+              date for multi-night stays.
+            </li>
+            <li>
+              Order at least <strong>3 days before your stay</strong>.
             </li>
             <li>
               Travelling solo? One dinner set per day at{" "}
-              <strong>half the two-person price</strong>.
+              <strong>half the two-person price</strong> — message us on
+              WhatsApp.
             </li>
             <li>
               Cancellation is free until 4 days before your stay;
@@ -735,9 +752,10 @@ export default function Page() {
             >
               pre-arrival form
             </a>
-            . It covers dinner and breakfast reservations, luggage transport,
-            and activities before check-in or after check-out. For
-            multi-night stays, please fill it in once per date.
+            . It covers dinner and breakfast reservations (skip these if you
+            already added meals at checkout), luggage transport, and
+            activities before check-in or after check-out. For multi-night
+            stays, please fill it in once per date.
           </p>
         </details>
         <details className="faq-item">
@@ -751,12 +769,13 @@ export default function Page() {
         <details className="faq-item">
           <summary>How do I reserve dinner and breakfast?</summary>
           <p>
-            Meals are booked separately from your room, through the
-            pre-arrival form in the <a href="#food">Food option</a> section.
-            Use the same email and name as your room booking, add your stay
-            date(s) and any dietary restrictions, and fill it in once per
-            date for multi-night stays. Orders are accepted up to 3 days
-            before your stay.
+            Booking direct on this site? Simply choose your meals as add-ons
+            at checkout when you book your room (one dinner set per stay —
+            for more evenings, message us on WhatsApp). Booked via
+            Booking.com? Use the pre-arrival form in the{" "}
+            <a href="#food">Food option</a> section — same email and name as
+            your room booking, one form per date for multi-night stays.
+            Orders are accepted up to 3 days before your stay.
           </p>
         </details>
         <details className="faq-item">
@@ -828,11 +847,13 @@ export default function Page() {
         <details className="faq-item">
           <summary>How much are dinner and breakfast?</summary>
           <p>
-            Dinner sets serve two people and range from ¥6,000 (chicken hot
-            pot) to ¥10,000 (wagyu BBQ), with shabu-shabu, wagyu sukiyaki and
-            vegan sets in between. Travelling solo? One set per day can be
-            ordered at half the two-person price. The ochazuke breakfast set
-            (vegan &amp; gluten-free) is ¥3,000.
+            Dinner sets come in two sizes (serves 2 / serves 3): chicken hot
+            pot ¥6,000 / ¥8,000, pork shabu-shabu or chilled rei-shabu
+            ¥8,000 / ¥11,000, wagyu sukiyaki ¥10,000 / ¥14,000, and vegan
+            gluten-free hot or chilled pots ¥8,000 / ¥11,000. Travelling
+            solo? One set per day can be ordered at half the two-person
+            price. The ochazuke breakfast set (vegan &amp; gluten-free) is
+            ¥1,500 per person.
           </p>
         </details>
         <details className="faq-item">

@@ -162,7 +162,7 @@ const structuredData = {
           name: "How do I reserve dinner and breakfast?",
           acceptedAnswer: {
             "@type": "Answer",
-            text: "Meals are booked separately from your room through the pre-arrival form in the Food option section. Use the same email and name as your room booking, and fill in the form once per date for multi-night stays. Orders are accepted up to 3 days before your stay.",
+            text: "Booking direct on the official site, guests choose meals as add-ons at checkout (one dinner set per stay; for more evenings, contact the inn on WhatsApp). Guests booked via Booking.com reserve through the pre-arrival form in the Food option section, using the same email and name as the room booking, one form per date for multi-night stays. Orders are accepted up to 3 days before the stay.",
           },
         },
         {
@@ -202,7 +202,7 @@ const structuredData = {
           name: "How much are dinner and breakfast at Kashiwaya Inn?",
           acceptedAnswer: {
             "@type": "Answer",
-            text: "Dinner sets serve two people and range from ¥6,000 (chicken hot pot) to ¥10,000 (wagyu BBQ), including shabu-shabu, wagyu sukiyaki and vegan sets. Solo travellers can order one set at half the two-person price. The ochazuke breakfast set (vegan & gluten-free) is ¥3,000.",
+            text: "Dinner sets come in two sizes (serves 2 / serves 3): chicken hot pot ¥6,000 / ¥8,000, pork shabu-shabu or chilled rei-shabu ¥8,000 / ¥11,000, wagyu sukiyaki ¥10,000 / ¥14,000, and vegan gluten-free hot or chilled pots ¥8,000 / ¥11,000. Solo travellers can order one set at half the two-person price. The ochazuke breakfast set (vegan & gluten-free) is ¥1,500 per person.",
           },
         },
         {
