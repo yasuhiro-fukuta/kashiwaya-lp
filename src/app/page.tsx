@@ -360,13 +360,8 @@ export default function Page() {
               <span>¥1,500 / person</span>
             </li>
           </ul>
-          <a
-            href={PRE_ARRIVAL_FORM_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="meal-cta"
-          >
-            Pre-arrival form &mdash; meals &amp; more <ArrowRight size={16} />
+          <a href="#book" className="meal-cta">
+            Book your stay &amp; add meals at checkout <ArrowRight size={16} />
           </a>
           <ul className="meal-note">
             <li>
@@ -381,8 +376,15 @@ export default function Page() {
             </li>
             <li>
               <strong>Booked via Booking.com?</strong> Meal add-ons aren&apos;t
-              available there — reserve through the form above, one form per
-              date for multi-night stays.
+              available there — order through our{" "}
+              <a
+                href={PRE_ARRIVAL_FORM_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                pre-arrival form
+              </a>
+              , one form per date for multi-night stays.
             </li>
             <li>
               Order at least <strong>3 days before your stay</strong>.
@@ -397,8 +399,17 @@ export default function Page() {
               non-refundable from 3 days before.
             </li>
             <li>
-              The same form also covers <strong>luggage transport</strong> and{" "}
-              <strong>activities</strong> before check-in / after check-out.
+              The{" "}
+              <a
+                href={PRE_ARRIVAL_FORM_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                pre-arrival form
+              </a>{" "}
+              also covers <strong>luggage transport</strong> and{" "}
+              <strong>activities</strong> before check-in / after check-out
+              &mdash; that part applies to everyone.
             </li>
             <li>
               Meals are <strong>not available for the unmanned whole-house

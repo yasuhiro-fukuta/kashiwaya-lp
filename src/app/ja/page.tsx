@@ -349,13 +349,8 @@ export default function Page() {
               <span>¥1,500 / 人</span>
             </li>
           </ul>
-          <a
-            href={PRE_ARRIVAL_FORM_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="meal-cta"
-          >
-            事前リクエストフォーム — お食事ほか <ArrowRight size={16} />
+          <a href="#book" className="meal-cta">
+            宿泊予約へ — お食事は予約時に追加 <ArrowRight size={16} />
           </a>
           <ul className="meal-note">
             <li>
@@ -370,8 +365,15 @@ export default function Page() {
             </li>
             <li>
               <strong>Booking.com経由の方:</strong>{" "}
-              アドオンはご利用いただけないため、上のフォームからご予約
-              ください(連泊の場合は日付ごとに)。
+              アドオンはご利用いただけないため、
+              <a
+                href={PRE_ARRIVAL_FORM_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                事前リクエストフォーム
+              </a>
+              からご予約ください(連泊の場合は日付ごとに)。
             </li>
             <li>
               ご注文は<strong>ご宿泊の3日前まで</strong>。
@@ -382,8 +384,16 @@ export default function Page() {
             </li>
             <li>キャンセルは4日前まで無料・全額返金。3日前以降は返金不可です。</li>
             <li>
-              同じフォームで<strong>荷物の配送</strong>や、チェックイン前後の
-              <strong>アクティビティ</strong>もリクエストできます。
+              <a
+                href={PRE_ARRIVAL_FORM_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                事前リクエストフォーム
+              </a>
+              では<strong>荷物の配送</strong>や、チェックイン前後の
+              <strong>アクティビティ</strong>もリクエストできます
+              (こちらはどなたでも)。
             </li>
             <li>
               <strong>無人一棟貸しではお食事はご利用いただけません</strong> —
