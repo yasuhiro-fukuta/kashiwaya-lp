@@ -23,7 +23,6 @@ const GOOGLE_MAP_URL = "https://maps.app.goo.gl/ViXN6oJNxvjQkv2SA?g_st=ac";
 const EBIKE_LP_URL = "https://kiso-ebike-lp.vercel.app/";
 const WHATSAPP_URL =
   "https://wa.me/819038392354?text=%E6%9F%8F%E5%B1%8B%E3%81%95%E3%82%93%E3%80%81%E5%AE%BF%E6%B3%8A%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6%E8%B3%AA%E5%95%8F%E3%81%8C%E3%81%82%E3%82%8A%E3%81%BE%E3%81%99%E3%80%82";
-const PRE_ARRIVAL_FORM_URL = "https://forms.gle/KqYFZBWuiVnAshAF9";
 
 const HERO_IMG = "/gallery/entrance.JPG";
 const HOUSE_IMG = "/gallery/1stfloor.JPG";
@@ -306,7 +305,7 @@ export default function Page() {
             柏屋のお食事はすべて事前予約制のオプションです。夕食は伝統の鍋、
             朝食はお茶漬け。食事制限にも合わせてお作りします。
             公式サイトからの直接予約なら予約手続きの画面でそのまま追加、
-            Booking.com経由の方は事前リクエストフォームからどうぞ。
+            Booking.com経由の方はWhatsAppでご注文ください。
           </p>
         </div>
         <div className="meal-order">
@@ -366,14 +365,10 @@ export default function Page() {
             <li>
               <strong>Booking.com経由の方:</strong>{" "}
               アドオンはご利用いただけないため、
-              <a
-                href={PRE_ARRIVAL_FORM_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                事前リクエストフォーム
+              <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">
+                WhatsApp
               </a>
-              からご予約ください(連泊の場合は日付ごとに)。
+              でご注文ください。
             </li>
             <li>
               ご注文は<strong>ご宿泊の3日前まで</strong>。
@@ -384,16 +379,8 @@ export default function Page() {
             </li>
             <li>キャンセルは4日前まで無料・全額返金。3日前以降は返金不可です。</li>
             <li>
-              <a
-                href={PRE_ARRIVAL_FORM_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                事前リクエストフォーム
-              </a>
-              では<strong>荷物の配送</strong>や、チェックイン前後の
-              <strong>アクティビティ</strong>もリクエストできます
-              (こちらはどなたでも)。
+              <strong>荷物の配送</strong>や、チェックイン前後の
+              <strong>アクティビティ</strong>もWhatsAppでご相談いただけます。
             </li>
             <li>
               <strong>無人一棟貸しではお食事はご利用いただけません</strong> —
@@ -715,17 +702,13 @@ export default function Page() {
         <details className="faq-item">
           <summary>到着前にやっておくことはありますか?</summary>
           <p>
-            <a
-              href={PRE_ARRIVAL_FORM_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              事前リクエストフォーム
+            <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">
+              WhatsApp
             </a>
-            のご記入をお願いしています。夕食・朝食の予約(予約時に
-            アドオンで追加済みの場合は不要)、荷物の配送、チェックイン
-            前後のアクティビティをまとめてリクエストできます。
-            連泊の場合は日付ごとにご記入ください。
+            で到着時刻をお知らせください。荷物の配送や、チェックイン前後の
+            アクティビティのご希望もあわせてどうぞ。お食事は公式サイトなら
+            予約時にアドオンで追加、Booking.com経由の方はWhatsAppで
+            ご注文ください。
           </p>
         </details>
         <details className="faq-item">
@@ -783,11 +766,10 @@ export default function Page() {
             ご連絡ください。例: 10月3日〜6日ご宿泊で、3日の夜に
             すき焼き・5日の夜に豚しゃぶをご希望なら、両方をアドオンして
             「すき焼きを3日の夜、豚しゃぶを5日の夜に」とご連絡を。
-            朝食も同様です。Booking.com経由の方は
-            「<a href="#food">お食事オプション</a>」セクションの
-            事前リクエストフォームから、宿泊予約と同じメールアドレス・
-            お名前で、宿泊日と食事制限を添えてご注文ください(連泊は
-            日付ごとに記入)。ご宿泊の3日前まで受け付けています。
+            朝食も同様です。Booking.com経由の方は、宿泊予約と同じ
+            お名前で、宿泊日と食事制限を添えてWhatsAppでご注文ください。
+            ご宿泊の3日前まで受け付けています。メニューは
+            「<a href="#food">お食事オプション</a>」セクションをご覧ください。
           </p>
         </details>
         <details className="faq-item">
@@ -923,13 +905,7 @@ export default function Page() {
           <div>
             <h5>予約・お問い合わせ</h5>
             <a href="#book">空室確認・宿泊予約</a>
-            <a
-              href={PRE_ARRIVAL_FORM_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              お食事の予約
-            </a>
+            <a href="#food">お食事オプション</a>
             <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">
               WhatsApp · +81 90-3839-2354
             </a>

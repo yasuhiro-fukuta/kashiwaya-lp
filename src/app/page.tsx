@@ -26,7 +26,6 @@ const GOOGLE_MAP_URL = "https://maps.app.goo.gl/ViXN6oJNxvjQkv2SA?g_st=ac";
 const EBIKE_LP_URL = "https://kiso-ebike-lp.vercel.app/";
 const WHATSAPP_URL =
   "https://wa.me/819038392354?text=Hello%20Kashiwaya%2C%20I%27d%20like%20to%20ask%20about%20a%20stay.";
-const PRE_ARRIVAL_FORM_URL = "https://forms.gle/KqYFZBWuiVnAshAF9";
 
 const HERO_IMG = "/gallery/entrance.JPG";
 const HOUSE_IMG = "/gallery/1stfloor.JPG";
@@ -317,7 +316,7 @@ export default function Page() {
             traditional nabe dinner and an ochazuke breakfast, cooked around
             any dietary needs. Booking direct on this site? Add them at
             checkout when you book your room. Booked via Booking.com?
-            Reserve through our pre-arrival form.
+            Order your meals on WhatsApp.
           </p>
         </div>
         <div className="meal-order">
@@ -376,15 +375,11 @@ export default function Page() {
             </li>
             <li>
               <strong>Booked via Booking.com?</strong> Meal add-ons aren&apos;t
-              available there — order through our{" "}
-              <a
-                href={PRE_ARRIVAL_FORM_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                pre-arrival form
-              </a>
-              , one form per date for multi-night stays.
+              available there — order your meals on{" "}
+              <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">
+                WhatsApp
+              </a>{" "}
+              instead.
             </li>
             <li>
               Order at least <strong>3 days before your stay</strong>.
@@ -399,17 +394,9 @@ export default function Page() {
               non-refundable from 3 days before.
             </li>
             <li>
-              The{" "}
-              <a
-                href={PRE_ARRIVAL_FORM_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                pre-arrival form
-              </a>{" "}
-              also covers <strong>luggage transport</strong> and{" "}
-              <strong>activities</strong> before check-in / after check-out
-              &mdash; that part applies to everyone.
+              <strong>Luggage transport</strong> and <strong>activities</strong>{" "}
+              before check-in / after check-out can also be arranged on
+              WhatsApp.
             </li>
             <li>
               Meals are <strong>not available for the unmanned whole-house
@@ -760,18 +747,14 @@ export default function Page() {
         <details className="faq-item">
           <summary>Is there anything to do before I arrive?</summary>
           <p>
-            Yes — please fill in our{" "}
-            <a
-              href={PRE_ARRIVAL_FORM_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              pre-arrival form
-            </a>
-            . It covers dinner and breakfast reservations (skip these if you
-            already added meals at checkout), luggage transport, and
-            activities before check-in or after check-out. For multi-night
-            stays, please fill it in once per date.
+            Yes — message us on{" "}
+            <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">
+              WhatsApp
+            </a>{" "}
+            with your arrival time, plus any luggage transport or activities
+            you&apos;d like before check-in or after check-out. Meals are
+            added at checkout when you book direct — or ordered on WhatsApp
+            if you booked via Booking.com.
           </p>
         </details>
         <details className="faq-item">
@@ -792,11 +775,10 @@ export default function Page() {
             staying Oct 3–6 and you&apos;d like sukiyaki on the 3rd and
             shabu-shabu on the 5th: add both sets at checkout, then message
             us &quot;Sukiyaki on the 3rd, Shabu-shabu on the 5th&quot;. The
-            same goes for breakfast mornings. Booked via Booking.com? Use
-            the pre-arrival form in the{" "}
-            <a href="#food">Food option</a> section — same email and name as
-            your room booking, one form per date for multi-night stays.
-            Orders are accepted up to 3 days before your stay.
+            same goes for breakfast mornings. Booked via Booking.com? Order
+            your meals on WhatsApp, with the same name as your room booking.
+            Orders are accepted up to 3 days before your stay — see the{" "}
+            <a href="#food">Food option</a> section for the menu.
           </p>
         </details>
         <details className="faq-item">
@@ -986,13 +968,7 @@ export default function Page() {
             <a href="#book">
               Check availability &amp; book
             </a>
-            <a
-              href={PRE_ARRIVAL_FORM_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Reserve meals
-            </a>
+            <a href="#food">Food option</a>
             <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">
               WhatsApp · +81 90-3839-2354
             </a>
