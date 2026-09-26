@@ -644,6 +644,10 @@ export default function Page() {
               No pets &middot; no parties or events &middot; no smoking
               indoors (the courtyard is fine)
             </li>
+            <li>
+              Cancellation: 100% of prepayments refunded up to 7 days before
+              arrival &middot; non-refundable after
+            </li>
             <li>The 2nd-floor room is reached by stairs only</li>
           </ul>
         </div>
@@ -789,6 +793,15 @@ export default function Page() {
             included. On those dates the individual rooms are closed, so the
             whole-house calendar only opens on the days it&apos;s available.
             Book it from the booking section like any room.
+          </p>
+        </details>
+        <details className="faq-item">
+          <summary>What is the cancellation policy for room bookings?</summary>
+          <p>
+            Prepayments are 100% refundable if you cancel 7 days before
+            arrival or earlier; cancellations after that are non-refundable.
+            (Meal orders follow their own policy — free until 4 days before
+            your stay, non-refundable from 3 days before.)
           </p>
         </details>
         <details className="faq-item">

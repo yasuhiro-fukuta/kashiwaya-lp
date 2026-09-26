@@ -279,6 +279,14 @@ const structuredData = {
         },
         {
           "@type": "Question",
+          name: "What is the cancellation policy for room bookings at Kashiwaya Inn?",
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: "100% of paid prepayments are refundable when canceled 7 days before arrival or earlier; 0% refundable if canceled after. Meal orders follow their own policy: free until 4 days before the stay, non-refundable from 3 days before.",
+          },
+        },
+        {
+          "@type": "Question",
           name: "Can guests rent the whole house at Kashiwaya Inn?",
           acceptedAnswer: {
             "@type": "Answer",
