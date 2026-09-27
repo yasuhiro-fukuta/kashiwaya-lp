@@ -1,7 +1,11 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import "./globals.css";
+import { ClickTracking } from "./analytics";
 
 const SITE_URL = "https://kashiwaya-inn.com";
+/** Google Analytics 4 の測定ID。空文字にすると計測タグごと無効になる。 */
+const GA_ID = process.env.NEXT_PUBLIC_GA_ID || "";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -336,7 +340,25 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
         />
       </head>
-      <body>{children}</body>
+      <body>
+        {children}
+        {/* Google Analytics 4 — GA_IDが空の間は無効 */}
+        {GA_ID && (
+          <>
+            <Script
+              src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
+              strategy="afterInteractive"
+            />
+            <Script id="ga4-init" strategy="afterInteractive">
+              {`window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', '${GA_ID}');`}
+            </Script>
+            <ClickTracking />
+          </>
+        )}
+      </body>
     </html>
   );
 }
