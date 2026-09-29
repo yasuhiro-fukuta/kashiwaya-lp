@@ -27,6 +27,32 @@ const EBIKE_LP_URL = "https://kiso-ebike-lp.vercel.app/";
 const WHATSAPP_URL =
   "https://wa.me/819038392354?text=Hello%20Kashiwaya%2C%20I%27d%20like%20to%20ask%20about%20a%20stay.";
 
+/** マルショー(一棟貸し用デリバリー)への注文テンプレート。
+ *  ゲストがマルショーに直接WhatsAppで注文する(宿は介在しない)。 */
+const MARUSHO_ORDER_TEXT = `Hello Marusho / マルショー様
+Delivery order to Kashiwaya (whole house) / 柏屋(一棟貸し)への配達注文です
+
+Date / 日付:
+Delivery time / 配達時間:
+Name / 名前:
+
+Order — please change the numbers / 数量をご記入ください:
+Katsudon / カツ丼 x0
+Katsu curry / カツカレー x0
+Fried chicken (karaage) / 唐揚げ x0
+Miso katsu / 味噌カツ x0
+Hand-rolled sushi set / 手巻き寿司セット x0
+Somen & tempura / そうめん天ぷら x0
+Udon & tempura / うどん天ぷら x0
+Soba & tempura / そば天ぷら x0
+Children's set / お子様セット x0
+Drink set (karaage, beer, fries) / ドリンクセット x0
+Kirin beer / キリンビール x0
+Juice or soda / ジュース・炭酸 x0
+Wine red or white / ワイン(赤・白) x0`;
+const MARUSHO_ORDER_URL =
+  "https://wa.me/818089135569?text=" + encodeURIComponent(MARUSHO_ORDER_TEXT);
+
 const HERO_IMG = "/gallery/entrance.JPG";
 const HOUSE_IMG = "/gallery/1stfloor.JPG";
 const FOOD_IMG = "/gallery/somen.jpg";
@@ -274,8 +300,10 @@ export default function Page() {
                   <li>Offered on select dates only &mdash; about one night a week</li>
                   <li>Unmanned stay &mdash; self check-in via key box</li>
                   <li>
-                    Dinner &amp; breakfast service not available &mdash; ask
-                    us on WhatsApp for alternatives
+                    Kashiwaya&apos;s dinner isn&apos;t available &mdash;
+                    local shop <a href="#marusho">Marusho delivers dinner</a>{" "}
+                    to the house instead; the ochazuke breakfast set can
+                    still be ordered
                   </li>
                 </ul>
                 <LodgifyBox rentalId="850548" />
@@ -399,9 +427,83 @@ export default function Page() {
               WhatsApp.
             </li>
             <li>
-              Meals are <strong>not available for the unmanned whole-house
-              rental</strong> &mdash; message us on WhatsApp and we&apos;ll
-              suggest alternatives.
+              Booking the <strong>whole house</strong>? Kashiwaya&apos;s
+              dinner isn&apos;t available on those unmanned dates &mdash;
+              see the delivery menu just below. Breakfast can be ordered
+              as usual.
+            </li>
+          </ul>
+        </div>
+
+        <div className="meal-order" id="marusho">
+          <div className="meal-order-head">
+            <UtensilsCrossed size={22} className="meal-icon" />
+            <h3>Whole-house dates &mdash; dinner, delivered</h3>
+            <p>
+              Kashiwaya&apos;s own dinner isn&apos;t available for the
+              unmanned whole-house rental, but dinner is still easy:
+              order from <strong>Marusho</strong>, a local shop that
+              delivers straight to Kashiwaya &mdash; and the house kitchen
+              is yours for self-catering.
+            </p>
+          </div>
+          <ul className="food-menu">
+            <li>
+              <span>
+                Katsudon rice bowl / katsu curry / fried chicken (karaage) /
+                miso katsu
+              </span>
+              <span>¥2,000</span>
+            </li>
+            <li>
+              <span>Hand-rolled sushi set &mdash; sashimi, rice &amp; seaweed</span>
+              <span>¥3,500</span>
+            </li>
+            <li>
+              <span>
+                Somen, udon or soba with tempura (vegetarian / vegan option)
+              </span>
+              <span>¥2,500</span>
+            </li>
+            <li>
+              <span>Children&apos;s set</span>
+              <span>¥1,500</span>
+            </li>
+            <li>
+              <span>Drink set &mdash; karaage, Kirin beer &amp; fries</span>
+              <span>¥2,000</span>
+            </li>
+            <li>
+              <span>Kirin beer, juice, cola or ginger ale</span>
+              <span>¥350</span>
+            </li>
+            <li>
+              <span>Wine &mdash; red or white</span>
+              <span>¥3,000</span>
+            </li>
+          </ul>
+          <a
+            href={MARUSHO_ORDER_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="meal-cta"
+          >
+            Order on WhatsApp &mdash; form ready to fill{" "}
+            <ArrowRight size={16} />
+          </a>
+          <ul className="meal-note">
+            <li>
+              The button opens WhatsApp to Marusho (+81 80-8913-5569) with a
+              bilingual order form already written &mdash; just fill in the
+              date, delivery time, name and quantities, then send. Please
+              mention you&apos;re staying at{" "}
+              <strong>Kashiwaya (whole house)</strong>.
+            </li>
+            <li>
+              Breakfast: Kashiwaya&apos;s <strong>ochazuke set (¥1,500 per
+              person)</strong> is available for whole-house stays too &mdash;
+              add it at checkout when booking direct, or order it on
+              WhatsApp if you booked via Booking.com.
             </li>
           </ul>
         </div>
@@ -825,9 +927,12 @@ export default function Page() {
             included. On those dates the individual rooms are closed, so the
             whole-house calendar only opens on the days it&apos;s available.
             Book it from the booking section like any room. Please note the
-            whole-house stay is unmanned (self check-in via key box), and
-            dinner and breakfast service is not available &mdash; message us
-            on WhatsApp and we&apos;ll suggest meal alternatives.
+            whole-house stay is unmanned (self check-in via key box) and
+            Kashiwaya&apos;s dinner isn&apos;t available &mdash; instead,
+            local shop Marusho delivers dinner sets to the house
+            (¥1,500–¥3,500, see the <a href="#marusho">Food option</a>{" "}
+            section). The ochazuke breakfast set can still be ordered, and
+            the kitchen is included for self-catering.
           </p>
         </details>
         <details className="faq-item">
