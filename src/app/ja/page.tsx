@@ -24,31 +24,9 @@ const EBIKE_LP_URL = "https://kiso-ebike-lp.vercel.app/";
 const WHATSAPP_URL =
   "https://wa.me/819038392354?text=%E6%9F%8F%E5%B1%8B%E3%81%95%E3%82%93%E3%80%81%E5%AE%BF%E6%B3%8A%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6%E8%B3%AA%E5%95%8F%E3%81%8C%E3%81%82%E3%82%8A%E3%81%BE%E3%81%99%E3%80%82";
 
-/** マルショー(一棟貸し用デリバリー)への注文テンプレート。
- *  ゲストがマルショーに直接WhatsAppで注文する(宿は介在しない)。英語版と共通。 */
-const MARUSHO_ORDER_TEXT = `Hello Marusho / マルショー様
-Delivery order to Kashiwaya (whole house) / 柏屋(一棟貸し)への配達注文です
-
-Date / 日付:
-Delivery time / 配達時間:
-Name / 名前:
-
-Order — please change the numbers / 数量をご記入ください:
-Katsudon / カツ丼 x0
-Katsu curry / カツカレー x0
-Fried chicken (karaage) / 唐揚げ x0
-Miso katsu / 味噌カツ x0
-Hand-rolled sushi set / 手巻き寿司セット x0
-Somen & tempura / そうめん天ぷら x0
-Udon & tempura / うどん天ぷら x0
-Soba & tempura / そば天ぷら x0
-Children's set / お子様セット x0
-Drink set (karaage, beer, fries) / ドリンクセット x0
-Kirin beer / キリンビール x0
-Juice or soda / ジュース・炭酸 x0
-Wine red or white / ワイン(赤・白) x0`;
-const MARUSHO_ORDER_URL =
-  "https://wa.me/818089135569?text=" + encodeURIComponent(MARUSHO_ORDER_TEXT);
+/** マルショー(一棟貸し用デリバリー)の注文ページ。
+ *  写真付きメニューから選ぶと注文メッセージ入りのWhatsAppが開く。 */
+const MARUSHO_SITE_URL = "https://marusho.vercel.app/";
 
 const HERO_IMG = "/gallery/entrance.JPG";
 const HOUSE_IMG = "/gallery/1stfloor.JPG";
@@ -426,58 +404,33 @@ export default function Page() {
             <h3>一棟貸しの日は — 夕食をデリバリーで</h3>
             <p>
               無人一棟貸しでは柏屋の夕食はご提供できませんが、ご安心を。
-              地元の食堂<strong>「マルショー」</strong>が柏屋まで
-              出前してくれます。キッチン付きなので自炊も可能です。
+              地元の食堂<strong>「マルショー」</strong>が夕食・朝食・
+              ドリンクを柏屋まで出前してくれます。キッチン付きなので
+              自炊も可能です。
             </p>
           </div>
-          <ul className="food-menu">
-            <li>
-              <span>カツ丼/カツカレー/唐揚げ/味噌カツ</span>
-              <span>¥2,000</span>
-            </li>
-            <li>
-              <span>手巻き寿司セット(刺身・酢飯・海苔)</span>
-              <span>¥3,500</span>
-            </li>
-            <li>
-              <span>そうめん・うどん・そば+天ぷら(ベジ・ヴィーガン対応)</span>
-              <span>¥2,500</span>
-            </li>
-            <li>
-              <span>お子様セット</span>
-              <span>¥1,500</span>
-            </li>
-            <li>
-              <span>ドリンクセット(唐揚げ・キリンビール・ポテト)</span>
-              <span>¥2,000</span>
-            </li>
-            <li>
-              <span>キリンビール・ジュース・コーラ・ジンジャーエール</span>
-              <span>¥350</span>
-            </li>
-            <li>
-              <span>ワイン(赤・白)</span>
-              <span>¥3,000</span>
-            </li>
-          </ul>
           <a
-            href={MARUSHO_ORDER_URL}
+            href={MARUSHO_SITE_URL}
             target="_blank"
             rel="noopener noreferrer"
             className="meal-cta"
           >
-            WhatsAppで注文 — フォーム入力済み <ArrowRight size={16} />
+            マルショー注文ページを開く <ArrowRight size={16} />
           </a>
           <ul className="meal-note">
             <li>
-              ボタンを押すとマルショー(+81 80-8913-5569)宛のWhatsAppが
-              開き、日英併記の注文フォームが入力済みで表示されます。
-              日付・配達時間・お名前・数量を記入して送信するだけ。
-              <strong>「柏屋(一棟貸し)宿泊」</strong>の旨をお伝えください。
+              注文ページの写真付きメニュー(夕食セット¥1,500〜¥3,500・
+              ベジ/ヴィーガン対応、朝食セット¥1,500、ドリンク)から料理と
+              数量を選び、日付・配達時間・お名前を入れると、注文メッセージ
+              入力済みのWhatsAppが開きます。あとは送信を押すだけ。
             </li>
             <li>
-              朝食は柏屋の<strong>お茶漬けセット(お一人¥1,500)</strong>を
-              一棟貸しでもご注文いただけます — 直接予約なら予約時に
+              お支払いはマルショーへの現地払いです(クレジットカード可・
+              カード手数料5%)。なるべく事前のご注文をお願いします。
+            </li>
+            <li>
+              柏屋の<strong>朝食お茶漬けセット(お一人¥1,500)</strong>も
+              一棟貸しでご注文いただけます — 直接予約なら予約時に
               アドオンで、Booking.com経由ならWhatsAppでどうぞ。
             </li>
           </ul>

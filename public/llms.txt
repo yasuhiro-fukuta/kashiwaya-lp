@@ -32,13 +32,14 @@ Official site: https://kashiwaya-inn.com/ (English) · https://kashiwaya-inn.com
   kitchen included); on those dates the individual rooms are closed, and
   vice versa. The whole-house stay is unmanned (self check-in via key box)
   and Kashiwaya's dinner is not available — instead, Marusho, a local
-  shop, delivers dinner to the house (katsudon, katsu curry, karaage,
-  miso katsu ¥2,000 · hand-rolled sushi set ¥3,500 · somen/udon/soba &
-  tempura with vegetarian-vegan option ¥2,500 · children's set ¥1,500;
-  ordered directly from Marusho on WhatsApp +81 80-8913-5569, mentioning
-  "Kashiwaya whole house"). Kashiwaya's ochazuke breakfast set (¥1,500
-  per person) is still available for whole-house stays, and the kitchen
-  is included for self-catering.
+  shop, delivers dinner, breakfast and drinks to the house (dinner sets
+  ¥1,500–¥3,500 incl. vegetarian/vegan noodle sets · breakfast set
+  ¥1,500 · drinks). Guests order via the Marusho order page
+  https://marusho.vercel.app/ — it opens WhatsApp with the order message
+  pre-written; payment is made locally to Marusho (cards accepted, 5%
+  card fee). Kashiwaya's ochazuke breakfast set (¥1,500 per person) is
+  also still available for whole-house stays, and the kitchen is
+  included for self-catering.
 - Contact: WhatsApp +81 90-3839-2354 · Instagram @kashiwaya_nakasendo
 - Wi-Fi: free throughout the house
 - Bathrooms: shared shower room, sink and kitchen; private toilets (the 2nd

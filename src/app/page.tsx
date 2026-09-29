@@ -27,31 +27,9 @@ const EBIKE_LP_URL = "https://kiso-ebike-lp.vercel.app/";
 const WHATSAPP_URL =
   "https://wa.me/819038392354?text=Hello%20Kashiwaya%2C%20I%27d%20like%20to%20ask%20about%20a%20stay.";
 
-/** マルショー(一棟貸し用デリバリー)への注文テンプレート。
- *  ゲストがマルショーに直接WhatsAppで注文する(宿は介在しない)。 */
-const MARUSHO_ORDER_TEXT = `Hello Marusho / マルショー様
-Delivery order to Kashiwaya (whole house) / 柏屋(一棟貸し)への配達注文です
-
-Date / 日付:
-Delivery time / 配達時間:
-Name / 名前:
-
-Order — please change the numbers / 数量をご記入ください:
-Katsudon / カツ丼 x0
-Katsu curry / カツカレー x0
-Fried chicken (karaage) / 唐揚げ x0
-Miso katsu / 味噌カツ x0
-Hand-rolled sushi set / 手巻き寿司セット x0
-Somen & tempura / そうめん天ぷら x0
-Udon & tempura / うどん天ぷら x0
-Soba & tempura / そば天ぷら x0
-Children's set / お子様セット x0
-Drink set (karaage, beer, fries) / ドリンクセット x0
-Kirin beer / キリンビール x0
-Juice or soda / ジュース・炭酸 x0
-Wine red or white / ワイン(赤・白) x0`;
-const MARUSHO_ORDER_URL =
-  "https://wa.me/818089135569?text=" + encodeURIComponent(MARUSHO_ORDER_TEXT);
+/** マルショー(一棟貸し用デリバリー)の注文ページ。
+ *  写真付きメニューから選ぶと注文メッセージ入りのWhatsAppが開く。 */
+const MARUSHO_SITE_URL = "https://marusho.vercel.app/";
 
 const HERO_IMG = "/gallery/entrance.JPG";
 const HOUSE_IMG = "/gallery/1stfloor.JPG";
@@ -441,69 +419,37 @@ export default function Page() {
             <h3>Whole-house dates &mdash; dinner, delivered</h3>
             <p>
               Kashiwaya&apos;s own dinner isn&apos;t available for the
-              unmanned whole-house rental, but dinner is still easy:
-              order from <strong>Marusho</strong>, a local shop that
-              delivers straight to Kashiwaya &mdash; and the house kitchen
-              is yours for self-catering.
+              unmanned whole-house rental, but eating well is still easy:{" "}
+              <strong>Marusho</strong>, a local shop, delivers dinner,
+              breakfast and drinks straight to Kashiwaya &mdash; and the
+              house kitchen is yours for self-catering.
             </p>
           </div>
-          <ul className="food-menu">
-            <li>
-              <span>
-                Katsudon rice bowl / katsu curry / fried chicken (karaage) /
-                miso katsu
-              </span>
-              <span>¥2,000</span>
-            </li>
-            <li>
-              <span>Hand-rolled sushi set &mdash; sashimi, rice &amp; seaweed</span>
-              <span>¥3,500</span>
-            </li>
-            <li>
-              <span>
-                Somen, udon or soba with tempura (vegetarian / vegan option)
-              </span>
-              <span>¥2,500</span>
-            </li>
-            <li>
-              <span>Children&apos;s set</span>
-              <span>¥1,500</span>
-            </li>
-            <li>
-              <span>Drink set &mdash; karaage, Kirin beer &amp; fries</span>
-              <span>¥2,000</span>
-            </li>
-            <li>
-              <span>Kirin beer, juice, cola or ginger ale</span>
-              <span>¥350</span>
-            </li>
-            <li>
-              <span>Wine &mdash; red or white</span>
-              <span>¥3,000</span>
-            </li>
-          </ul>
           <a
-            href={MARUSHO_ORDER_URL}
+            href={MARUSHO_SITE_URL}
             target="_blank"
             rel="noopener noreferrer"
             className="meal-cta"
           >
-            Order on WhatsApp &mdash; form ready to fill{" "}
-            <ArrowRight size={16} />
+            Open the Marusho order page <ArrowRight size={16} />
           </a>
           <ul className="meal-note">
             <li>
-              The button opens WhatsApp to Marusho (+81 80-8913-5569) with a
-              bilingual order form already written &mdash; just fill in the
-              date, delivery time, name and quantities, then send. Please
-              mention you&apos;re staying at{" "}
-              <strong>Kashiwaya (whole house)</strong>.
+              Pick your dishes on the order page (photo menu &mdash; dinner
+              sets ¥1,500–¥3,500 with vegetarian/vegan options, breakfast
+              set ¥1,500, drinks), set the quantities, fill in the date,
+              delivery time and your name &mdash; it then opens WhatsApp
+              with the order message already written. Just press send.
             </li>
             <li>
-              Breakfast: Kashiwaya&apos;s <strong>ochazuke set (¥1,500 per
-              person)</strong> is available for whole-house stays too &mdash;
-              add it at checkout when booking direct, or order it on
-              WhatsApp if you booked via Booking.com.
+              Payment is made locally to Marusho (credit cards accepted,
+              5% card fee). Please order in advance where possible.
+            </li>
+            <li>
+              Prefer Kashiwaya&apos;s <strong>ochazuke breakfast set
+              (¥1,500 per person)</strong>? It&apos;s available for
+              whole-house stays too &mdash; add it at checkout when booking
+              direct, or order it on WhatsApp if you booked via Booking.com.
             </li>
           </ul>
         </div>
