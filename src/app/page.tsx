@@ -28,30 +28,10 @@ const WHATSAPP_URL =
   "https://wa.me/819038392354?text=Hello%20Kashiwaya%2C%20I%27d%20like%20to%20ask%20about%20a%20stay.";
 
 /** マルショー(一棟貸し用デリバリー)への注文テンプレート。
- *  ゲストがマルショーに直接WhatsAppで注文する(宿は介在しない)。 */
-const MARUSHO_ORDER_TEXT = `Hello Marusho / マルショー様
-Delivery order to Kashiwaya (whole house) / 柏屋(一棟貸し)への配達注文です
-
-Date / 日付:
-Delivery time / 配達時間:
-Name / 名前:
-
-Order — please change the numbers / 数量をご記入ください:
-Katsudon / カツ丼 x0
-Katsu curry / カツカレー x0
-Fried chicken (karaage) / 唐揚げ x0
-Miso katsu / 味噌カツ x0
-Hand-rolled sushi set / 手巻き寿司セット x0
-Somen & tempura / そうめん天ぷら x0
-Udon & tempura / うどん天ぷら x0
-Soba & tempura / そば天ぷら x0
-Children's set / お子様セット x0
-Drink set (karaage, beer, fries) / ドリンクセット x0
-Kirin beer / キリンビール x0
-Juice or soda / ジュース・炭酸 x0
-Wine red or white / ワイン(赤・白) x0`;
+ *  ゲストがマルショーに直接WhatsAppで注文する(宿は介在しない)。
+ *  Googleフォームで使っているものと同一のURL。 */
 const MARUSHO_ORDER_URL =
-  "https://wa.me/818089135569?text=" + encodeURIComponent(MARUSHO_ORDER_TEXT);
+  "https://wa.me/818089135569?text=Hello%20Marusho%21%20Food%20delivery%20order.%0APlace%3A%20Kashiwaya%20Inn%20%28%E6%9F%8F%E5%B1%8B%29%20-%20whole%20house%0ADate%3A%20%0ADelivery%20time%3A%20%0AName%3A%20%0A%0APlease%20change%200%20to%20the%20number%20you%20want%3A%0A%5BDinner%5D%0AKatsudon%20%28%E3%82%AB%E3%83%84%E4%B8%BC%29%20x%200%0AKatsu%20Curry%20%28%E3%82%AB%E3%83%AC%E3%83%BC%E3%82%AB%E3%83%84%29%20x%200%0AFried%20Chicken%20%28%E5%94%90%E6%8F%9A%E3%81%92%29%20x%200%0AMiso%20Katsu%20%28%E5%91%B3%E5%99%8C%E3%82%AB%E3%83%84%29%20x%200%0AHand-rolled%20Sushi%20%28%E6%89%8B%E5%B7%BB%E3%81%8D%E5%AF%BF%E5%8F%B8%29%20x%200%0ASomen%20%26%20Tempura%20%28%E3%82%BD%E3%83%BC%E3%83%A1%E3%83%B3%E3%80%81%E3%81%A6%E3%82%93%E3%81%B7%E3%82%89%29%20x%200%0AUdon%20%26%20Tempura%20%28%E3%81%86%E3%81%A9%E3%82%93%E3%80%81%E3%81%A6%E3%82%93%E3%81%B7%E3%82%89%29%20x%200%0ASoba%20%26%20Tempura%20%28%E3%81%9D%E3%81%B0%E3%80%81%E3%81%A6%E3%82%93%E3%81%B7%E3%82%89%29%20x%200%0AChildren%27s%20set%20%28%E3%81%8A%E5%AD%90%E6%A7%98%E3%82%BB%E3%83%83%E3%83%88%29%20x%200%0ADrink%20set%20%28%E9%A3%B2%E3%81%BF%E3%82%BB%E3%83%83%E3%83%88%29%20x%200%0A%5BBreakfast%20-%20next%20morning%5D%0ABreakfast%20set%20%28%E6%9C%9D%E3%81%94%E3%81%AF%E3%82%93%E3%82%BB%E3%83%83%E3%83%88%29%20x%200%0A%5BDrinks%5D%0AKirin%20beer%20%28%E3%82%AD%E3%83%AA%E3%83%B3%E3%83%93%E3%83%BC%E3%83%AB%29%20x%200%0AOrange%20juice%20%28%E3%82%AA%E3%83%AC%E3%83%B3%E3%82%B8%29%20x%200%0ACoca-Cola%20%28%E3%82%B3%E3%82%AB%E3%82%B3%E3%83%BC%E3%83%A9%29%20x%200%0AGinger%20ale%20%28%E3%82%B8%E3%83%B3%E3%82%B8%E3%83%A3%E3%83%BC%E3%82%A8%E3%83%BC%E3%83%AB%29%20x%200%0AWine%20red%20%28%E8%B5%A4%E3%83%AF%E3%82%A4%E3%83%B3%29%20x%200%0AWine%20white%20%28%E7%99%BD%E3%83%AF%E3%82%A4%E3%83%B3%29%20x%200%0A%0AThank%20you%21";
 
 const HERO_IMG = "/gallery/entrance.JPG";
 const HOUSE_IMG = "/gallery/1stfloor.JPG";
