@@ -27,11 +27,9 @@ const EBIKE_LP_URL = "https://kiso-ebike-lp.vercel.app/";
 const WHATSAPP_URL =
   "https://wa.me/819038392354?text=Hello%20Kashiwaya%2C%20I%27d%20like%20to%20ask%20about%20a%20stay.";
 
-/** マルショー(一棟貸し用デリバリー)への注文テンプレート。
- *  ゲストがマルショーに直接WhatsAppで注文する(宿は介在しない)。
- *  Googleフォームで使っているものと同一のURL。 */
-const MARUSHO_ORDER_URL =
-  "https://wa.me/818089135569?text=Hello%20Marusho%21%20Food%20delivery%20order.%0APlace%3A%20Kashiwaya%20Inn%20%28%E6%9F%8F%E5%B1%8B%29%20-%20whole%20house%0ADate%3A%20%0ADelivery%20time%3A%20%0AName%3A%20%0A%0APlease%20change%200%20to%20the%20number%20you%20want%3A%0A%5BDinner%5D%0AKatsudon%20%28%E3%82%AB%E3%83%84%E4%B8%BC%29%20x%200%0AKatsu%20Curry%20%28%E3%82%AB%E3%83%AC%E3%83%BC%E3%82%AB%E3%83%84%29%20x%200%0AFried%20Chicken%20%28%E5%94%90%E6%8F%9A%E3%81%92%29%20x%200%0AMiso%20Katsu%20%28%E5%91%B3%E5%99%8C%E3%82%AB%E3%83%84%29%20x%200%0AHand-rolled%20Sushi%20%28%E6%89%8B%E5%B7%BB%E3%81%8D%E5%AF%BF%E5%8F%B8%29%20x%200%0ASomen%20%26%20Tempura%20%28%E3%82%BD%E3%83%BC%E3%83%A1%E3%83%B3%E3%80%81%E3%81%A6%E3%82%93%E3%81%B7%E3%82%89%29%20x%200%0AUdon%20%26%20Tempura%20%28%E3%81%86%E3%81%A9%E3%82%93%E3%80%81%E3%81%A6%E3%82%93%E3%81%B7%E3%82%89%29%20x%200%0ASoba%20%26%20Tempura%20%28%E3%81%9D%E3%81%B0%E3%80%81%E3%81%A6%E3%82%93%E3%81%B7%E3%82%89%29%20x%200%0AChildren%27s%20set%20%28%E3%81%8A%E5%AD%90%E6%A7%98%E3%82%BB%E3%83%83%E3%83%88%29%20x%200%0ADrink%20set%20%28%E9%A3%B2%E3%81%BF%E3%82%BB%E3%83%83%E3%83%88%29%20x%200%0A%5BBreakfast%20-%20next%20morning%5D%0ABreakfast%20set%20%28%E6%9C%9D%E3%81%94%E3%81%AF%E3%82%93%E3%82%BB%E3%83%83%E3%83%88%29%20x%200%0A%5BDrinks%5D%0AKirin%20beer%20%28%E3%82%AD%E3%83%AA%E3%83%B3%E3%83%93%E3%83%BC%E3%83%AB%29%20x%200%0AOrange%20juice%20%28%E3%82%AA%E3%83%AC%E3%83%B3%E3%82%B8%29%20x%200%0ACoca-Cola%20%28%E3%82%B3%E3%82%AB%E3%82%B3%E3%83%BC%E3%83%A9%29%20x%200%0AGinger%20ale%20%28%E3%82%B8%E3%83%B3%E3%82%B8%E3%83%A3%E3%83%BC%E3%82%A8%E3%83%BC%E3%83%AB%29%20x%200%0AWine%20red%20%28%E8%B5%A4%E3%83%AF%E3%82%A4%E3%83%B3%29%20x%200%0AWine%20white%20%28%E7%99%BD%E3%83%AF%E3%82%A4%E3%83%B3%29%20x%200%0A%0AThank%20you%21";
+/** マルショー(一棟貸し用デリバリー)の注文ページ。
+ *  写真付きメニューから選ぶと注文メッセージ入りのWhatsAppが開く。 */
+const MARUSHO_SITE_URL = "https://marusho.vercel.app/";
 
 const HERO_IMG = "/gallery/entrance.JPG";
 const HOUSE_IMG = "/gallery/1stfloor.JPG";
@@ -421,69 +419,37 @@ export default function Page() {
             <h3>Whole-house dates &mdash; dinner, delivered</h3>
             <p>
               Kashiwaya&apos;s own dinner isn&apos;t available for the
-              unmanned whole-house rental, but dinner is still easy:
-              order from <strong>Marusho</strong>, a local shop that
-              delivers straight to Kashiwaya &mdash; and the house kitchen
-              is yours for self-catering.
+              unmanned whole-house rental, but eating well is still easy:{" "}
+              <strong>Marusho</strong>, a local shop, delivers dinner,
+              breakfast and drinks straight to Kashiwaya &mdash; and the
+              house kitchen is yours for self-catering.
             </p>
           </div>
-          <ul className="food-menu">
-            <li>
-              <span>
-                Katsudon rice bowl / katsu curry / fried chicken (karaage) /
-                miso katsu
-              </span>
-              <span>¥2,000</span>
-            </li>
-            <li>
-              <span>Hand-rolled sushi set &mdash; sashimi, rice &amp; seaweed</span>
-              <span>¥3,500</span>
-            </li>
-            <li>
-              <span>
-                Somen, udon or soba with tempura (vegetarian / vegan option)
-              </span>
-              <span>¥2,500</span>
-            </li>
-            <li>
-              <span>Children&apos;s set</span>
-              <span>¥1,500</span>
-            </li>
-            <li>
-              <span>Drink set &mdash; karaage, Kirin beer &amp; fries</span>
-              <span>¥2,000</span>
-            </li>
-            <li>
-              <span>Kirin beer, juice, cola or ginger ale</span>
-              <span>¥350</span>
-            </li>
-            <li>
-              <span>Wine &mdash; red or white</span>
-              <span>¥3,000</span>
-            </li>
-          </ul>
           <a
-            href={MARUSHO_ORDER_URL}
+            href={MARUSHO_SITE_URL}
             target="_blank"
             rel="noopener noreferrer"
             className="meal-cta"
           >
-            Order on WhatsApp &mdash; form ready to fill{" "}
-            <ArrowRight size={16} />
+            Open the Marusho order page <ArrowRight size={16} />
           </a>
           <ul className="meal-note">
             <li>
-              The button opens WhatsApp to Marusho (+81 80-8913-5569) with a
-              bilingual order form already written &mdash; just fill in the
-              date, delivery time, name and quantities, then send. Please
-              mention you&apos;re staying at{" "}
-              <strong>Kashiwaya (whole house)</strong>.
+              Pick your dishes on the order page (photo menu &mdash; dinner
+              sets ¥1,500–¥3,500 with vegetarian/vegan options, breakfast
+              set ¥1,500, drinks), set the quantities, fill in the date,
+              delivery time and your name &mdash; it then opens WhatsApp
+              with the order message already written. Just press send.
             </li>
             <li>
-              Breakfast: Kashiwaya&apos;s <strong>ochazuke set (¥1,500 per
-              person)</strong> is available for whole-house stays too &mdash;
-              add it at checkout when booking direct, or order it on
-              WhatsApp if you booked via Booking.com.
+              Payment is made locally to Marusho (credit cards accepted,
+              5% card fee). Please order in advance where possible.
+            </li>
+            <li>
+              Prefer Kashiwaya&apos;s <strong>ochazuke breakfast set
+              (¥1,500 per person)</strong>? It&apos;s available for
+              whole-house stays too &mdash; add it at checkout when booking
+              direct, or order it on WhatsApp if you booked via Booking.com.
             </li>
           </ul>
         </div>
