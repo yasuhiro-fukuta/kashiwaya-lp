@@ -420,9 +420,8 @@ export default function Page() {
             <p>
               Kashiwaya&apos;s own dinner isn&apos;t available for the
               unmanned whole-house rental, but eating well is still easy:{" "}
-              <strong>Marusho</strong>, a local shop, delivers dinner,
-              breakfast and drinks straight to Kashiwaya &mdash; and the
-              house kitchen is yours for self-catering.
+              <strong>Marusho</strong>, a local shop, delivers dinner
+              straight to Kashiwaya.
             </p>
           </div>
           <a
