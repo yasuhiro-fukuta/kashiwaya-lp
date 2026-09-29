@@ -300,10 +300,10 @@ export default function Page() {
                   <li>Offered on select dates only &mdash; about one night a week</li>
                   <li>Unmanned stay &mdash; self check-in via key box</li>
                   <li>
-                    Kashiwaya&apos;s dinner &amp; breakfast aren&apos;t
-                    available &mdash; local shop{" "}
-                    <a href="#marusho">Marusho delivers dinner</a> to the
-                    house, and the kitchen is yours
+                    Kashiwaya&apos;s dinner isn&apos;t available &mdash;
+                    local shop <a href="#marusho">Marusho delivers dinner</a>{" "}
+                    to the house instead; the ochazuke breakfast set can
+                    still be ordered
                   </li>
                 </ul>
                 <LodgifyBox rentalId="850548" />
@@ -428,8 +428,9 @@ export default function Page() {
             </li>
             <li>
               Booking the <strong>whole house</strong>? Kashiwaya&apos;s
-              kitchen is off on those unmanned dates &mdash; see the
-              delivery menu just below.
+              dinner isn&apos;t available on those unmanned dates &mdash;
+              see the delivery menu just below. Breakfast can be ordered
+              as usual.
             </li>
           </ul>
         </div>
@@ -439,7 +440,7 @@ export default function Page() {
             <UtensilsCrossed size={22} className="meal-icon" />
             <h3>Whole-house dates &mdash; dinner, delivered</h3>
             <p>
-              Kashiwaya&apos;s own meals aren&apos;t available for the
+              Kashiwaya&apos;s own dinner isn&apos;t available for the
               unmanned whole-house rental, but dinner is still easy:
               order from <strong>Marusho</strong>, a local shop that
               delivers straight to Kashiwaya &mdash; and the house kitchen
@@ -499,9 +500,10 @@ export default function Page() {
               <strong>Kashiwaya (whole house)</strong>.
             </li>
             <li>
-              Breakfast isn&apos;t delivered &mdash; the whole-house kitchen
-              and dining are included, so bring groceries or pick some up
-              locally.
+              Breakfast: Kashiwaya&apos;s <strong>ochazuke set (¥1,500 per
+              person)</strong> is available for whole-house stays too &mdash;
+              add it at checkout when booking direct, or order it on
+              WhatsApp if you booked via Booking.com.
             </li>
           </ul>
         </div>
@@ -926,11 +928,11 @@ export default function Page() {
             whole-house calendar only opens on the days it&apos;s available.
             Book it from the booking section like any room. Please note the
             whole-house stay is unmanned (self check-in via key box) and
-            Kashiwaya&apos;s dinner and breakfast service isn&apos;t
-            available &mdash; instead, local shop Marusho delivers dinner
-            sets to the house (¥1,500–¥3,500, see the{" "}
-            <a href="#marusho">Food option</a> section), and the kitchen is
-            included for self-catering.
+            Kashiwaya&apos;s dinner isn&apos;t available &mdash; instead,
+            local shop Marusho delivers dinner sets to the house
+            (¥1,500–¥3,500, see the <a href="#marusho">Food option</a>{" "}
+            section). The ochazuke breakfast set can still be ordered, and
+            the kitchen is included for self-catering.
           </p>
         </details>
         <details className="faq-item">

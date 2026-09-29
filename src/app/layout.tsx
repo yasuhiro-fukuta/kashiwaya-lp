@@ -294,7 +294,7 @@ const structuredData = {
           name: "Can guests rent the whole house at Kashiwaya Inn?",
           acceptedAnswer: {
             "@type": "Answer",
-            text: "Yes — on select dates (about one night a week) the whole kominka is listed for a single group: both floors, garden and kitchen included. On those dates the individual rooms are closed, so the whole-house calendar only opens on available days. The whole-house stay is unmanned (self check-in via key box) and Kashiwaya's dinner/breakfast service is not available on those dates — instead, Marusho, a local shop, delivers dinner sets to the house (¥1,500–¥3,500, including vegetarian and vegan noodle sets, ordered directly on WhatsApp), and the kitchen is included for self-catering.",
+            text: "Yes — on select dates (about one night a week) the whole kominka is listed for a single group: both floors, garden and kitchen included. On those dates the individual rooms are closed, so the whole-house calendar only opens on available days. The whole-house stay is unmanned (self check-in via key box) and Kashiwaya's dinner is not available on those dates — instead, Marusho, a local shop, delivers dinner sets to the house (¥1,500–¥3,500, including vegetarian and vegan noodle sets, ordered directly on WhatsApp). The ochazuke breakfast set (¥1,500 per person) can still be ordered, and the kitchen is included for self-catering.",
           },
         },
         {
