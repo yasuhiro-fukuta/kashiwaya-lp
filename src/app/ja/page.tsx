@@ -24,6 +24,32 @@ const EBIKE_LP_URL = "https://kiso-ebike-lp.vercel.app/";
 const WHATSAPP_URL =
   "https://wa.me/819038392354?text=%E6%9F%8F%E5%B1%8B%E3%81%95%E3%82%93%E3%80%81%E5%AE%BF%E6%B3%8A%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6%E8%B3%AA%E5%95%8F%E3%81%8C%E3%81%82%E3%82%8A%E3%81%BE%E3%81%99%E3%80%82";
 
+/** マルショー(一棟貸し用デリバリー)への注文テンプレート。
+ *  ゲストがマルショーに直接WhatsAppで注文する(宿は介在しない)。英語版と共通。 */
+const MARUSHO_ORDER_TEXT = `Hello Marusho / マルショー様
+Delivery order to Kashiwaya (whole house) / 柏屋(一棟貸し)への配達注文です
+
+Date / 日付:
+Delivery time / 配達時間:
+Name / 名前:
+
+Order — please change the numbers / 数量をご記入ください:
+Katsudon / カツ丼 x0
+Katsu curry / カツカレー x0
+Fried chicken (karaage) / 唐揚げ x0
+Miso katsu / 味噌カツ x0
+Hand-rolled sushi set / 手巻き寿司セット x0
+Somen & tempura / そうめん天ぷら x0
+Udon & tempura / うどん天ぷら x0
+Soba & tempura / そば天ぷら x0
+Children's set / お子様セット x0
+Drink set (karaage, beer, fries) / ドリンクセット x0
+Kirin beer / キリンビール x0
+Juice or soda / ジュース・炭酸 x0
+Wine red or white / ワイン(赤・白) x0`;
+const MARUSHO_ORDER_URL =
+  "https://wa.me/818089135569?text=" + encodeURIComponent(MARUSHO_ORDER_TEXT);
+
 const HERO_IMG = "/gallery/entrance.JPG";
 const HOUSE_IMG = "/gallery/1stfloor.JPG";
 const FOOD_IMG = "/gallery/somen.jpg";
@@ -266,7 +292,11 @@ export default function Page() {
                   <li>両フロア(計140㎡)· 庭もキッチンも独占</li>
                   <li>週に1日ほどの限定販売</li>
                   <li>無人運営 — キーボックスでセルフチェックイン</li>
-                  <li>仕出し(夕食・朝食)のご提供はありません — 代替はWhatsAppでご相談を</li>
+                  <li>
+                    柏屋の夕食・朝食はご提供なし —{" "}
+                    <a href="#marusho">地元「マルショー」の夕食デリバリー</a>
+                    が利用可、キッチン付きで自炊もOK
+                  </li>
                 </ul>
                 <LodgifyBox rentalId="850548" language="ja" />
               </div>
@@ -383,8 +413,70 @@ export default function Page() {
               <strong>アクティビティ</strong>もWhatsAppでご相談いただけます。
             </li>
             <li>
-              <strong>無人一棟貸しではお食事はご利用いただけません</strong> —
-              WhatsAppでご相談いただければ、代替サービスをご案内します。
+              <strong>一棟貸し</strong>の日は柏屋の台所はお休みです —
+              すぐ下のデリバリーメニューをご覧ください。
+            </li>
+          </ul>
+        </div>
+
+        <div className="meal-order" id="marusho">
+          <div className="meal-order-head">
+            <UtensilsCrossed size={22} className="meal-icon" />
+            <h3>一棟貸しの日は — 夕食をデリバリーで</h3>
+            <p>
+              無人一棟貸しでは柏屋のお食事はご提供できませんが、夕食は
+              ご安心を。地元の食堂<strong>「マルショー」</strong>が柏屋まで
+              出前してくれます。キッチン付きなので自炊も可能です。
+            </p>
+          </div>
+          <ul className="food-menu">
+            <li>
+              <span>カツ丼/カツカレー/唐揚げ/味噌カツ</span>
+              <span>¥2,000</span>
+            </li>
+            <li>
+              <span>手巻き寿司セット(刺身・酢飯・海苔)</span>
+              <span>¥3,500</span>
+            </li>
+            <li>
+              <span>そうめん・うどん・そば+天ぷら(ベジ・ヴィーガン対応)</span>
+              <span>¥2,500</span>
+            </li>
+            <li>
+              <span>お子様セット</span>
+              <span>¥1,500</span>
+            </li>
+            <li>
+              <span>ドリンクセット(唐揚げ・キリンビール・ポテト)</span>
+              <span>¥2,000</span>
+            </li>
+            <li>
+              <span>キリンビール・ジュース・コーラ・ジンジャーエール</span>
+              <span>¥350</span>
+            </li>
+            <li>
+              <span>ワイン(赤・白)</span>
+              <span>¥3,000</span>
+            </li>
+          </ul>
+          <a
+            href={MARUSHO_ORDER_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="meal-cta"
+          >
+            WhatsAppで注文 — フォーム入力済み <ArrowRight size={16} />
+          </a>
+          <ul className="meal-note">
+            <li>
+              ボタンを押すとマルショー(+81 80-8913-5569)宛のWhatsAppが
+              開き、日英併記の注文フォームが入力済みで表示されます。
+              日付・配達時間・お名前・数量を記入して送信するだけ。
+              <strong>「柏屋(一棟貸し)宿泊」</strong>の旨をお伝えください。
+            </li>
+            <li>
+              朝食のデリバリーはありません — キッチンとダイニング付きなので、
+              食材の持ち込みや買い出しでどうぞ。
             </li>
           </ul>
         </div>
@@ -736,8 +828,10 @@ export default function Page() {
             その日は各部屋の販売を止めているため、一棟貸しのカレンダーに
             空きが出ている日が対象です。予約セクションからお部屋と同じように
             ご予約ください。なお、一棟貸しは無人運営(キーボックスでの
-            セルフチェックイン)で、仕出し(夕食・朝食)のご提供はありません。
-            お食事はWhatsAppでご相談いただければ代替サービスをご案内します。
+            セルフチェックイン)で、柏屋の夕食・朝食はご提供できません。
+            代わりに地元の食堂「マルショー」の出前(¥1,500〜¥3,500、
+            「<a href="#marusho">お食事オプション</a>」欄参照)がご利用
+            いただけます。キッチン付きなので自炊も可能です。
           </p>
         </details>
         <details className="faq-item">
