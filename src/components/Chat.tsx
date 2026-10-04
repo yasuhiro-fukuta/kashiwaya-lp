@@ -79,6 +79,24 @@ export default function Chat() {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight });
   }, [messages]);
 
+  // Links like /chat?q=【スタッフ】今月のシフトは？ pre-fill the input so
+  // staff can bookmark their usual questions; the person just taps send.
+  useEffect(() => {
+    try {
+      const q = new URLSearchParams(window.location.search).get("q");
+      if (q) {
+        setInput(q.slice(0, 2000));
+        requestAnimationFrame(() => {
+          autoGrow();
+          inputRef.current?.focus();
+        });
+      }
+    } catch {
+      // no query string available — nothing to pre-fill
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   function autoGrow() {
     const el = inputRef.current;
     if (!el) return;
