@@ -24,7 +24,9 @@ export async function GET() {
       generatedAt: data.generatedAt,
       today: data.today,
       boardRows: Array.isArray(data.board) ? data.board.length : -1,
-      specialTasks: Array.isArray(data.special) ? data.special.length : -1,
+      specialSpotRows: Array.isArray(data.board)
+        ? data.board.filter((r: { specialSpot?: string }) => r.specialSpot).length
+        : -1,
       staff: Array.isArray(data.staff) ? data.staff.length : -1,
     });
   } catch (err) {

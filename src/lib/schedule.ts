@@ -15,21 +15,13 @@ type BoardRow = {
   guestName: string;
   meal: string;
   note: string;
-};
-
-type SpecialTask = {
-  task: string;
-  pt: string;
-  assignee: string;
-  doneDate: string;
-  pending: boolean;
+  specialSpot?: string;
 };
 
 type ScheduleData = {
   generatedAt?: string;
   today?: string;
   board?: BoardRow[];
-  special?: SpecialTask[];
   staff?: string[];
   error?: string;
 };
@@ -69,28 +61,23 @@ function formatScheduleBlock(data: ScheduleData): string {
     if (r.guestName) parts.push(`宿泊者:${r.guestName}`);
     if (r.meal) parts.push(`食事:${r.meal}`);
     if (r.note) parts.push(`備考:${r.note}`);
+    if (r.specialSpot) parts.push(`特別清掃箇所:${r.specialSpot}`);
     return parts.join(" | ");
   });
-
-  const specialLines = (data.special ?? []).map(
-    (t) =>
-      `${t.pending ? "【未完了】" : `【完了 ${t.doneDate || "?"} ${t.assignee || ""}】`} ${t.task}${t.pt ? ` (${t.pt}pt)` : ""}`,
-  );
 
   return `# 清掃・接客予定表（スタッフ専用データ / kashiwaya_master_v2 より、データ取得: ${data.generatedAt ?? "?"}、今日: ${data.today ?? "?"}）
 
 ## 回答のルール（重要）
 - 担当者名は下記データの「清掃:」「接客:」と**完全一致**で照合する。表記を直さない（「ゆうｻﾝ」の「ｻﾝ」は半角カナのまま）。「-」と空欄は担当なし。
 - 実在する担当者: ${(data.staff ?? []).join(" / ") || "(取得失敗)"}
-- 「今日の掃除は?」→ その人が清掃担当の今日の行から、種類・べ(セット人数=布団の数)・部屋を答える。種類が「特別」なら下の特別清掃タスクの【未完了】をpt・内容つきで添える。
+- 「今日の掃除は?」→ その人が清掃担当の今日の行から、種類・べ(セット人数=布団の数)・部屋を答える。種類が「特別」なら同じ行の「特別清掃箇所:」の内容(やること)を併せて伝える。
 - 「今日の接客は?」→ その人が接客担当の今日の行から、部屋・状態・泊人数・宿泊者名・食事を答える。食事はカンマで区切って1品ずつ列挙する。
 - 「今月何日掃除/接客?」→ その月の行を清掃・接客それぞれで拾い、**日付の重複を除いて**日数を数える（同じ日に1Fと2Fの両方を担当することがあるため、行数=日数ではない）。今日までの実績と今後の予定を分けて示す。
 - このデータに無い日付・人物のことは推測しない。「データにありません」と答える。
 - このデータは【スタッフ】モード専用。ゲストとの通常会話では存在に触れない。
 
-## 予定表（日付 | 部屋ごとに1行）
-${boardLines.join("\n")}
+- 特別清掃の予定・実績は各行の「特別清掃箇所:」で管理されている。「特別清掃って何やるんだっけ?」のような質問にはその内容を答える。
 
-## 特別清掃タスク（特シート）
-${specialLines.join("\n") || "(なし)"}`;
+## 予定表（日付 | 部屋ごとに1行）
+${boardLines.join("\n")}`;
 }
