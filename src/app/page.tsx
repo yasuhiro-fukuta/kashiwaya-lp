@@ -279,7 +279,14 @@ export default function Page() {
                   <li>Unmanned stay &mdash; self check-in via key box</li>
                   <li>
                     Kashiwaya&apos;s dinner isn&apos;t available &mdash;
-                    local shop <a href="#marusho">Marusho delivers dinner</a>{" "}
+                    local shop{" "}
+                    <a
+                      href={MARUSHO_SITE_URL}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Marusho delivers dinner
+                    </a>{" "}
                     to the house instead; the ochazuke breakfast set can
                     still be ordered
                   </li>
@@ -315,7 +322,7 @@ export default function Page() {
         <div className="section-head">
           <span className="eyebrow-dark">Food option</span>
           <h2>
-            Dinner &amp; breakfast, <em>cooked in the house.</em>
+            Dinner &amp; breakfast, <em>cooked by the chef next door.</em>
           </h2>
           <p>
             Meals at Kashiwaya are optional and reserved in advance — a

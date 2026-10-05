@@ -272,7 +272,13 @@ export default function Page() {
                   <li>無人運営 — キーボックスでセルフチェックイン</li>
                   <li>
                     柏屋の夕食はご提供なし —{" "}
-                    <a href="#marusho">地元「マルショー」の夕食デリバリー</a>
+                    <a
+                      href={MARUSHO_SITE_URL}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      地元「マルショー」の夕食デリバリー
+                    </a>
                     が利用可。朝食(お茶漬けセット)はご注文いただけます
                   </li>
                 </ul>
@@ -307,7 +313,7 @@ export default function Page() {
         <div className="section-head">
           <span className="eyebrow-dark">お食事オプション</span>
           <h2>
-            この家で仕込む、<em>夕食と朝食。</em>
+            近所のシェフが仕込む、<em>夕食と朝食。</em>
           </h2>
           <p>
             柏屋のお食事はすべて事前予約制のオプションです。夕食は伝統の鍋、

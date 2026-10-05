@@ -11,7 +11,7 @@ function buildLodgifyDoc(rentalId: string, language: string): string {
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet" />
 <style>
   html, body { margin: 0; background: transparent; font-family: "Outfit", Arial, sans-serif; }
-  body { padding-bottom: 30px; }
+  body { padding-bottom: 10px; }
   :root {
     --ldg-bnb-background: #ffffff;
     --ldg-bnb-border-radius: 0.42em;
@@ -88,7 +88,7 @@ export default function LodgifyBox({
         width: 320,
         maxWidth: "100%",
         margin: "1rem auto 0",
-        height: 430, // 固定。上にボックス、下はカレンダーが開くスペース
+        height: 390, // 固定。上にボックス、下はカレンダーが開くスペース
         border: "none",
         background: "transparent",
       }}
