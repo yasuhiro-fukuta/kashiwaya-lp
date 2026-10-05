@@ -16,6 +16,7 @@ import ChatWidget from "@/components/ChatWidget";
 import LodgifyBox from "@/components/LodgifyBox";
 import PhotoGallery from "@/components/PhotoGallery";
 import CouponBanner from "@/components/CouponBanner";
+import ShareMenu from "@/components/ShareMenu";
 
 /** 日本語版LP。構成は英語版(/)と同一。リンク・画像は英語版と共通。 */
 const INSTAGRAM_URL = "https://www.instagram.com/kashiwaya_nakasendo";
@@ -96,6 +97,7 @@ export default function Page() {
           >
             予約する <ArrowRight size={14} />
           </a>
+          <ShareMenu lang="ja" />
           <button
             type="button"
             className="menu-btn"

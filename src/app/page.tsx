@@ -16,6 +16,7 @@ import ChatWidget from "@/components/ChatWidget";
 import LodgifyBox from "@/components/LodgifyBox";
 import PhotoGallery from "@/components/PhotoGallery";
 import CouponBanner from "@/components/CouponBanner";
+import ShareMenu from "@/components/ShareMenu";
 
 /** =================== CUSTOMIZE ZONE =====================
  *  Update links and image filenames here. All gallery files
@@ -100,6 +101,7 @@ export default function Page() {
           >
             Book <ArrowRight size={14} />
           </a>
+          <ShareMenu lang="en" />
           <button
             type="button"
             className="menu-btn"
