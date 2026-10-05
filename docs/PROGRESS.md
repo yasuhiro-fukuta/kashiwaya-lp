@@ -153,6 +153,17 @@ Webチャットで画像を添付して質問できる(📎ボタン / PCはコ�
   ヘッダーどちらのアイコンも対象。背景タップ・×・Esc で閉じる
   (`src/components/AvatarLightbox.tsx`)
 
+## E-bikeサイトの参照(2026-10-05)
+
+E-bike(Beyond Nakasendo Cycling)の料金・ルート・予約情報は
+https://nakasendo-ebike.com/llms.txt を1時間キャッシュで取得し、
+一次優先情報としてゲスト・スタッフ両モードのプロンプトに注入。
+**E-bikeサイト側のllms.txtを更新すればボットの回答も自動更新**される。
+
+- 実装: `src/lib/ebike.ts`(取得失敗時はE-bikeブロックなしで動くfail soft)
+- 取得元の差し替え: 環境変数 `EBIKE_INFO_URL`
+- kiso-ebike-lp側で内容を変えたら `public/llms.txt` も更新すること
+
 ## 運用メモ
 
 - FAQの更新 = **Googleドキュメントを編集するだけ**(最大1時間で反映)
