@@ -310,6 +310,50 @@ export default function Page() {
         </div>
       </section>
 
+      {/* ============ HONEST NOTES ============ */}
+      <section className="honest" id="honest">
+        <div className="section-head">
+          <span className="eyebrow-dark">予約の前に</span>
+          <h2>
+            正直にお伝えします。<em>ここはホテルではなく、築140年の家です。</em>
+          </h2>
+          <p>
+            柏屋は、合う方には最高の宿ですが、合わない方もいます。
+            ご予約の前に、次の4点だけご確認ください。
+          </p>
+        </div>
+        <div className="honest-card">
+          <ul className="meal-note">
+            <li>
+              <strong>キッチン・洗面台・シャワールームは共用です</strong>
+              (部屋貸しの場合)。各階1組限定なので、共有するのは最大で
+              もう1組だけ。トイレは各部屋専用です。浴槽はなく、日帰り温泉が
+              車で約15分の場所にあります。
+            </li>
+            <li>
+              <strong>2階のお部屋のトイレは1階にあります。</strong>
+              夜中も階段の上り下りが必要です。トイレ自体は専用で、
+              他のお客様のエリアを通ることはありません。
+            </li>
+            <li>
+              <strong>階段は昔のままで、急で狭いです。</strong>
+              足腰に不安のある方は1階のお部屋をお選びください。
+            </li>
+            <li>
+              <strong>断熱・防音には築140年の木造家屋なりの限界があります。</strong>
+              夏は各部屋のエアコンで快適ですが、冬は石油ストーブと電気毛布が
+              頼りで、朝晩は冷え込みます。家のきしみや、もう1組の生活音が
+              聞こえることもあります——だから21時以降は静かに過ごす宿です。
+            </li>
+          </ul>
+          <p className="honest-foot">
+            ここまで読んで大丈夫そうなら、きっと気に入っていただけます。
+            囲炉裏端の夜、静かな宿場の朝、そして1885年から旅人を
+            泊めてきた家の時間を。
+          </p>
+        </div>
+      </section>
+
       {/* ============ FOOD OPTION ============ */}
       <section className="food-option" id="food">
         <div className="section-head">
