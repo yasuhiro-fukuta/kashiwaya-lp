@@ -319,6 +319,53 @@ export default function Page() {
         </div>
       </section>
 
+      {/* ============ HONEST NOTES ============ */}
+      <section className="honest" id="honest">
+        <div className="section-head">
+          <span className="eyebrow-dark">Before you book</span>
+          <h2>
+            An honest note. <em>This is a 140-year-old house, not a hotel.</em>
+          </h2>
+          <p>
+            Kashiwaya is wonderful for the right guest — and wrong for some.
+            Please read these four points before you book.
+          </p>
+        </div>
+        <div className="honest-card">
+          <ul className="meal-note">
+            <li>
+              <strong>The kitchen, sink and shower room are shared</strong>{" "}
+              when booking by the room — with at most one other group, since
+              each floor sleeps a single group. Toilets are private. There is
+              no bathtub; a day-use natural hot spring is ~15 min away by car.
+            </li>
+            <li>
+              <strong>The 2nd-floor room&apos;s toilet is on the 1st
+              floor</strong> — including at night, that means taking the
+              stairs. The toilet itself is private, and you never pass
+              through another guest&apos;s area.
+            </li>
+            <li>
+              <strong>The stairs are original — steep and narrow.</strong>{" "}
+              If stairs are hard for you, choose the 1st-floor room.
+            </li>
+            <li>
+              <strong>Insulation and soundproofing have the limits of a
+              140-year-old wooden house.</strong> Summer is covered by
+              air-conditioning; winter relies on kerosene stoves and
+              electric blankets, and mornings can be cold. You may hear the
+              house creak and your neighbours live — which is why the house
+              goes quiet after 21:00.
+            </li>
+          </ul>
+          <p className="honest-foot">
+            If none of this puts you off, you&apos;ll likely love it here —
+            the hearth-side evenings, the quiet post-town mornings, and a
+            house that has sheltered travellers since 1885.
+          </p>
+        </div>
+      </section>
+
       {/* ============ FOOD OPTION ============ */}
       <section className="food-option" id="food">
         <div className="section-head">
