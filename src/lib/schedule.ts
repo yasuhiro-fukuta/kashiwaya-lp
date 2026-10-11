@@ -26,28 +26,54 @@ type ScheduleData = {
   error?: string;
 };
 
-export async function getScheduleBlock(): Promise<string | null> {
-  const url = process.env.SHEET_API_URL;
-  const token = process.env.SHEET_API_TOKEN;
-  if (!url || !token) return null;
+// When the Apps Script API can't be reached at all, this block is injected
+// instead so the bot says so honestly rather than inventing an answer like
+// "シフト表はここに保管されていない" (which happened on transient failures).
+export const SCHEDULE_UNAVAILABLE_NOTE = `# シフト表 接続エラー（内部情報）
+現在、清掃・接客予定表（kashiwaya_master_v2）への接続に一時的に失敗している。シフト・清掃・接客・宿泊予定・特別清掃について聞かれたら、推測やドキュメントからの回答はせず、「いまシフト表につながらないため、1〜2分おいてもう一度聞いてください」とだけ伝えること。シフト表が存在しない・保管されていない、といった説明はしないこと。`;
 
-  try {
-    const sep = url.includes("?") ? "&" : "?";
-    const res = await fetch(`${url}${sep}token=${encodeURIComponent(token)}`, {
-      // The sheet is rebuilt hourly; a 5-minute cache keeps answers fresh
-      // without hammering Apps Script.
-      next: { revalidate: 300 },
-      redirect: "follow",
-    });
-    if (!res.ok) throw new Error(`schedule api ${res.status}`);
-    const data = (await res.json()) as ScheduleData;
-    if (data.error) throw new Error(`schedule api: ${data.error}`);
-    if (!Array.isArray(data.board)) throw new Error("schedule api: no board");
-    return formatScheduleBlock(data);
-  } catch (err) {
-    console.error("schedule: fetch failed:", err);
-    return null;
+// Apps Script occasionally fails or times out (e.g. while the hourly batch
+// rewrites the sheet), so: retry once uncached, and keep the last good block
+// in module memory to serve (with a disclaimer) when both attempts fail.
+let lastGood: { block: string; generatedAt: string } | null = null;
+
+async function fetchSchedule(bypassCache: boolean): Promise<ScheduleData> {
+  const url = process.env.SHEET_API_URL!;
+  const token = process.env.SHEET_API_TOKEN!;
+  const sep = url.includes("?") ? "&" : "?";
+  const res = await fetch(`${url}${sep}token=${encodeURIComponent(token)}`, {
+    // The sheet is rebuilt hourly; a 5-minute cache keeps answers fresh
+    // without hammering Apps Script.
+    ...(bypassCache ? { cache: "no-store" as const } : { next: { revalidate: 300 } }),
+    redirect: "follow",
+  });
+  if (!res.ok) throw new Error(`schedule api ${res.status}`);
+  const data = (await res.json()) as ScheduleData;
+  if (data.error) throw new Error(`schedule api: ${data.error}`);
+  if (!Array.isArray(data.board)) throw new Error("schedule api: no board");
+  return data;
+}
+
+export async function getScheduleBlock(): Promise<string | null> {
+  if (!process.env.SHEET_API_URL || !process.env.SHEET_API_TOKEN) return null;
+
+  for (const bypassCache of [false, true]) {
+    try {
+      const data = await fetchSchedule(bypassCache);
+      const block = formatScheduleBlock(data);
+      lastGood = { block, generatedAt: data.generatedAt ?? "?" };
+      return block;
+    } catch (err) {
+      console.error(`schedule: fetch failed (retry=${bypassCache}):`, err);
+    }
   }
+
+  if (lastGood) {
+    return `${lastGood.block}
+
+※注意: シフト表への最新の接続に失敗したため、上記は ${lastGood.generatedAt} 時点に取得したデータである。回答にも「${lastGood.generatedAt}時点のデータです」と添えること。`;
+  }
+  return null;
 }
 
 function formatScheduleBlock(data: ScheduleData): string {
