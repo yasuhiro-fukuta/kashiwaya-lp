@@ -1009,8 +1009,7 @@ export default function Page() {
             floor — you won&apos;t pass through any other guest&apos;s area
             to reach it). There&apos;s no bathtub — if you want a proper
             soak, a day-use natural hot spring is about 15 minutes away by
-            car (closed Wednesdays). We can shuttle you there when our
-            schedule allows, or arrange a taxi.
+            car (closed Wednesdays). We can arrange a taxi for you.
           </p>
         </details>
         <details className="faq-item">

@@ -230,7 +230,7 @@ const structuredData = {
           name: "Are the bathrooms shared? Is there a bath?",
           acceptedAnswer: {
             "@type": "Answer",
-            text: "The shower room, sink and kitchen are shared; toilets are private (the second floor's private toilet is on the first floor, reached without passing through any other guest's area). There is no bathtub; a day-use natural hot spring is about 15 minutes away by car (closed Wednesdays) and the inn can shuttle guests when the schedule allows, or arrange a taxi.",
+            text: "The shower room, sink and kitchen are shared; toilets are private (the second floor's private toilet is on the first floor, reached without passing through any other guest's area). There is no bathtub; a day-use natural hot spring is about 15 minutes away by car (closed Wednesdays) and the inn can arrange a taxi.",
           },
         },
         {
