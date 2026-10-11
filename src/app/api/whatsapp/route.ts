@@ -1,7 +1,7 @@
 import { getKnowledge } from "@/lib/knowledge";
 import { getMenuBlock } from "@/lib/menu";
 import { getEbikeBlock } from "@/lib/ebike";
-import { getDmLogBlock } from "@/lib/dmlog";
+import { getDmLogBlock, DMLOG_UNAVAILABLE_NOTE } from "@/lib/dmlog";
 import { getScheduleBlock, SCHEDULE_UNAVAILABLE_NOTE } from "@/lib/schedule";
 import { buildStaffSystemPrompt, buildSystemPrompt, STAFF_REPLY_RULES, STAFF_REPLY_TAG_PATTERN, STAFF_TAG_PATTERN } from "@/lib/prompt";
 import Anthropic from "@anthropic-ai/sdk";
@@ -97,6 +97,7 @@ export async function POST(req: Request) {
       if (ebike) system.push({ type: "text", text: ebike });
       if (schedule) system.push({ type: "text", text: schedule });
       if (dmlog) system.push({ type: "text", text: dmlog });
+      else if (staffMode) system.push({ type: "text", text: DMLOG_UNAVAILABLE_NOTE });
       else if (staffMode && process.env.SHEET_API_URL) {
         system.push({ type: "text", text: SCHEDULE_UNAVAILABLE_NOTE });
       }
