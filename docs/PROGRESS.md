@@ -164,6 +164,19 @@ https://nakasendo-ebike.com/llms.txt を1時間キャッシュで取得し、
 - 取得元の差し替え: 環境変数 `EBIKE_INFO_URL`
 - kiso-ebike-lp側で内容を変えたら `public/llms.txt` も更新すること
 
+## DM台帳の参照(2026-10-11)
+
+スタッフモード限定で、ゲストDM対応の台帳「問い合わせ台帳(柏屋・Beyond Nakasendo)」
+(Googleドキュメント ID: 1fRbx2tZr_gWIGqBpYradw92IOLCLHn4vWMboAM-wJ3c)を
+5分キャッシュで取得してプロンプトに注入。**「今日のシフトは?」と聞くと、
+当日の宿泊者とのDMやり取り(決まったこと・未解決)も併せて答える**。
+
+- 実装: `src/lib/dmlog.ts`(fail soft)。差し替えは環境変数 `DM_DOC_ID`
+- 台帳の更新はDM対応スレッド(別のClaude)がこのGoogleドキュメントを直接編集する運用
+- 元のClaude Docs版台帳からの移行(2026-10-11に内容を複製)。以後はGoogleドキュメントが正
+- ⚠ ドキュメントの共有設定は「リンクを知っている全員: 閲覧者」が必要(ボットが読むため)
+- ゲストモードでは一切読み込まれない(台帳には個人情報が含まれるため)
+
 ## 運用メモ
 
 - FAQの更新 = **Googleドキュメントを編集するだけ**(最大1時間で反映)
