@@ -10,6 +10,10 @@ export const runtime = "nodejs";
 export const maxDuration = 60;
 
 const MODEL = process.env.CHAT_MODEL ?? "claude-haiku-4-5";
+// Staff mode cross-references the schedule and the DM ledger across a
+// large context; the small model missed matches (Okada vs 岡田様), so
+// staff questions run on a stronger model. Guest mode stays on MODEL.
+const STAFF_MODEL = process.env.STAFF_CHAT_MODEL ?? "claude-sonnet-5";
 const MAX_MESSAGE_CHARS = 2000;
 const MAX_TURNS = 30;
 
@@ -131,7 +135,7 @@ export async function POST(req: Request) {
   }
 
   const stream = client.messages.stream({
-    model: MODEL,
+    model: staffMode ? STAFF_MODEL : MODEL,
     max_tokens: 1024,
     system,
     messages: toApiMessages(history),

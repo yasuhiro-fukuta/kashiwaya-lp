@@ -10,6 +10,10 @@ export const runtime = "nodejs";
 export const maxDuration = 60;
 
 const MODEL = process.env.CHAT_MODEL ?? "claude-haiku-4-5";
+// Staff mode cross-references the schedule and the DM ledger across a
+// large context; the small model missed matches (Okada vs 岡田様), so
+// staff questions run on a stronger model. Guest mode stays on MODEL.
+const STAFF_MODEL = process.env.STAFF_CHAT_MODEL ?? "claude-sonnet-5";
 const GRAPH_API = "https://graph.facebook.com/v20.0";
 
 // Meta retries webhook deliveries; remember recently handled message ids so a
@@ -102,7 +106,7 @@ export async function POST(req: Request) {
         system.push({ type: "text", text: SCHEDULE_UNAVAILABLE_NOTE });
       }
       const response = await client.messages.create({
-        model: MODEL,
+        model: staffMode ? STAFF_MODEL : MODEL,
         max_tokens: 1024,
         system,
         messages: [{ role: "user", content: question }],
