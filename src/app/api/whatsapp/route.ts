@@ -1,7 +1,7 @@
 import { getKnowledge } from "@/lib/knowledge";
 import { getMenuBlock } from "@/lib/menu";
 import { getEbikeBlock } from "@/lib/ebike";
-import { getScheduleBlock } from "@/lib/schedule";
+import { getScheduleBlock, SCHEDULE_UNAVAILABLE_NOTE } from "@/lib/schedule";
 import { buildStaffSystemPrompt, buildSystemPrompt, STAFF_REPLY_RULES, STAFF_REPLY_TAG_PATTERN, STAFF_TAG_PATTERN } from "@/lib/prompt";
 import Anthropic from "@anthropic-ai/sdk";
 
@@ -94,6 +94,9 @@ export async function POST(req: Request) {
       if (meals) system.push({ type: "text", text: meals });
       if (ebike) system.push({ type: "text", text: ebike });
       if (schedule) system.push({ type: "text", text: schedule });
+      else if (staffMode && process.env.SHEET_API_URL) {
+        system.push({ type: "text", text: SCHEDULE_UNAVAILABLE_NOTE });
+      }
       const response = await client.messages.create({
         model: MODEL,
         max_tokens: 1024,
