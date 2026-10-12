@@ -1,152 +1,49 @@
-"use client";
-
-import { useEffect, useState } from "react";
-import {
-  ArrowRight,
-  BedDouble,
-  Instagram,
-  MapPin,
-  Menu,
-  UtensilsCrossed,
-  Beer,
-  X,
-} from "lucide-react";
 import Link from "next/link";
+import { ArrowRight, MessageCircle } from "lucide-react";
 import ChatWidget from "@/components/ChatWidget";
-import LodgifyBox from "@/components/LodgifyBox";
-import PhotoGallery from "@/components/PhotoGallery";
-import CouponBanner from "@/components/CouponBanner";
-import ShareMenu from "@/components/ShareMenu";
+import LegacyHash from "@/components/LegacyHash";
+import { SiteNav, SiteFooter } from "@/components/SiteChrome";
+import { GOOGLE_MAP_URL, WHATSAPP_URL_JA } from "@/lib/site";
 
-/** 日本語版LP。構成は英語版(/)と同一。リンク・画像は英語版と共通。 */
-const INSTAGRAM_URL = "https://www.instagram.com/kashiwaya_nakasendo";
-const GOOGLE_MAP_URL = "https://maps.app.goo.gl/ViXN6oJNxvjQkv2SA?g_st=ac";
-const EBIKE_LP_URL = "https://kiso-ebike-lp.vercel.app/";
-const WHATSAPP_URL =
-  "https://wa.me/819038392354?text=%E6%9F%8F%E5%B1%8B%E3%81%95%E3%82%93%E3%80%81%E5%AE%BF%E6%B3%8A%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6%E8%B3%AA%E5%95%8F%E3%81%8C%E3%81%82%E3%82%8A%E3%81%BE%E3%81%99%E3%80%82";
-
-/** マルショー(一棟貸し用デリバリー)の注文ページ。
- *  写真付きメニューから選ぶと注文メッセージ入りのWhatsAppが開く。 */
-const MARUSHO_SITE_URL = "https://marusho.vercel.app/";
-
+/** 日本語トップ。構成は英語版(/)と同一。 */
 const HERO_IMG = "/gallery/entrance.JPG";
-const HOUSE_IMG = "/gallery/1stfloor.JPG";
-const FOOD_IMG = "/gallery/somen.jpg";
-const DRINK_IMG = "/gallery/beer.jpg";
-const GORGE_IMG = "/gallery/kakizore.JPG";
 
-const PEOPLE = [
+const ENTRIES = [
   {
-    name: "Shu Ichikawa",
-    role: "オーナー",
-    body: [
-      "柏屋を営んできた市川家の4代目。",
-      "海外・東京・南木曽を行き来しながら、時代の変化の中でこの家を守り続けてきた。",
-    ],
+    href: "/ja/stay",
+    img: "/gallery/1fchess.jpg",
+    title: "泊まる",
+    body: "客室は2部屋、1フロア1組の貸切感 — 日によっては一棟貸しも。直接予約はコードKISO15で15%オフ。",
+    more: "客室・ご予約",
   },
   {
-    name: "Kaku Ichikawa",
-    role: "クラフトビール開発",
-    body: [
-      "オーナーの長男。",
-      "東京で美容室とブルワリーを営み、柏屋限定のクラフトビール3種を造り上げた。",
-    ],
+    href: "/ja/dining",
+    img: "/gallery/somen.jpg",
+    title: "食べる",
+    body: "近所のシェフが仕込む鍋の夕食と、お茶漬けの朝食。柏屋のためだけに醸されたクラフトビールと共に。",
+    more: "メニュー・ご注文方法",
   },
   {
-    name: "Hiroshi Kumagai",
-    role: "改修者",
-    body: [
-      "2015年に東京から移住し、南木曽で3軒の古民家を改修。そのうちの1軒が柏屋。",
-      "現在は南木曽の象徴的な古民家ゲストハウス「Yui-an」を営む。",
-    ],
-  },
-  {
-    name: "Yasuhiro Fukuta",
-    role: "マスター",
-    body: [
-      "現在の柏屋の運営者。",
-      "名古屋から南木曽に何度も通ううちに二拠点生活を始め、二足のわらじを履きながらHiroshi Kumagaiに師事。",
-      "アメリカ・ウェストバージニアでの1年間の暮らしに感銘を受け、「地元に深く潜る」体験をこの南木曽で形にすることをミッションとしている。",
-    ],
+    href: "/ja/explore",
+    img: "/gallery/kakizore.JPG",
+    title: "周辺を楽しむ",
+    body: "妻籠・馬籠、エメラルドの渓谷、マスターと走るE-bike — すべて玄関先から。",
+    more: "周辺ガイド",
   },
 ] as const;
 
+const TOP_GALLERY = [
+  "/gallery/tour/common-engawa-v.jpg",
+  "/gallery/tour/1f-dining.jpg",
+  "/gallery/tour/common-garden.jpg",
+  "/gallery/tour/1f-lamp-v.jpg",
+] as const;
+
 export default function Page() {
-  const [scrolled, setScrolled] = useState(false);
-  const [menuOpen, setMenuOpen] = useState(false);
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 80);
-    onScroll();
-    window.addEventListener("scroll", onScroll);
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
   return (
     <>
-      {/* ============ NAV ============ */}
-      <nav className={`nav ${scrolled ? "scrolled" : ""} ${menuOpen ? "menu-open" : ""}`}>
-        <a href="#top" className="brand">
-          柏屋 <em>Kashiwaya</em>
-        </a>
-        <div className="nav-right">
-          <a
-            href="#book"
-            className="nav-book"
-            onClick={() => setMenuOpen(false)}
-          >
-            予約する <ArrowRight size={14} />
-          </a>
-          <ShareMenu lang="ja" />
-          <button
-            type="button"
-            className="menu-btn"
-            aria-label={menuOpen ? "メニューを閉じる" : "メニューを開く"}
-            onClick={() => setMenuOpen((o) => !o)}
-          >
-            {menuOpen ? <X size={22} /> : <Menu size={22} />}
-          </button>
-        </div>
-      </nav>
-
-      {/* ============ MENU DRAWER ============ */}
-      <div className={`nav-drawer ${menuOpen ? "open" : ""}`}>
-        <div className="drawer-inner">
-          <nav className="drawer-group">
-            <span className="drawer-label">柏屋 Kashiwaya Inn</span>
-            <a href="#book" onClick={() => setMenuOpen(false)}>宿泊予約</a>
-            <a href="#food" onClick={() => setMenuOpen(false)}>お食事オプション</a>
-            <a href="#concept" onClick={() => setMenuOpen(false)}>コンセプト</a>
-            <a href="#house" onClick={() => setMenuOpen(false)}>建物</a>
-            <a href="#gallery" onClick={() => setMenuOpen(false)}>ギャラリー</a>
-            <a href="#people" onClick={() => setMenuOpen(false)}>人</a>
-            <a href="#facilities" onClick={() => setMenuOpen(false)}>
-              設備・ご案内
-            </a>
-            <a href="#access" onClick={() => setMenuOpen(false)}>アクセス</a>
-            <a href="#faq" onClick={() => setMenuOpen(false)}>よくある質問</a>
-          </nav>
-          <nav className="drawer-group drawer-sub">
-            <span className="drawer-label">ガイド(英語)</span>
-            <Link href="/guide/tsumago-magome-day-walk">
-              妻籠・馬籠 日帰りウォーク
-            </Link>
-            <Link href="/guide/rainy-day-in-kiso">雨の日の木曽</Link>
-            <Link href="/guide/kiso-valley-ebike-day">
-              渓谷と川をE-bikeで
-            </Link>
-          </nav>
-          <nav className="drawer-group drawer-sub">
-            <span className="drawer-label">Language</span>
-            <Link href="/">English</Link>
-          </nav>
-        </div>
-      </div>
-
-      {/* ============ FLOATING BOOK ============ */}
-      <a href="#book" className="float-book">
-        <BedDouble size={16} /> 宿泊予約
-      </a>
+      <LegacyHash lang="ja" />
+      <SiteNav lang="ja" />
 
       {/* ============ HERO ============ */}
       <header className="hero" id="top">
@@ -157,22 +54,25 @@ export default function Page() {
         <div className="hero-inner">
           <span className="eyebrow">長野 · 木曽路 · 三留野宿</span>
           <h1>
-            地元に潜り、<em>歴史に加わる。</em>
+            地元に潜る、<em>ふたりの時間。</em>
           </h1>
           <p className="hero-lede">
-            中山道41番目の宿場・三留野宿に建つ、築140年の古民家。
-            本陣にならった造りのまま、今も人の暮らしが続く家に泊まる。
-            何百年も旅人が行き交ってきた街道の上で。
+            中山道の静かな宿場に建つ、築140年・本陣造りの古民家。
+            1フロアを — 日によっては一棟まるごと — ふたりで貸切に。
+            囲炉裏端の夕食、この家のためだけのビール、
+            誰も起きていない朝の旧街道。
           </p>
           <div className="hero-ctas">
-            <a href="#book" className="btn-primary">
+            <Link href="/ja/stay" className="btn-primary">
               宿泊を予約 <ArrowRight size={16} />
-            </a>
-            <a href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer" className="btn-secondary">
-              <Instagram size={15} /> Instagram
-            </a>
-            <a href={GOOGLE_MAP_URL} target="_blank" rel="noopener noreferrer" className="btn-secondary">
-              <MapPin size={15} /> アクセス
+            </Link>
+            <a
+              href={WHATSAPP_URL_JA}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-secondary"
+            >
+              <MessageCircle size={15} /> WhatsApp
             </a>
           </div>
         </div>
@@ -194,301 +94,7 @@ export default function Page() {
         </div>
       </div>
 
-      {/* ============ BOOK DIRECT ============ */}
-      <section className="book-direct" id="book">
-        <div className="book-direct-inner">
-          <span className="eyebrow-dark">直接予約</span>
-          <h2>
-            仲介なし、<em>私たちから直接。</em>
-          </h2>
-          <p className="book-direct-lede">
-            予約サイトを介さず、最初のメッセージから最後の朝まで、
-            私たちが直接おもてなしします。1軒の古民家に客室は2部屋。
-            さらに日によっては、一棟貸しもご用意しています。
-          </p>
-
-          <CouponBanner lang="ja" />
-
-          <div className="room-grid">
-            <div className="room-card">
-              <div className="room-photo">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src="/gallery/1fchess.jpg"
-                  alt="和室 — 歴史ある1階"
-                  loading="lazy"
-                  decoding="async"
-                />
-              </div>
-              <div className="room-body">
-                <h3>和室</h3>
-                <div className="room-sub">歴史ある1階</div>
-                <ul className="room-feats">
-                  <li>80㎡ · 歴史ある1階をまるごと貸切</li>
-                  <li>畳の和室 · 中庭向き · 布団</li>
-                  <li>プライベートトイレ · 洗濯乾燥機 · ボードゲーム</li>
-                </ul>
-                <LodgifyBox rentalId="793793" language="ja" />
-              </div>
-            </div>
-
-            <div className="room-card">
-              <div className="room-photo">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src="/gallery/2ndfloor.JPG"
-                  alt="スーペリアファミリールーム — モダンな2階"
-                  loading="lazy"
-                  decoding="async"
-                />
-              </div>
-              <div className="room-body">
-                <h3>スーペリアファミリールーム</h3>
-                <div className="room-sub">モダンな2階</div>
-                <ul className="room-feats">
-                  <li>60㎡ · 大人3名まで · 布団4組</li>
-                  <li>バルコニー・山の眺め · 専用トイレは1階 · 階段のみ</li>
-                </ul>
-                <LodgifyBox rentalId="793801" language="ja" />
-              </div>
-            </div>
-
-            {/* ===== Room 3: 一棟貸し ===== */}
-            <div className="room-card">
-              <div className="room-photo">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src="/gallery/tour/common-exterior.jpg"
-                  alt="一棟貸し — 築140年の古民家をまるごと"
-                  loading="lazy"
-                  decoding="async"
-                />
-              </div>
-              <div className="room-body">
-                <h3>一棟貸し</h3>
-                <div className="room-sub">1階+2階 まるごと</div>
-                <ul className="room-feats">
-                  <li>築140年の家を、1組様で貸切</li>
-                  <li>両フロア(計140㎡)· 庭もキッチンも独占</li>
-                  <li>週に1日ほどの限定販売</li>
-                  <li>無人運営 — キーボックスでセルフチェックイン</li>
-                  <li>
-                    柏屋の夕食はご提供なし —{" "}
-                    <a
-                      href={MARUSHO_SITE_URL}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      地元「マルショー」の夕食デリバリー
-                    </a>
-                    が利用可。朝食(お茶漬けセット)はご注文いただけます
-                  </li>
-                </ul>
-                <LodgifyBox rentalId="850548" language="ja" />
-              </div>
-            </div>
-          </div>
-
-          <p className="meal-lead">
-            一棟貸しの日は各部屋の販売を止めています(逆も同様)。
-            ご希望日に空きが見えない場合は、もう一方の掲載もご確認ください。
-          </p>
-
-          <p className="meal-lead">
-            公式サイトからのご予約なら、予約手続きの画面でそのまま
-            お食事を追加できます — メニューはすぐ下の
-            「<a href="#food">お食事オプション</a>」をご覧ください。
-          </p>
-
-          <p className="book-direct-foot">
-            ご質問は{" "}
-            <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">
-              WhatsApp →
-            </a>{" "}
-            へお気軽に。
-          </p>
-        </div>
-      </section>
-
-      {/* ============ HONEST NOTES ============ */}
-      <section className="honest" id="honest">
-        <div className="section-head">
-          <span className="eyebrow-dark">予約の前に</span>
-          <h2>
-            正直にお伝えします。<em>ここはホテルではなく、築140年の家です。</em>
-          </h2>
-          <p>
-            柏屋は、合う方には最高の宿ですが、合わない方もいます。
-            ご予約の前に、次の4点だけご確認ください。
-          </p>
-        </div>
-        <div className="honest-card">
-          <ul className="meal-note">
-            <li>
-              <strong>キッチン・洗面台・シャワールームは共用です</strong>
-              (部屋貸しの場合)。各階1組限定なので、共有するのは最大で
-              もう1組だけ。トイレは各部屋専用です。浴槽はなく、日帰り温泉が
-              車で約15分の場所にあります。
-            </li>
-            <li>
-              <strong>2階のお部屋のトイレは1階にあります。</strong>
-              夜中も階段の上り下りが必要です。トイレ自体は専用で、
-              他のお客様のエリアを通ることはありません。
-            </li>
-            <li>
-              <strong>階段は昔のままで、急で狭いです。</strong>
-              足腰に不安のある方は1階のお部屋をお選びください。
-            </li>
-            <li>
-              <strong>断熱・防音には築140年の木造家屋なりの限界があります。</strong>
-              夏は各部屋のエアコンで快適ですが、冬は石油ストーブと電気毛布が
-              頼りで、朝晩は冷え込みます。家のきしみや、もう1組の生活音が
-              聞こえることもあります——だから21時以降は静かに過ごす宿です。
-            </li>
-          </ul>
-          <p className="honest-foot">
-            ここまで読んで大丈夫そうなら、きっと気に入っていただけます。
-            囲炉裏端の夜、静かな宿場の朝、そして1885年から旅人を
-            泊めてきた家の時間を。
-          </p>
-        </div>
-      </section>
-
-      {/* ============ FOOD OPTION ============ */}
-      <section className="food-option" id="food">
-        <div className="section-head">
-          <span className="eyebrow-dark">お食事オプション</span>
-          <h2>
-            近所のシェフが仕込む、<em>夕食と朝食。</em>
-          </h2>
-          <p>
-            柏屋のお食事はすべて事前予約制のオプションです。夕食は伝統の鍋、
-            朝食はお茶漬け。食事制限にも合わせてお作りします。
-            公式サイトからの直接予約なら予約手続きの画面でそのまま追加、
-            Booking.com経由の方はWhatsAppでご注文ください。
-          </p>
-        </div>
-        <div className="meal-order">
-          <div className="meal-photo">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/gallery/somen.jpg"
-              alt="柏屋の夕食 — 冷やしそうめんと季節の一皿"
-              loading="lazy"
-              decoding="async"
-            />
-          </div>
-          <ul className="food-menu">
-            <li>
-              <span>鶏鍋の夕食(2名分 / 3名分)</span>
-              <span>¥6,000 / ¥8,000</span>
-            </li>
-            <li>
-              <span>豚しゃぶしゃぶの夕食(2名分 / 3名分)</span>
-              <span>¥8,000 / ¥11,000</span>
-            </li>
-            <li>
-              <span>豚冷しゃぶの夕食(2名分 / 3名分)</span>
-              <span>¥8,000 / ¥11,000</span>
-            </li>
-            <li>
-              <span>和牛すき焼きの夕食(2名分 / 3名分)</span>
-              <span>¥10,000 / ¥14,000</span>
-            </li>
-            <li>
-              <span>ビーガン&グルテンフリー鍋の夕食(2名分 / 3名分)</span>
-              <span>¥8,000 / ¥11,000</span>
-            </li>
-            <li>
-              <span>ビーガン&グルテンフリー冷製鍋の夕食(2名分 / 3名分)</span>
-              <span>¥8,000 / ¥11,000</span>
-            </li>
-            <li>
-              <span>朝食お茶漬けセット(ビーガン&グルテンフリー)</span>
-              <span>¥1,500 / 人</span>
-            </li>
-          </ul>
-          <a href="#book" className="meal-cta">
-            宿泊予約へ — お食事は予約時に追加 <ArrowRight size={16} />
-          </a>
-          <ul className="meal-note">
-            <li>
-              <strong>公式サイトからの直接予約の方:</strong>{" "}
-              予約手続きの画面でお食事をアドオンとして追加できます
-              (各メニュー1滞在につき1回分)。1泊の場合はご連絡不要です。
-              連泊の方は、どの日付にどの仕出しがご希望か、WhatsAppで
-              ご連絡ください。例: 10月3日〜6日ご宿泊で、3日の夜に
-              すき焼き(3名分)・5日の夜に豚しゃぶ(3名分)をご希望なら、
-              両方をアドオンして「すき焼きを3日の夜、豚しゃぶを5日の夜に」
-              とご連絡を。朝食も同様です。
-            </li>
-            <li>
-              <strong>Booking.com経由の方:</strong>{" "}
-              アドオンはご利用いただけないため、
-              <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">
-                WhatsApp
-              </a>
-              でご注文ください。
-            </li>
-            <li>
-              ご注文は<strong>ご宿泊の3日前まで</strong>。
-            </li>
-            <li>
-              お一人でのご利用は1日1組まで、<strong>2名分の半額</strong>で
-              ご案内します — WhatsAppでご相談ください。
-            </li>
-            <li>キャンセルは4日前まで無料・全額返金。3日前以降は返金不可です。</li>
-            <li>
-              <strong>荷物の配送</strong>や、チェックイン前後の
-              <strong>アクティビティ</strong>もWhatsAppでご相談いただけます。
-            </li>
-            <li>
-              <strong>一棟貸し</strong>の日は柏屋の夕食はご提供できません —
-              すぐ下のデリバリーメニューをご覧ください。朝食は通常どおり
-              ご注文いただけます。
-            </li>
-          </ul>
-        </div>
-
-        <div className="meal-order" id="marusho">
-          <div className="meal-order-head">
-            <UtensilsCrossed size={22} className="meal-icon" />
-            <h3>一棟貸しの日は — 夕食をデリバリーで</h3>
-            <p>
-              無人一棟貸しでは柏屋の夕食はご提供できませんが、ご安心を。
-              地元の食堂<strong>「マルショー」</strong>が夕食を柏屋まで
-              出前してくれます。
-            </p>
-          </div>
-          <a
-            href={MARUSHO_SITE_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="meal-cta"
-          >
-            マルショー注文ページを開く <ArrowRight size={16} />
-          </a>
-          <ul className="meal-note">
-            <li>
-              注文ページの写真付きメニュー(夕食セット¥1,500〜¥3,500・
-              ベジ/ヴィーガン対応、朝食セット¥1,500、ドリンク)から料理と
-              数量を選び、日付・配達時間・お名前を入れると、注文メッセージ
-              入力済みのWhatsAppが開きます。あとは送信を押すだけ。
-            </li>
-            <li>
-              お支払いはマルショーへの現地払いです(クレジットカード可・
-              カード手数料5%)。なるべく事前のご注文をお願いします。
-            </li>
-            <li>
-              柏屋の<strong>朝食お茶漬けセット(お一人¥1,500)</strong>も
-              一棟貸しでご注文いただけます — 直接予約なら予約時に
-              アドオンで、Booking.com経由ならWhatsAppでどうぞ。
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      {/* ============ CONCEPT ============ */}
+      {/* ============ CONCEPT (short) ============ */}
       <section id="concept">
         <div className="section-head">
           <span className="eyebrow-dark">コンセプト</span>
@@ -496,544 +102,57 @@ export default function Page() {
             ただの宿ではなく、<em>村に入っていくための入口。</em>
           </h2>
           <p>
-            多くの旅人は妻籠と馬籠を通り過ぎ、バスが去った後のこの谷を知りません。
-            柏屋は「その先」を見たい人のための宿です。この土地の家族が食べるものを食べ、
-            地元の人が飲むものを飲み、140年間この街道を見つめてきた家で眠る。
+            多くの旅人は妻籠と馬籠を通り過ぎ、バスが去った後のこの谷を
+            知りません。柏屋は「その先」を見たいふたりのための宿です。
+            囲炉裏端で鍋を囲む夜、この家限定のクラフトビール、
+            そして21時には静けさの戻る、140年ものの旧街道。
           </p>
         </div>
       </section>
 
-      {/* ============ HOUSE (chapter 1) ============ */}
-      <section className="chapter" id="house">
-        <div className="chapter-visual">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={HOUSE_IMG} alt="築140年の古民家・柏屋" loading="lazy" decoding="async" />
-        </div>
-        <div className="chapter-text">
-          <span className="chapter-num">第一章 · 建物</span>
-          <h3>
-            1885年築、<em>本陣にならった造り。</em>
-          </h3>
-          <p>
-            柏屋が建つ三留野宿は、馬籠宿・妻籠宿に続く中山道41番目の宿場。
-            江戸と京都を結んだこの街道で、武家の旅人が泊まった本陣と
-            同じ形式で建てられた家です。
-          </p>
-          <p>
-            度重なる大火で古い家々の多くは失われましたが、
-            今も暮らしの続く古民家がわずかに残っています。柏屋はその一つ。
-            南木曽駅から歩いて15分です。
-          </p>
-          <div className="note">
-            三留野宿 · Midono-juku · 中山道41番目の宿場
-          </div>
-        </div>
-      </section>
-
-      {/* ============ GALLERY ============ */}
-      <section className="gallery" id="gallery">
-        <div className="section-head">
-          <span className="eyebrow-dark">ギャラリー</span>
-          <h2>
-            部屋から部屋へ、<em>家を歩く。</em>
-          </h2>
-        </div>
-        <PhotoGallery lang="ja" />
-      </section>
-
-      {/* ============ FOOD (chapter 2) ============ */}
-      <section className="chapter reverse">
-        <div className="chapter-visual">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={FOOD_IMG} alt="地元の台所、季節の食事" loading="lazy" decoding="async" />
-        </div>
-        <div className="chapter-text">
-          <span className="chapter-num">第二章 · 食</span>
-          <h3>
-            この谷の家族が<em>ハレの日に食べるもの。</em>
-          </h3>
-          <p>
-            和食レストランのメニューではなく、この谷の家族がお祝いの日に
-            食卓に並べる料理を。夕食は伝統の鍋、朝食はお茶漬け。
-            静かで、季節に寄り添う、丁寧な食事です。
-          </p>
-          <p>
-            和牛からビーガン、グルテンフリーまで — ご予約時にお知らせいただければ、
-            あなたに合わせてお作りします。
-          </p>
-          <div className="note">
-            <UtensilsCrossed
-              size={14}
-              style={{ display: "inline", verticalAlign: "-2px", marginRight: "0.4rem" }}
-            />
-            夕食:伝統の鍋 · 朝食:お茶漬け
-          </div>
-        </div>
-      </section>
-
-      {/* ============ DRINK (chapter 3) ============ */}
-      <section className="chapter">
-        <div className="chapter-visual">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={DRINK_IMG} alt="柏屋限定クラフトビール" loading="lazy" decoding="async" />
-        </div>
-        <div className="chapter-text">
-          <span className="chapter-num">第三章 · 酒</span>
-          <h3>
-            柏屋のためだけに醸された<em>3種のクラフトビール。</em>
-          </h3>
-          <p>
-            オーナー家族の営むブルワリーが、柏屋限定のビールを3種類
-            造っています。ここでしか飲めません。あわせて、マスターが
-            選んだ地元の日本酒とワインも少しだけ。
-          </p>
-          <div className="note">
-            <Beer
-              size={14}
-              style={{ display: "inline", verticalAlign: "-2px", marginRight: "0.4rem" }}
-            />
-            限定クラフトビール3種 · 地元の日本酒とワイン
-          </div>
-        </div>
-      </section>
-
-      {/* ============ ACTIVITIES CTA → ebike LP ============ */}
-      <section className="activities-cta full">
-        <div className="activities-cta-inner">
-          <div className="activities-cta-text">
-            <span className="eyebrow-light">日中の過ごし方</span>
-            <h3>
-              <em>アクティビティ</em>をお探しですか?
-            </h3>
-            <p>
-              マスターは日中、ガイド付きE-bikeツアーとレンタルも
-              運営しています — ここで育った人しか知らないルートへ。
-              チェックイン前・チェックアウト後のアクティビティは
-              下のサイトからどうぞ。
-            </p>
-            <a href={EBIKE_LP_URL} target="_blank" rel="noopener noreferrer" className="cta-btn">
-              Beyond Nakasendo Cycling を見る <ArrowRight size={16} />
-            </a>
-          </div>
-          <div className="activities-cta-visual">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={GORGE_IMG} alt="大通りから外れた木曽の谷" loading="lazy" decoding="async" />
-          </div>
-        </div>
-      </section>
-
-      {/* ============ PEOPLE ============ */}
-      <section className="people" id="people">
-        <div className="people-inner">
-          <div className="section-head">
-            <span className="eyebrow-dark">人</span>
-            <h2>
-              この家を支える<em>手。</em>
-            </h2>
-            <p>4人の人間が、4世代にわたって、1軒の家に暮らしをつないでいます。</p>
-          </div>
-          <div className="people-grid">
-            {PEOPLE.map((p) => (
-              <div key={p.name} className="person">
-                <div className="person-role">{p.role}</div>
-                <h4>{p.name}</h4>
-                {p.body.map((line, i) => (
-                  <p key={i}>{line}</p>
-                ))}
+      {/* ============ ENTRANCES ============ */}
+      <section className="entries">
+        <div className="entry-grid">
+          {ENTRIES.map((e) => (
+            <Link key={e.href} href={e.href} className="entry-card">
+              <div className="entry-photo">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={e.img} alt={e.title} loading="lazy" decoding="async" />
               </div>
-            ))}
-          </div>
+              <div className="entry-body">
+                <h3>{e.title}</h3>
+                <p>{e.body}</p>
+                <span className="entry-more">
+                  {e.more} <ArrowRight size={14} />
+                </span>
+              </div>
+            </Link>
+          ))}
         </div>
+        <p className="entries-foot">
+          実用的なご質問は <Link href="/ja/faq">よくある質問・設備・アクセス →</Link>
+        </p>
       </section>
 
-      {/* ============ GOOD TO KNOW (facilities & rules) ============ */}
-      <section className="facilities" id="facilities">
-        <div className="section-head">
-          <span className="eyebrow-dark">設備・ご案内</span>
-          <h2>
-            柏屋の詳細を<em>ひと目で。</em>
-          </h2>
+      {/* ============ GALLERY STRIP ============ */}
+      <section className="gallery">
+        <div className="top-gallery">
+          {TOP_GALLERY.map((src) => (
+            <Link key={src} href="/ja/stay#gallery">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={src} alt="柏屋の内部" loading="lazy" decoding="async" />
+            </Link>
+          ))}
         </div>
-        <div className="quote-grid">
-          <div className="quote-card">
-            <blockquote>
-              「2階をまるごと貸切で、とても広くて素敵でした。古い家なので
-              少し心配していましたが、清潔で、嬉しい驚きでした。」
-            </blockquote>
-            <cite>Katerina さん · 日本</cite>
-          </div>
-          <div className="quote-card">
-            <blockquote>
-              「本物の日本の古民家。部屋から部屋へ歩き、伝統的な引き戸を
-              開け、静かな夕食を楽しむ——まるで魔法のようでした。」
-            </blockquote>
-            <cite>Fabrizio さん · イギリス</cite>
-          </div>
-        </div>
-        <p className="quote-source">Booking.com のクチコミより</p>
-        <div className="amenities-grid">
-          <div className="amenity-group">
-            <h4>客室</h4>
-            <ul>
-              <li>布団・リネン</li>
-              <li>タオル・スリッパ・耳栓・バスアメニティ</li>
-              <li>エアコン・暖房</li>
-              <li>ドライヤー・扇風機</li>
-              <li>ダイニングテーブル・ワイングラス</li>
-              <li>枕元コンセント・衣類ラック・物干し</li>
-            </ul>
-          </div>
-          <div className="amenity-group">
-            <h4>水回り</h4>
-            <ul>
-              <li>トイレは各室プライベート</li>
-              <li>シャワールームは共用</li>
-              <li>洗面・キッチンは共用</li>
-              <li>バスタブなし(車で行ける日帰り温泉あり)</li>
-            </ul>
-          </div>
-          <div className="amenity-group">
-            <h4>館内</h4>
-            <ul>
-              <li>無料Wi-Fi</li>
-              <li>1フロア1組 — 全2室の貸切感</li>
-              <li>洗濯乾燥機(1階客室)</li>
-              <li>ボードゲーム・パズル</li>
-              <li>荷物預かり</li>
-              <li>各室に火災警報器・消火器</li>
-              <li>屋内禁煙</li>
-            </ul>
-          </div>
-          <div className="amenity-group">
-            <h4>屋外・駐車場</h4>
-            <ul>
-              <li>無料専用駐車場(要事前予約)</li>
-              <li>庭・テラス</li>
-              <li>バルコニー・山の眺め(2階)</li>
-            </ul>
-          </div>
-          <div className="amenity-group">
-            <h4>アクティビティ・サービス</h4>
-            <ul>
-              <li>E-bikeレンタル&ガイドツアー(有料)</li>
-              <li>宿を出てすぐハイキング・サイクリング</li>
-              <li>習字体験(開催日はご相談)</li>
-              <li>駅送迎・荷物転送</li>
-              <li>英語・日本語対応</li>
-            </ul>
-          </div>
-        </div>
-        <div className="rules-card">
-          <h4>ハウスルール</h4>
-          <ul>
-            <li>チェックイン 16:00〜18:00 · チェックアウト 10:00まで</li>
-            <li>チェックイン時に写真付き身分証と予約時のクレジットカードをご提示ください</li>
-            <li>到着予定時刻を事前にお知らせください(キーボックスによるセルフチェックインも相談可)</li>
-            <li>お子様歓迎(年齢制限なし)· ベビーベッドなし・追加布団は数に限りあり</li>
-            <li>ペット不可 · パーティー等不可 · 屋内禁煙(中庭は可)</li>
-            <li>キャンセル: 到着7日前まで前払い金を全額返金 · 以降は返金不可</li>
-            <li>2階客室へは階段のみ</li>
-          </ul>
-        </div>
+        <p className="top-access">
+          長野県木曽郡南木曽町 3993(三留野宿)— JR南木曽駅から徒歩15分 ·{" "}
+          <a href={GOOGLE_MAP_URL} target="_blank" rel="noopener noreferrer">
+            地図を開く
+          </a>
+        </p>
       </section>
 
-      {/* ============ LOCATION ============ */}
-      <section className="location" id="access">
-        <div className="section-head">
-          <span className="eyebrow-dark">アクセス</span>
-          <h2>
-            旧中山道の、<em>静かな通りに。</em>
-          </h2>
-          <p>
-            長野県木曽郡南木曽町 3993(三留野宿)。
-            JR南木曽駅から約1km、徒歩15分です。
-          </p>
-        </div>
-        <div className="map-embed">
-          <iframe
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d6487.241362023977!2d137.6134136005096!3d35.61242230192019!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x601cc792f7fe924b%3A0xa2f12b3f1d333f0d!2zS2FzaGl3YXlhIElubiBOYWdpc28g5p-P5bGL44Kk44Oz!5e0!3m2!1sja!2sjp!4v1787387096800!5m2!1sja!2sjp"
-            title="地図 — 柏屋(南木曽)"
-            allowFullScreen
-            loading="lazy"
-            referrerPolicy="strict-origin-when-cross-origin"
-          />
-        </div>
-        <div className="dist-grid">
-          <div className="dist-item">
-            <span className="dist-name">JR南木曽駅</span>
-            <span className="dist-km">1km · 徒歩15分</span>
-          </div>
-          <div className="dist-item">
-            <span className="dist-name">妻籠宿</span>
-            <span className="dist-km">4km</span>
-          </div>
-          <div className="dist-item">
-            <span className="dist-name">馬籠宿</span>
-            <span className="dist-km">13km</span>
-          </div>
-          <div className="dist-item">
-            <span className="dist-name">阿寺渓谷・柿其渓谷</span>
-            <span className="dist-km">約10km</span>
-          </div>
-          <div className="dist-item">
-            <span className="dist-name">松本空港</span>
-            <span className="dist-km">82km</span>
-          </div>
-        </div>
-      </section>
-
-      {/* ============ FAQ ============ */}
-      <section className="faq" id="faq">
-        <div className="section-head">
-          <span className="eyebrow-dark">ご案内</span>
-          <h2>
-            知っておくと<em>良いこと。</em>
-          </h2>
-        </div>
-        <details className="faq-item">
-          <summary>アクセスは?</summary>
-          <p>
-            JR中央本線・南木曽駅から徒歩15分、三留野宿(南木曽3993)にあります。
-            送迎をご希望の場合は事前にお知らせください。
-          </p>
-        </details>
-        <details className="faq-item">
-          <summary>到着前にやっておくことはありますか?</summary>
-          <p>
-            <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">
-              WhatsApp
-            </a>
-            で到着時刻をお知らせください。荷物の配送や、チェックイン前後の
-            アクティビティのご希望もあわせてどうぞ。お食事は公式サイトなら
-            予約時にアドオンで追加、Booking.com経由の方はWhatsAppで
-            ご注文ください。
-          </p>
-        </details>
-        <details className="faq-item">
-          <summary>チェックイン・チェックアウトの時間は?</summary>
-          <p>
-            チェックインは16:00〜18:00です。早く着いた場合は荷物を置いて
-            散策していただけます(16時以降にハウスツアーとチェックインを行います)。
-            遅くなる場合は、到着時にWhatsAppでご連絡ください —
-            スタッフはすぐ向かいの家におります。チェックアウトは10:00まで、
-            手続きは不要です。
-          </p>
-        </details>
-        <details className="faq-item">
-          <summary>チェックイン前・チェックアウト後に荷物を置けますか?</summary>
-          <p>
-            はい。エントランスを入ってすぐの棚に置いてください。
-            お預かり中の荷物の賠償はお一人様10万円までとさせていただきます。
-          </p>
-        </details>
-        <details className="faq-item">
-          <summary>一棟貸しはできますか?</summary>
-          <p>
-            はい。週に1日ほど、家をまるごと1組様に貸し切る「一棟貸し」の日を
-            設けています。両フロア・庭・キッチンすべてお使いいただけます。
-            その日は各部屋の販売を止めているため、一棟貸しのカレンダーに
-            空きが出ている日が対象です。予約セクションからお部屋と同じように
-            ご予約ください。なお、一棟貸しは無人運営(キーボックスでの
-            セルフチェックイン)で、柏屋の夕食はご提供できません。
-            代わりに地元の食堂「マルショー」の出前(¥1,500〜¥3,500、
-            「<a href="#marusho">お食事オプション</a>」欄参照)がご利用
-            いただけます。朝食のお茶漬けセットはご注文可能、
-            キッチン付きなので自炊もできます。
-          </p>
-        </details>
-        <details className="faq-item">
-          <summary>宿泊のキャンセルポリシーは?</summary>
-          <p>
-            到着7日前までのキャンセルは、前払い金を全額(100%)返金します。
-            それ以降のキャンセルは返金できません。
-            (お食事のご注文は別ポリシーです — ご宿泊の4日前まで無料、
-            3日前以降は返金不可。)
-          </p>
-        </details>
-        <details className="faq-item">
-          <summary>駅や妻籠から送迎はありますか?</summary>
-          <p>
-            はい。南木曽駅・妻籠宿・十二兼駅は、16時から18時の間、
-            無料送迎エリアです。事前にご相談ください。
-            ご出発時はタクシーの手配をお手伝いします。
-          </p>
-        </details>
-        <details className="faq-item">
-          <summary>食事の予約方法は?</summary>
-          <p>
-            公式サイトからの直接予約なら、予約手続きの画面でお食事を
-            アドオンとして追加できます。1泊の場合はそれだけでOK。
-            連泊の方は、どの日付にどの仕出しがご希望か、WhatsAppで
-            ご連絡ください。例: 10月3日〜6日ご宿泊で、3日の夜に
-            すき焼き・5日の夜に豚しゃぶをご希望なら、両方をアドオンして
-            「すき焼きを3日の夜、豚しゃぶを5日の夜に」とご連絡を。
-            朝食も同様です。Booking.com経由の方は、宿泊予約と同じ
-            お名前で、宿泊日と食事制限を添えてWhatsAppでご注文ください。
-            ご宿泊の3日前まで受け付けています。メニューは
-            「<a href="#food">お食事オプション</a>」セクションをご覧ください。
-          </p>
-        </details>
-        <details className="faq-item">
-          <summary>食事の料金は?</summary>
-          <p>
-            夕食セットは2名分と3名分をご用意:鶏鍋 6,000円/8,000円、
-            豚しゃぶしゃぶ・豚冷しゃぶ 8,000円/11,000円、和牛すき焼き
-            10,000円/14,000円、ビーガン&グルテンフリーの鍋・冷製鍋
-            8,000円/11,000円(2名分/3名分)。お一人でのご利用は1日1組まで、
-            2名分の半額でご案内します。朝食のお茶漬けセット
-            (ビーガン&グルテンフリー)はお一人1,500円です。
-          </p>
-        </details>
-        <details className="faq-item">
-          <summary>Booking.comのGenius特典で「朝食無料」と表示されました。</summary>
-          <p>
-            申し訳ありませんが、朝食は無料ではありません。Genius レベル2〜3の
-            ご予約では、当宿との取り決めなくBooking.com側のシステムが
-            「朝食無料」特典を表示することがあります。柏屋には朝食付きプランは
-            なく、お食事(夕食・朝食)はすべて事前予約制の有料サービスです。
-            紛らわしい表示となりご迷惑をおかけします。
-          </p>
-        </details>
-        <details className="faq-item">
-          <summary>夕食は外で食べられますか?</summary>
-          <p>
-            ご注意ください — 周辺のレストランは夜の営業が不定期です。
-            当宿の夕食(3日前まで予約可)か、当日注文できるデリバリーの
-            ご利用をおすすめします。ご滞在日にどこが開いているかは
-            お気軽にお尋ねください。
-          </p>
-        </details>
-        <details className="faq-item">
-          <summary>食事のキャンセルはできますか?</summary>
-          <p>
-            ご宿泊の4日前までは無料・全額返金です。3日前以降は準備が
-            始まっているため返金できません。キャンセルはWhatsAppで
-            ご連絡ください。
-          </p>
-        </details>
-        <details className="faq-item">
-          <summary>食事制限(ビーガン・グルテンフリーなど)に対応できますか?</summary>
-          <p>
-            はい。ご予約時またはWhatsAppでお知らせください。
-            和牛からビーガン・グルテンフリーまで、あなたに合わせてお作りします。
-          </p>
-        </details>
-        <details className="faq-item">
-          <summary>E-bikeをレンタルできますか?</summary>
-          <p>
-            はい。マスターがBeyond Nakasendo Cyclingとして、ガイド付き
-            E-bikeツアーとレンタルを運営しています(10:00 — 15:00、
-            1台4,000円/日)。同サイトからご予約ください。
-          </p>
-        </details>
-        <details className="faq-item">
-          <summary>Wi-Fiはありますか?</summary>
-          <p>あります。館内で無料でお使いいただけます。</p>
-        </details>
-        <details className="faq-item">
-          <summary>現金は必要ですか?</summary>
-          <p>
-            柏屋でのお支払い(食事・ドリンク)はカードもご利用いただけますが、
-            周辺の飲食店の多くと、バス・電車はすべて現金のみです。
-            千円札より大きいお札は使えないため、千円札のご用意をおすすめします。
-            最寄りのATMは徒歩20分ほどのセブンイレブンにあります。
-          </p>
-        </details>
-        <details className="faq-item">
-          <summary>水回りは共用ですか?お風呂はありますか?</summary>
-          <p>
-            シャワー・シンク・キッチンは共用、トイレは各室プライベートです
-            (2階のお客様専用トイレは1階にあります。他のお客様のスペースを
-            通らずにご利用いただけます)。バスタブはありませんが、車で約15分の
-            ところに天然の日帰り温泉があります(水曜定休)。
-            タクシー手配もできます。
-          </p>
-        </details>
-        <details className="faq-item">
-          <summary>洗濯はできますか?</summary>
-          <p>
-            1階のお客様は洗濯乾燥機をご利用いただけます。
-            徒歩15分のところにコインランドリーもあります。
-          </p>
-        </details>
-        <details className="faq-item">
-          <summary>荷物を次の宿泊地へ送れますか?</summary>
-          <p>
-            馬籠〜妻籠間は予約不要の荷物シャトルがあります。
-            南木曽駅〜野尻駅間は当宿が運営していますので、お気軽にどうぞ。
-            木曽エリア全域(松本〜中津川)は、NLTS・Walk Liteの
-            荷物配送サービス(要予約)がご利用いただけます。
-          </p>
-        </details>
-        <details className="faq-item">
-          <summary>熊は出ますか?</summary>
-          <p>
-            この山域にはツキノワグマが生息していますが、馬籠峠は
-            トレイル上に固定の鐘が設置されており、ここ10年ほど目撃されていません。
-            熊は人を恐れ、たいてい先に逃げていきます。ご心配な方には
-            熊鈴・熊スプレーのレンタルもあります。
-          </p>
-        </details>
-        <details className="faq-item">
-          <summary>馬籠峠の難易度は?</summary>
-          <p>
-            やさしいコースです。スニーカーで十分ですが、サンダルはおすすめしません。
-            冬は凍結対策として外付けスパイクを推奨します(レンタルあり)。
-          </p>
-        </details>
-        <details className="faq-item">
-          <summary>ハウスルールは?(喫煙・ペット・静粛時間)</summary>
-          <p>
-            ペットはご遠慮ください。木造建築のため屋内は禁煙です(中庭は可)。
-            写真・動画の撮影は大歓迎です。近隣の方は朝が早いので、
-            21時以降はお静かにお願いします。
-          </p>
-        </details>
-      </section>
-
-      {/* ============ FOOTER ============ */}
-      <footer className="lp-footer">
-        <div className="lp-footer-inner">
-          <div>
-            <div className="ft-brand">柏屋 Kashiwaya Inn</div>
-            <p>
-              中山道41番目の宿場・三留野宿に建つ築140年の古民家。
-              長野県木曽郡南木曽町 3993。
-            </p>
-            <p>JR中央本線・南木曽駅から徒歩15分。</p>
-          </div>
-          <div>
-            <h5>予約・お問い合わせ</h5>
-            <a href="#book">空室確認・宿泊予約</a>
-            <a href="#food">お食事オプション</a>
-            <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">
-              WhatsApp · +81 90-3839-2354
-            </a>
-            <a href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer">
-              Instagram
-            </a>
-            <a href={GOOGLE_MAP_URL} target="_blank" rel="noopener noreferrer">
-              Google マップ
-            </a>
-          </div>
-          <div>
-            <h5>日中の過ごし方</h5>
-            <a href={EBIKE_LP_URL} target="_blank" rel="noopener noreferrer">
-              Beyond Nakasendo Cycling →
-            </a>
-            <p style={{ marginTop: "0.4rem" }}>
-              マスターが営むガイド付きE-bikeツアー&レンタル。
-            </p>
-            <p style={{ marginTop: "1.2rem" }}>
-              <Link href="/">English page →</Link>
-            </p>
-          </div>
-        </div>
-        <div className="ft-bottom">
-          © 柏屋 Kashiwaya Inn · 三留野宿 · 南木曽 · 木曽路
-        </div>
-      </footer>
-
+      <SiteFooter lang="ja" />
       <ChatWidget />
     </>
   );
