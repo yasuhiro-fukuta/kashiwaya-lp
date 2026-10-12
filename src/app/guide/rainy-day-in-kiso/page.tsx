@@ -81,7 +81,7 @@ export default function Page() {
         flat, quick-drying ride on a rental e-bike.
       </div>
 
-      <Link href="/#book" className="article-cta">
+      <Link href="/stay#book" className="article-cta">
         Stay at Kashiwaya →
       </Link>
     </main>

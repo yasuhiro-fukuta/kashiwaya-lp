@@ -1,156 +1,51 @@
-"use client";
-
-import { useEffect, useState } from "react";
-import {
-  ArrowRight,
-  BedDouble,
-  Instagram,
-  MapPin,
-  Menu,
-  UtensilsCrossed,
-  Beer,
-  X,
-} from "lucide-react";
 import Link from "next/link";
+import { ArrowRight, MessageCircle } from "lucide-react";
 import ChatWidget from "@/components/ChatWidget";
-import LodgifyBox from "@/components/LodgifyBox";
-import PhotoGallery from "@/components/PhotoGallery";
-import CouponBanner from "@/components/CouponBanner";
-import ShareMenu from "@/components/ShareMenu";
+import LegacyHash from "@/components/LegacyHash";
+import { SiteNav, SiteFooter } from "@/components/SiteChrome";
+import { GOOGLE_MAP_URL, WHATSAPP_URL_EN } from "@/lib/site";
 
-/** =================== CUSTOMIZE ZONE =====================
- *  Update links and image filenames here. All gallery files
- *  live under /public/gallery/ (case sensitive on Vercel).
- *  ======================================================== */
-const INSTAGRAM_URL = "https://www.instagram.com/kashiwaya_nakasendo";
-const GOOGLE_MAP_URL = "https://maps.app.goo.gl/ViXN6oJNxvjQkv2SA?g_st=ac";
-const EBIKE_LP_URL = "https://kiso-ebike-lp.vercel.app/";
-const WHATSAPP_URL =
-  "https://wa.me/819038392354?text=Hello%20Kashiwaya%2C%20I%27d%20like%20to%20ask%20about%20a%20stay.";
-
-/** マルショー(一棟貸し用デリバリー)の注文ページ。
- *  写真付きメニューから選ぶと注文メッセージ入りのWhatsAppが開く。 */
-const MARUSHO_SITE_URL = "https://marusho.vercel.app/";
-
+/** トップページ。ハネムーン・カップル向けに絞り、詳細は
+ *  /stay /dining /explore /faq の各ページへ誘導する。
+ *  画像は 2026-12 のプロ撮影後に差し替え予定のプレースホルダ。 */
 const HERO_IMG = "/gallery/entrance.JPG";
-const HOUSE_IMG = "/gallery/1stfloor.JPG";
-const FOOD_IMG = "/gallery/somen.jpg";
-const DRINK_IMG = "/gallery/beer.jpg";
-const GORGE_IMG = "/gallery/kakizore.JPG";
-/** ====================================================== */
 
-const PEOPLE = [
+const ENTRIES = [
   {
-    name: "Shu Ichikawa",
-    role: "Owner",
-    body: [
-      "Fourth-generation owner of Kashiwaya, founded by the Ichikawa family.",
-      "He has kept the house alive while moving between overseas, Tokyo, and Nagiso — protecting it through changing times.",
-    ],
+    href: "/stay",
+    img: "/gallery/1fchess.jpg",
+    title: "Stay",
+    body: "Two rooms, one group per floor — or the whole kominka to yourselves. Direct bookings save 15% with code KISO15.",
+    more: "Rooms & booking",
   },
   {
-    name: "Kaku Ichikawa",
-    role: "Craft Beer Creator",
-    body: [
-      "Eldest son of Shu Ichikawa.",
-      "Based in Tokyo, he runs a hair salon and a brewery, and developed three Kashiwaya-exclusive beers.",
-    ],
+    href: "/dining",
+    img: "/gallery/somen.jpg",
+    title: "Dine",
+    body: "Nabe dinners and ochazuke breakfasts by the chef next door — and craft beer brewed only for this house.",
+    more: "Menu & how to order",
   },
   {
-    name: "Hiroshi Kumagai",
-    role: "Renovator",
-    body: [
-      "Moved from Tokyo in 2015 and renovated three kominka in Nagiso — one of them is Kashiwaya.",
-      "He now runs \u201CYui-an,\u201D an iconic kominka hostel that has become a symbol of Nagiso.",
-    ],
-  },
-  {
-    name: "Yasuhiro Fukuta",
-    role: "Master",
-    body: [
-      "The current operator of Kashiwaya.",
-      "After visiting Nagiso many times from Nagoya, he began a dual-base life and apprenticed under Hiroshi Kumagai while working two jobs.",
-      "Inspired by a year living in West Virginia, USA, his mission is to recreate that deep \u201Cdive into the local\u201D experience here in Nagiso.",
-    ],
+    href: "/explore",
+    img: "/gallery/kakizore.JPG",
+    title: "Explore",
+    body: "Tsumago and Magome, emerald gorges, e-bike rides with the master — everything within reach of the front door.",
+    more: "The valley & guides",
   },
 ] as const;
 
+const TOP_GALLERY = [
+  "/gallery/tour/common-engawa-v.jpg",
+  "/gallery/tour/1f-dining.jpg",
+  "/gallery/tour/common-garden.jpg",
+  "/gallery/tour/1f-lamp-v.jpg",
+] as const;
+
 export default function Page() {
-  const [scrolled, setScrolled] = useState(false);
-  const [menuOpen, setMenuOpen] = useState(false);
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 80);
-    onScroll();
-    window.addEventListener("scroll", onScroll);
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
   return (
     <>
-      {/* ============ NAV ============ */}
-      <nav className={`nav ${scrolled ? "scrolled" : ""} ${menuOpen ? "menu-open" : ""}`}>
-        <a href="#top" className="brand">
-          Kashiwaya <em>Inn</em>
-        </a>
-        <div className="nav-right">
-          <a
-            href="#book"
-            className="nav-book"
-            onClick={() => setMenuOpen(false)}
-          >
-            Book <ArrowRight size={14} />
-          </a>
-          <ShareMenu lang="en" />
-          <button
-            type="button"
-            className="menu-btn"
-            aria-label={menuOpen ? "Close menu" : "Open menu"}
-            onClick={() => setMenuOpen((o) => !o)}
-          >
-            {menuOpen ? <X size={22} /> : <Menu size={22} />}
-          </button>
-        </div>
-      </nav>
-
-      {/* ============ MENU DRAWER ============ */}
-      <div className={`nav-drawer ${menuOpen ? "open" : ""}`}>
-        <div className="drawer-inner">
-          <nav className="drawer-group">
-            <span className="drawer-label">Kashiwaya Inn</span>
-            <a href="#book" onClick={() => setMenuOpen(false)}>Book a stay</a>
-            <a href="#food" onClick={() => setMenuOpen(false)}>Food option</a>
-            <a href="#concept" onClick={() => setMenuOpen(false)}>Concept</a>
-            <a href="#house" onClick={() => setMenuOpen(false)}>The house</a>
-            <a href="#gallery" onClick={() => setMenuOpen(false)}>Gallery</a>
-            <a href="#people" onClick={() => setMenuOpen(false)}>The people</a>
-            <a href="#facilities" onClick={() => setMenuOpen(false)}>
-              Facilities &amp; good to know
-            </a>
-            <a href="#access" onClick={() => setMenuOpen(false)}>Access &amp; map</a>
-            <a href="#faq" onClick={() => setMenuOpen(false)}>FAQ</a>
-          </nav>
-          <nav className="drawer-group drawer-sub">
-            <span className="drawer-label">Guides</span>
-            <Link href="/guide/tsumago-magome-day-walk">
-              Tsumago–Magome day walk
-            </Link>
-            <Link href="/guide/rainy-day-in-kiso">Rainy days in the Kiso</Link>
-            <Link href="/guide/kiso-valley-ebike-day">
-              Gorges &amp; rivers by e-bike
-            </Link>
-          </nav>
-          <nav className="drawer-group drawer-sub">
-            <span className="drawer-label">Language</span>
-            <Link href="/ja">日本語</Link>
-          </nav>
-        </div>
-      </div>
-
-      {/* ============ FLOATING BOOK ============ */}
-      <a href="#book" className="float-book">
-        <BedDouble size={16} /> Book a Stay
-      </a>
+      <LegacyHash lang="en" />
+      <SiteNav lang="en" />
 
       {/* ============ HERO ============ */}
       <header className="hero" id="top">
@@ -159,24 +54,27 @@ export default function Page() {
           style={{ backgroundImage: `url('${HERO_IMG}')` }}
         />
         <div className="hero-inner">
-          <span className="eyebrow">Nagiso · Kiso Valley · Midono-juku</span>
+          <span className="eyebrow">Nagiso · Kiso Valley · Nakasendo</span>
           <h1>
-            Dive into the local, <em>join into the history.</em>
+            Dive into the local, <em>just the two of you.</em>
           </h1>
           <p className="hero-lede">
-            A 140-year-old kominka in the 41st post town on the Nakasendo —
-            built in the style of a samurai inn, still home to the people who
-            live here. Stay where the road has run for centuries.
+            A 140-year-old samurai-style inn in a quiet post town on the
+            Nakasendo. One floor — or the whole house — to yourselves:
+            hearth-side dinners, beer brewed only for this house, and
+            mornings on the old road before anyone else wakes.
           </p>
           <div className="hero-ctas">
-            <a href="#book" className="btn-primary">
+            <Link href="/stay" className="btn-primary">
               Book your stay <ArrowRight size={16} />
-            </a>
-            <a href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer" className="btn-secondary">
-              <Instagram size={15} /> Instagram
-            </a>
-            <a href={GOOGLE_MAP_URL} target="_blank" rel="noopener noreferrer" className="btn-secondary">
-              <MapPin size={15} /> Find us
+            </Link>
+            <a
+              href={WHATSAPP_URL_EN}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-secondary"
+            >
+              <MessageCircle size={15} /> WhatsApp
             </a>
           </div>
         </div>
@@ -198,319 +96,7 @@ export default function Page() {
         </div>
       </div>
 
-      {/* ============ BOOK DIRECT (Lodgify rooms + Square meals) ============ */}
-      <section className="book-direct" id="book">
-        <div className="book-direct-inner">
-          <span className="eyebrow-dark">Book direct</span>
-          <h2>
-            No middleman, <em>just us.</em>
-          </h2>
-          <p className="book-direct-lede">
-            Book direct, skip the platforms — and deal with real people, not a
-            front desk. We host you ourselves, from the first message to the
-            last morning. Two rooms in one kominka — and on select dates,
-            the whole house to yourselves.
-          </p>
-
-          <CouponBanner lang="en" />
-
-          <div className="room-grid">
-            {/* ===== Room 1: Japanese-Style Room (1F) ===== */}
-            <div className="room-card">
-              <div className="room-photo">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src="/gallery/1fchess.jpg"
-                  alt="Japanese-Style Room — 1st historic floor"
-                  loading="lazy"
-                  decoding="async"
-                />
-              </div>
-              <div className="room-body">
-                <h3>Japanese-Style Room</h3>
-                <div className="room-sub">1st historic floor</div>
-                <ul className="room-feats">
-                  <li>80 m&sup2; &middot; the whole historic floor for your group</li>
-                  <li>Tatami rooms &middot; courtyard-facing &middot; futon bedding</li>
-                  <li>Private toilet &middot; washer-dryer &middot; board games</li>
-                </ul>
-                <LodgifyBox rentalId="793793" />
-              </div>
-            </div>
-
-            {/* ===== Room 2: Superior Family Room (2F) ===== */}
-            <div className="room-card">
-              <div className="room-photo">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src="/gallery/2ndfloor.JPG"
-                  alt="Superior Family Room — 2nd modern floor"
-                  loading="lazy"
-                  decoding="async"
-                />
-              </div>
-              <div className="room-body">
-                <h3>Superior Family Room</h3>
-                <div className="room-sub">2nd modern floor</div>
-                <ul className="room-feats">
-                  <li>60 m&sup2; &middot; up to 3 adults &middot; 4 futons</li>
-                  <li>Balcony &amp; mountain view &middot; private toilet on 1F &middot; stairs only</li>
-                </ul>
-                <LodgifyBox rentalId="793801" />
-              </div>
-            </div>
-
-            {/* ===== Room 3: Whole-House Rental ===== */}
-            <div className="room-card">
-              <div className="room-photo">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src="/gallery/tour/common-exterior.jpg"
-                  alt="Whole-house rental — the entire 140-year-old kominka"
-                  loading="lazy"
-                  decoding="async"
-                />
-              </div>
-              <div className="room-body">
-                <h3>The Whole House</h3>
-                <div className="room-sub">Vacation house rental &middot; both floors</div>
-                <ul className="room-feats">
-                  <li>The entire 140-year-old kominka, for one group</li>
-                  <li>Both floors (140 m&sup2;) &middot; garden &amp; kitchen all to yourselves</li>
-                  <li>Offered on select dates only &mdash; about one night a week</li>
-                  <li>Unmanned stay &mdash; self check-in via key box</li>
-                  <li>
-                    Kashiwaya&apos;s dinner isn&apos;t available &mdash;
-                    local shop{" "}
-                    <a
-                      href={MARUSHO_SITE_URL}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      Marusho delivers dinner
-                    </a>{" "}
-                    to the house instead; the ochazuke breakfast set can
-                    still be ordered
-                  </li>
-                </ul>
-                <LodgifyBox rentalId="850548" />
-              </div>
-            </div>
-          </div>
-
-          <p className="meal-lead">
-            On whole-house dates the individual rooms are closed (and vice
-            versa), so the calendars never overlap &mdash; if your date shows
-            no availability on one listing, check the other.
-          </p>
-
-          <p className="meal-lead">
-            Booking direct? You can add dinner and breakfast right at
-            checkout &mdash; see the <a href="#food">Food option</a> section
-            just below for the menu.
-          </p>
-
-          <p className="book-direct-foot">
-            Questions? Message us on{" "}
-            <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">
-              WhatsApp →
-            </a>
-          </p>
-        </div>
-      </section>
-
-      {/* ============ HONEST NOTES ============ */}
-      <section className="honest" id="honest">
-        <div className="section-head">
-          <span className="eyebrow-dark">Before you book</span>
-          <h2>
-            An honest note. <em>This is a 140-year-old house, not a hotel.</em>
-          </h2>
-          <p>
-            Kashiwaya is wonderful for the right guest — and wrong for some.
-            Please read these four points before you book.
-          </p>
-        </div>
-        <div className="honest-card">
-          <ul className="meal-note">
-            <li>
-              <strong>The kitchen, sink and shower room are shared</strong>{" "}
-              when booking by the room — with at most one other group, since
-              each floor sleeps a single group. Toilets are private. There is
-              no bathtub; a day-use natural hot spring is ~15 min away by car.
-            </li>
-            <li>
-              <strong>The 2nd-floor room&apos;s toilet is on the 1st
-              floor</strong> — including at night, that means taking the
-              stairs. The toilet itself is private, and you never pass
-              through another guest&apos;s area.
-            </li>
-            <li>
-              <strong>The stairs are original — steep and narrow.</strong>{" "}
-              If stairs are hard for you, choose the 1st-floor room.
-            </li>
-            <li>
-              <strong>Insulation and soundproofing have the limits of a
-              140-year-old wooden house.</strong> Summer is covered by
-              air-conditioning; winter relies on kerosene stoves and
-              electric blankets, and mornings can be cold. You may hear the
-              house creak and your neighbours live — which is why the house
-              goes quiet after 21:00.
-            </li>
-          </ul>
-          <p className="honest-foot">
-            If none of this puts you off, you&apos;ll likely love it here —
-            the hearth-side evenings, the quiet post-town mornings, and a
-            house that has sheltered travellers since 1885.
-          </p>
-        </div>
-      </section>
-
-      {/* ============ FOOD OPTION ============ */}
-      <section className="food-option" id="food">
-        <div className="section-head">
-          <span className="eyebrow-dark">Food option</span>
-          <h2>
-            Dinner &amp; breakfast, <em>cooked by the chef next door.</em>
-          </h2>
-          <p>
-            Meals at Kashiwaya are optional and reserved in advance — a
-            traditional nabe dinner and an ochazuke breakfast, cooked around
-            any dietary needs. Booking direct on this site? Add them at
-            checkout when you book your room. Booked via Booking.com?
-            Order your meals on WhatsApp.
-          </p>
-        </div>
-        <div className="meal-order">
-          <div className="meal-photo">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/gallery/somen.jpg"
-              alt="Dinner at Kashiwaya — chilled somen and seasonal dishes"
-              loading="lazy"
-              decoding="async"
-            />
-          </div>
-          <ul className="food-menu">
-            <li>
-              <span>Chicken hot pot dinner (serves 2 / 3)</span>
-              <span>¥6,000 / ¥8,000</span>
-            </li>
-            <li>
-              <span>Pork shabu-shabu hot pot dinner (serves 2 / 3)</span>
-              <span>¥8,000 / ¥11,000</span>
-            </li>
-            <li>
-              <span>Pork chilled shabu (rei-shabu) dinner (serves 2 / 3)</span>
-              <span>¥8,000 / ¥11,000</span>
-            </li>
-            <li>
-              <span>Wagyu sukiyaki dinner (serves 2 / 3)</span>
-              <span>¥10,000 / ¥14,000</span>
-            </li>
-            <li>
-              <span>Vegan gluten-free hot pot dinner (serves 2 / 3)</span>
-              <span>¥8,000 / ¥11,000</span>
-            </li>
-            <li>
-              <span>Vegan gluten-free chilled pot dinner (serves 2 / 3)</span>
-              <span>¥8,000 / ¥11,000</span>
-            </li>
-            <li>
-              <span>Ochazuke breakfast set (vegan &amp; gluten-free)</span>
-              <span>¥1,500 / person</span>
-            </li>
-          </ul>
-          <a href="#book" className="meal-cta">
-            Book your stay &amp; add meals at checkout <ArrowRight size={16} />
-          </a>
-          <ul className="meal-note">
-            <li>
-              <strong>Booking direct on this site?</strong> Choose your meals
-              as add-ons at checkout (each menu once per stay). Staying one
-              night? Nothing more to do. Staying longer? Tell us on WhatsApp
-              which order you&apos;d like on which date — e.g. staying
-              Oct 3–6 and you&apos;d like sukiyaki on the 3rd and shabu-shabu
-              on the 5th: add both sets at checkout, then message us
-              &quot;Sukiyaki on the 3rd, Shabu-shabu on the 5th&quot;. Same
-              for breakfast mornings.
-            </li>
-            <li>
-              <strong>Booked via Booking.com?</strong> Meal add-ons aren&apos;t
-              available there — order your meals on{" "}
-              <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">
-                WhatsApp
-              </a>{" "}
-              instead.
-            </li>
-            <li>
-              Order at least <strong>3 days before your stay</strong>.
-            </li>
-            <li>
-              Travelling solo? One dinner set per day at{" "}
-              <strong>half the two-person price</strong> — message us on
-              WhatsApp.
-            </li>
-            <li>
-              Cancellation is free until 4 days before your stay;
-              non-refundable from 3 days before.
-            </li>
-            <li>
-              <strong>Luggage transport</strong> and <strong>activities</strong>{" "}
-              before check-in / after check-out can also be arranged on
-              WhatsApp.
-            </li>
-            <li>
-              Booking the <strong>whole house</strong>? Kashiwaya&apos;s
-              dinner isn&apos;t available on those unmanned dates &mdash;
-              see the delivery menu just below. Breakfast can be ordered
-              as usual.
-            </li>
-          </ul>
-        </div>
-
-        <div className="meal-order" id="marusho">
-          <div className="meal-order-head">
-            <UtensilsCrossed size={22} className="meal-icon" />
-            <h3>Whole-house dates &mdash; dinner, delivered</h3>
-            <p>
-              Kashiwaya&apos;s own dinner isn&apos;t available for the
-              unmanned whole-house rental, but eating well is still easy:{" "}
-              <strong>Marusho</strong>, a local shop, delivers dinner
-              straight to Kashiwaya.
-            </p>
-          </div>
-          <a
-            href={MARUSHO_SITE_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="meal-cta"
-          >
-            Open the Marusho order page <ArrowRight size={16} />
-          </a>
-          <ul className="meal-note">
-            <li>
-              Pick your dishes on the order page (photo menu &mdash; dinner
-              sets ¥1,500–¥3,500 with vegetarian/vegan options, breakfast
-              set ¥1,500, drinks), set the quantities, fill in the date,
-              delivery time and your name &mdash; it then opens WhatsApp
-              with the order message already written. Just press send.
-            </li>
-            <li>
-              Payment is made locally to Marusho (credit cards accepted,
-              5% card fee). Please order in advance where possible.
-            </li>
-            <li>
-              Prefer Kashiwaya&apos;s <strong>ochazuke breakfast set
-              (¥1,500 per person)</strong>? It&apos;s available for
-              whole-house stays too &mdash; add it at checkout when booking
-              direct, or order it on WhatsApp if you booked via Booking.com.
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      {/* ============ CONCEPT ============ */}
+      {/* ============ CONCEPT (short) ============ */}
       <section id="concept">
         <div className="section-head">
           <span className="eyebrow-dark">The idea</span>
@@ -518,597 +104,59 @@ export default function Page() {
             Not just a place to sleep. <em>A way to enter the village.</em>
           </h2>
           <p>
-            Most travellers pass through Tsumago and Magome and never see what
-            happens after the buses leave. Kashiwaya is for the ones who stay —
-            who eat what the family eats, drink what the locals drink, and
-            sleep in a house that has watched the road for 140 years.
+            Most travellers pass through Tsumago and Magome and never see
+            what happens after the buses leave. Kashiwaya is for the two of
+            you who stay — an evening by the hearth over a nabe dinner, a
+            beer brewed only for this house, and a street that has carried
+            travellers for 140 years, quiet again by nine.
           </p>
         </div>
       </section>
 
-      {/* ============ HOUSE (chapter 1) ============ */}
-      <section className="chapter" id="house">
-        <div className="chapter-visual">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={HOUSE_IMG} alt="The 140-year-old kominka of Kashiwaya" loading="lazy" decoding="async" />
-        </div>
-        <div className="chapter-text">
-          <span className="chapter-num">Chapter 01 · The House</span>
-          <h3>
-            Built in 1885 in the <em>samurai inn</em> style.
-          </h3>
-          <p>
-            Kashiwaya sits in Midono-juku — the 41st post town on the
-            Nakasendo, right after Magome and Tsumago. The house was built in
-            the same form as the honjin, the official inns where samurai
-            travellers stayed when this road carried them between Edo and
-            Kyoto.
-          </p>
-          <p>
-            Fires through the centuries took many of the old houses, but a few
-            kominka remain, still lived in. Kashiwaya is one of them. We&apos;re
-            15 minutes on foot from Nagiso Station.
-          </p>
-          <div className="note">
-            Midono-juku · 三留野宿 · the 41st post town on the Nakasendo
-          </div>
-        </div>
-      </section>
-
-      {/* ============ GALLERY ============ */}
-      <section className="gallery" id="gallery">
-        <div className="section-head">
-          <span className="eyebrow-dark">Gallery</span>
-          <h2>
-            Walk the house, <em>room by room.</em>
-          </h2>
-        </div>
-        <PhotoGallery lang="en" />
-      </section>
-
-      {/* ============ FOOD (chapter 2) ============ */}
-      <section className="chapter reverse">
-        <div className="chapter-visual">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={FOOD_IMG} alt="Local kitchen, seasonal meal" loading="lazy" decoding="async" />
-        </div>
-        <div className="chapter-text">
-          <span className="chapter-num">Chapter 02 · The Food</span>
-          <h3>
-            What a Japanese family eats <em>on a special day.</em>
-          </h3>
-          <p>
-            Not the menu you find in a Japanese restaurant. The food a family
-            in this valley would put on the table for a celebration — a
-            traditional nabe at dinner, ochazuke at breakfast. Quiet, seasonal,
-            careful.
-          </p>
-          <p>
-            Wagyu to vegan, gluten-free if you need it — tell us when you book
-            and we&apos;ll cook around you.
-          </p>
-          <div className="note">
-            <UtensilsCrossed
-              size={14}
-              style={{ display: "inline", verticalAlign: "-2px", marginRight: "0.4rem" }}
-            />
-            Dinner: traditional nabe · Breakfast: ochazuke.
-          </div>
-        </div>
-      </section>
-
-      {/* ============ DRINK (chapter 3) ============ */}
-      <section className="chapter">
-        <div className="chapter-visual">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={DRINK_IMG} alt="Kashiwaya-exclusive craft beer" loading="lazy" decoding="async" />
-        </div>
-        <div className="chapter-text">
-          <span className="chapter-num">Chapter 03 · The Drink</span>
-          <h3>
-            Three craft beers, <em>brewed only for us.</em>
-          </h3>
-          <p>
-            A brewery run by the owner&apos;s family makes three beers
-            exclusively for Kashiwaya — you won&apos;t find them anywhere else.
-            Alongside them, a small selection of local sake and wine, hand-picked
-            by the master.
-          </p>
-          <div className="note">
-            <Beer
-              size={14}
-              style={{ display: "inline", verticalAlign: "-2px", marginRight: "0.4rem" }}
-            />
-            Three exclusive craft beers · curated local sake and wine.
-          </div>
-        </div>
-      </section>
-
-      {/* ============ ACTIVITIES CTA → ebike LP ============ */}
-      <section className="activities-cta full">
-        <div className="activities-cta-inner">
-          <div className="activities-cta-text">
-            <span className="eyebrow-light">During the day</span>
-            <h3>
-              Looking for an <em>activity?</em>
-            </h3>
-            <p>
-              The master also runs guided e-bike tours and rentals during the
-              day — the routes only the people who grew up here know. If you
-              want something before check-in or after check-out, ask through
-              the site below.
-            </p>
-            <a href={EBIKE_LP_URL} target="_blank" rel="noopener noreferrer" className="cta-btn">
-              See Beyond Nakasendo Cycling <ArrowRight size={16} />
-            </a>
-          </div>
-          <div className="activities-cta-visual">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={GORGE_IMG} alt="The Kiso valley off the main road" loading="lazy" decoding="async" />
-          </div>
-        </div>
-      </section>
-
-      {/* ============ PEOPLE ============ */}
-      <section className="people" id="people">
-        <div className="people-inner">
-          <div className="section-head">
-            <span className="eyebrow-dark">The people</span>
-            <h2>
-              The hands <em>behind the house.</em>
-            </h2>
-            <p>
-              Four people, one house — keeping it lived-in across four
-              generations.
-            </p>
-          </div>
-          <div className="people-grid">
-            {PEOPLE.map((p) => (
-              <div key={p.name} className="person">
-                <div className="person-role">{p.role}</div>
-                <h4>{p.name}</h4>
-                {p.body.map((line, i) => (
-                  <p key={i}>{line}</p>
-                ))}
+      {/* ============ ENTRANCES ============ */}
+      <section className="entries">
+        <div className="entry-grid">
+          {ENTRIES.map((e) => (
+            <Link key={e.href} href={e.href} className="entry-card">
+              <div className="entry-photo">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={e.img} alt={e.title} loading="lazy" decoding="async" />
               </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ============ GOOD TO KNOW (facilities & rules) ============ */}
-      <section className="facilities" id="facilities">
-        <div className="section-head">
-          <span className="eyebrow-dark">Good to know</span>
-          <h2>
-            The details, <em>at a glance.</em>
-          </h2>
-        </div>
-        <div className="quote-grid">
-          <div className="quote-card">
-            <blockquote>
-              &ldquo;I had the whole second floor to myself &mdash; very
-              spacious and lovely. The house is old, so I was afraid it
-              wasn&apos;t going to be very nice, but it was clean and I was
-              really pleasantly surprised.&rdquo;
-            </blockquote>
-            <cite>Katerina &middot; Japan</cite>
-          </div>
-          <div className="quote-card">
-            <blockquote>
-              &ldquo;The house is spectacular &mdash; an actual old Japanese
-              house. It is almost magical to walk the rooms, open the
-              traditional sliding doors or enjoy a peaceful dinner in the
-              dining room.&rdquo;
-            </blockquote>
-            <cite>Fabrizio &middot; United Kingdom</cite>
-          </div>
-        </div>
-        <p className="quote-source">From guest reviews on Booking.com</p>
-        <div className="amenities-grid">
-          <div className="amenity-group">
-            <h4>The rooms</h4>
-            <ul>
-              <li>Futon bedding &amp; linens</li>
-              <li>Towels, slippers, earplugs &amp; bath amenities</li>
-              <li>Air-conditioning &amp; heating</li>
-              <li>Hairdryer &amp; fan</li>
-              <li>Dining table &amp; wine glasses</li>
-              <li>Bedside outlets, clothes rack &amp; drying stand</li>
-            </ul>
-          </div>
-          <div className="amenity-group">
-            <h4>Bath &amp; water</h4>
-            <ul>
-              <li>Private toilet for each room</li>
-              <li>Shared shower room</li>
-              <li>Shared sink &amp; kitchen</li>
-              <li>No bathtub &mdash; a day-trip onsen is a short drive away</li>
-            </ul>
-          </div>
-          <div className="amenity-group">
-            <h4>The house</h4>
-            <ul>
-              <li>Free Wi-Fi throughout</li>
-              <li>One group per floor &mdash; just two rooms in the house</li>
-              <li>Washer-dryer (1st-floor room)</li>
-              <li>Board games &amp; puzzles</li>
-              <li>Luggage storage</li>
-              <li>Smoke alarms &amp; fire extinguishers in every room</li>
-              <li>No smoking indoors</li>
-            </ul>
-          </div>
-          <div className="amenity-group">
-            <h4>Outdoors &amp; parking</h4>
-            <ul>
-              <li>Free private on-site parking (please reserve ahead)</li>
-              <li>Garden &amp; terrace</li>
-              <li>Balcony &amp; mountain view (2nd floor)</li>
-            </ul>
-          </div>
-          <div className="amenity-group">
-            <h4>Activities &amp; services</h4>
-            <ul>
-              <li>E-bike rentals &amp; guided tours (paid)</li>
-              <li>Hiking &amp; cycling from the door</li>
-              <li>Calligraphy sessions (schedule permitting)</li>
-              <li>Station pick-up &amp; luggage forwarding</li>
-              <li>English &amp; Japanese spoken</li>
-            </ul>
-          </div>
-        </div>
-        <div className="rules-card">
-          <h4>House rules</h4>
-          <ul>
-            <li>Check-in 16:00 &mdash; 18:00 &middot; check-out by 10:00</li>
-            <li>
-              Photo ID and the credit card used for booking are required at
-              check-in
-            </li>
-            <li>
-              Please let us know your arrival time in advance &mdash;
-              self-check-in via key box can also be arranged
-            </li>
-            <li>
-              Children welcome (no age limit) &middot; no cots, and extra
-              futons are limited
-            </li>
-            <li>
-              No pets &middot; no parties or events &middot; no smoking
-              indoors (the courtyard is fine)
-            </li>
-            <li>
-              Cancellation: 100% of prepayments refunded up to 7 days before
-              arrival &middot; non-refundable after
-            </li>
-            <li>The 2nd-floor room is reached by stairs only</li>
-          </ul>
-        </div>
-      </section>
-
-      {/* ============ LOCATION ============ */}
-      <section className="location" id="access">
-        <div className="section-head">
-          <span className="eyebrow-dark">Where we are</span>
-          <h2>
-            One quiet street <em>on the old road.</em>
-          </h2>
-          <p>
-            Nagiso 3993 &mdash; Midono-juku, Nagiso, Kiso District, Nagano.
-            About 1 km (15 minutes on foot) from JR Nagiso Station.
-          </p>
-        </div>
-        <div className="map-embed">
-          <iframe
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d6487.241362023977!2d137.6134136005096!3d35.61242230192019!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x601cc792f7fe924b%3A0xa2f12b3f1d333f0d!2zS2FzaGl3YXlhIElubiBOYWdpc28g5p-P5bGL44Kk44Oz!5e0!3m2!1sja!2sjp!4v1787387096800!5m2!1sja!2sjp"
-            title="Map — Kashiwaya Inn, Nagiso"
-            allowFullScreen
-            loading="lazy"
-            referrerPolicy="strict-origin-when-cross-origin"
-          />
-        </div>
-        <div className="dist-grid">
-          <div className="dist-item">
-            <span className="dist-name">JR Nagiso Station</span>
-            <span className="dist-km">1 km &middot; 15 min on foot</span>
-          </div>
-          <div className="dist-item">
-            <span className="dist-name">Tsumago-juku</span>
-            <span className="dist-km">4 km</span>
-          </div>
-          <div className="dist-item">
-            <span className="dist-name">Magome-juku</span>
-            <span className="dist-km">13 km</span>
-          </div>
-          <div className="dist-item">
-            <span className="dist-name">Atera Valley &amp; Kakizore Gorge</span>
-            <span className="dist-km">about 10 km</span>
-          </div>
-          <div className="dist-item">
-            <span className="dist-name">Matsumoto Airport</span>
-            <span className="dist-km">82 km</span>
-          </div>
-        </div>
-      </section>
-
-      {/* ============ FAQ ============ */}
-      <section className="faq" id="faq">
-        <div className="section-head">
-          <span className="eyebrow-dark">Practicalities</span>
-          <h2>
-            A few <em>good things to know.</em>
-          </h2>
-        </div>
-        <details className="faq-item">
-          <summary>How do I get there?</summary>
-          <p>
-            Nagiso Station on the JR Chuo line, then 15 minutes on foot to
-            Kashiwaya in Midono-juku (Nagiso 3993). If you need a ride, the
-            manager will help you arrange a taxi — just tell us in advance.
-          </p>
-        </details>
-        <details className="faq-item">
-          <summary>Is there anything to do before I arrive?</summary>
-          <p>
-            Yes — message us on{" "}
-            <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">
-              WhatsApp
-            </a>{" "}
-            with your arrival time, plus any luggage transport or activities
-            you&apos;d like before check-in or after check-out. Meals are
-            added at checkout when you book direct — or ordered on WhatsApp
-            if you booked via Booking.com.
-          </p>
-        </details>
-        <details className="faq-item">
-          <summary>I have a dietary restriction (vegan, gluten-free, etc.).</summary>
-          <p>
-            Tell us when you book on our site, or send us a WhatsApp message.
-            We cook around your needs — wagyu through to vegan and
-            gluten-free.
-          </p>
-        </details>
-        <details className="faq-item">
-          <summary>How do I reserve dinner and breakfast?</summary>
-          <p>
-            Booking direct on this site? Simply choose your meals as add-ons
-            at checkout when you book your room. For one-night stays
-            there&apos;s nothing more to do. Staying multiple nights? Tell us
-            on WhatsApp which order you&apos;d like on which date — e.g.
-            staying Oct 3–6 and you&apos;d like sukiyaki on the 3rd and
-            shabu-shabu on the 5th: add both sets at checkout, then message
-            us &quot;Sukiyaki on the 3rd, Shabu-shabu on the 5th&quot;. The
-            same goes for breakfast mornings. Booked via Booking.com? Order
-            your meals on WhatsApp, with the same name as your room booking.
-            Orders are accepted up to 3 days before your stay — see the{" "}
-            <a href="#food">Food option</a> section for the menu.
-          </p>
-        </details>
-        <details className="faq-item">
-          <summary>Can I cancel a meal order?</summary>
-          <p>
-            Yes — cancellation is free with a full refund up to 4 days before
-            your stay. From 3 days before onward, meal orders are
-            non-refundable, as the meals are already being prepared. To cancel,
-            please message us on WhatsApp.
-          </p>
-        </details>
-        <details className="faq-item">
-          <summary>Can I rent an e-bike?</summary>
-          <p>
-            Yes — the master runs guided e-bike tours and rentals through
-            Beyond Nakasendo Cycling. Daytime use is ¥4,000 per bike per day
-            (10:00 — 15:00). Book through their site.
-          </p>
-        </details>
-        <details className="faq-item">
-          <summary>What are the check-in and check-out times?</summary>
-          <p>
-            Check-in is 16:00 — 18:00. Arriving early? You can drop your
-            luggage and explore, and we&apos;ll do the house tour and formal
-            check-in after 16:00. Arriving late? Message us on WhatsApp when
-            you reach the entrance — the host lives just across the street.
-            Check-out is by 10:00, with no procedure: leave whenever
-            you&apos;re ready.
-          </p>
-        </details>
-        <details className="faq-item">
-          <summary>Can I leave my luggage before check-in or after check-out?</summary>
-          <p>
-            Yes — place it at the entrance, on the shelf just inside. Please
-            note our liability for stored luggage is limited to ¥100,000 per
-            person.
-          </p>
-        </details>
-        <details className="faq-item">
-          <summary>Can we rent the whole house?</summary>
-          <p>
-            Yes — on select dates (about one night a week) we list the whole
-            kominka for a single group: both floors, garden and kitchen
-            included. On those dates the individual rooms are closed, so the
-            whole-house calendar only opens on the days it&apos;s available.
-            Book it from the booking section like any room. Please note the
-            whole-house stay is unmanned (self check-in via key box) and
-            Kashiwaya&apos;s dinner isn&apos;t available &mdash; instead,
-            local shop Marusho delivers dinner sets to the house
-            (¥1,500–¥3,500, see the <a href="#marusho">Food option</a>{" "}
-            section). The ochazuke breakfast set can still be ordered, and
-            the kitchen is included for self-catering.
-          </p>
-        </details>
-        <details className="faq-item">
-          <summary>What is the cancellation policy for room bookings?</summary>
-          <p>
-            Prepayments are 100% refundable if you cancel 7 days before
-            arrival or earlier; cancellations after that are non-refundable.
-            (Meal orders follow their own policy — free until 4 days before
-            your stay, non-refundable from 3 days before.)
-          </p>
-        </details>
-        <details className="faq-item">
-          <summary>Can you pick me up from Nagiso Station or Tsumago?</summary>
-          <p>
-            Yes — Nagiso Station, Tsumago and Junikane Station are within our
-            free pick-up area between 16:00 and 18:00. Just ask in advance.
-            For departures we can call a taxi for you on the day.
-          </p>
-        </details>
-        <details className="faq-item">
-          <summary>How much are dinner and breakfast?</summary>
-          <p>
-            Dinner sets come in two sizes (serves 2 / serves 3): chicken hot
-            pot ¥6,000 / ¥8,000, pork shabu-shabu or chilled rei-shabu
-            ¥8,000 / ¥11,000, wagyu sukiyaki ¥10,000 / ¥14,000, and vegan
-            gluten-free hot or chilled pots ¥8,000 / ¥11,000. Travelling
-            solo? One set per day can be ordered at half the two-person
-            price. The ochazuke breakfast set (vegan &amp; gluten-free) is
-            ¥1,500 per person.
-          </p>
-        </details>
-        <details className="faq-item">
-          <summary>
-            I booked on Booking.com with Genius — is breakfast free?
-          </summary>
-          <p>
-            No — some Genius Level 2–3 reservations show a &ldquo;free
-            breakfast&rdquo; benefit that Booking.com&apos;s system displays
-            without any arrangement with us. Kashiwaya has no
-            breakfast-included plans: all meals are optional, paid, and
-            reserved in advance. We&apos;re sorry for the confusion this
-            causes.
-          </p>
-        </details>
-        <details className="faq-item">
-          <summary>Can I just eat out in the evening instead?</summary>
-          <p>
-            Be careful — restaurants near us don&apos;t keep regular evening
-            hours. The safe plan is to reserve dinner at the inn (up to 3
-            days ahead) or ask us about same-day meal delivery. We&apos;ll
-            gladly check what&apos;s open on your dates.
-          </p>
-        </details>
-        <details className="faq-item">
-          <summary>Is there Wi-Fi?</summary>
-          <p>Yes — free Wi-Fi throughout the house.</p>
-        </details>
-        <details className="faq-item">
-          <summary>Do I need cash?</summary>
-          <p>
-            Kashiwaya itself takes card payments for meals and drinks, but
-            most local restaurants — and all local buses and trains — are
-            cash-only, and can&apos;t change notes larger than ¥1,000. Bring a
-            stack of ¥1,000 notes. The nearest ATM is at the 7-Eleven, about
-            20 minutes on foot.
-          </p>
-        </details>
-        <details className="faq-item">
-          <summary>Are the bathrooms shared? Is there a bath?</summary>
-          <p>
-            The shower room, sink and kitchen are shared; toilets are private
-            (the private toilet for second-floor guests is on the first
-            floor — you won&apos;t pass through any other guest&apos;s area
-            to reach it). There&apos;s no bathtub — if you want a proper
-            soak, a day-use natural hot spring is about 15 minutes away by
-            car (closed Wednesdays). We can arrange a taxi for you.
-          </p>
-        </details>
-        <details className="faq-item">
-          <summary>Can I do laundry?</summary>
-          <p>
-            First-floor guests have a washer-dryer to use. Otherwise
-            there&apos;s a coin laundry about 15 minutes&apos; walk away.
-          </p>
-        </details>
-        <details className="faq-item">
-          <summary>Can you forward my luggage to my next stop?</summary>
-          <p>
-            Between Magome and Tsumago there&apos;s a no-reservation luggage
-            shuttle. Between Nagiso and Nojiri stations we run one ourselves —
-            just ask. For the wider Kiso area (Matsumoto to Nakatsugawa), NLTS
-            and Walk Lite offer luggage transfer with advance booking.
-          </p>
-        </details>
-        <details className="faq-item">
-          <summary>Are there bears on the trails?</summary>
-          <p>
-            Asian black bears do live in these mountains, but fixed bells
-            along the Magome Pass trail mean no sightings there for about a
-            decade. Bears avoid people and almost always run first; the only
-            real risk is surprising a mother with cubs. If you&apos;re
-            worried, we rent bear bells and bear spray.
-          </p>
-        </details>
-        <details className="faq-item">
-          <summary>How hard is the Magome Pass walk?</summary>
-          <p>
-            Easy — sneakers are fine (sandals aren&apos;t recommended). In
-            winter, strap-on spikes for icy patches are a good idea; we rent
-            those too.
-          </p>
-        </details>
-        <details className="faq-item">
-          <summary>House rules — smoking, pets, quiet hours?</summary>
-          <p>
-            No pets, and no smoking inside the wooden house — the courtyard
-            is fine. Photos and videos are all OK (sharing them motivates
-            us!). Local residents rise early, so please keep quiet after
-            21:00.
-          </p>
-        </details>
-      </section>
-
-      {/* ============ FOOTER ============ */}
-      <footer className="lp-footer">
-        <div className="lp-footer-inner">
-          <div>
-            <div className="ft-brand">Kashiwaya Inn</div>
-            <p>
-              A 140-year-old kominka in Midono-juku, the 41st post town on
-              the Nakasendo. Nagiso 3993, Kiso, Nagano.
-            </p>
-            <p>15 minutes&apos; walk from Nagiso Station (JR Chuo line).</p>
-          </div>
-          <div>
-            <h5>Book &amp; ask</h5>
-            <a href="#book">
-              Check availability &amp; book
-            </a>
-            <a href="#food">Food option</a>
-            <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">
-              WhatsApp · +81 90-3839-2354
-            </a>
-            <a href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer">
-              Instagram
-            </a>
-            <a href={GOOGLE_MAP_URL} target="_blank" rel="noopener noreferrer">
-              Google Maps
-            </a>
-          </div>
-          <div>
-            <h5>During the day</h5>
-            <a href={EBIKE_LP_URL} target="_blank" rel="noopener noreferrer">
-              Beyond Nakasendo Cycling →
-            </a>
-            <p style={{ marginTop: "0.4rem" }}>
-              Guided e-bike rides and rentals, run by the master of the house.
-            </p>
-            <h5 style={{ marginTop: "1.2rem" }}>Guides</h5>
-            <Link href="/guide/tsumago-magome-day-walk">
-              Tsumago–Magome day walk
+              <div className="entry-body">
+                <h3>{e.title}</h3>
+                <p>{e.body}</p>
+                <span className="entry-more">
+                  {e.more} <ArrowRight size={14} />
+                </span>
+              </div>
             </Link>
-            <Link href="/guide/rainy-day-in-kiso">Rainy days in the Kiso</Link>
-            <Link href="/guide/kiso-valley-ebike-day">
-              Gorges &amp; rivers by e-bike
+          ))}
+        </div>
+        <p className="entries-foot">
+          Practical questions? <Link href="/faq">FAQ, facilities &amp; access →</Link>
+        </p>
+      </section>
+
+      {/* ============ GALLERY STRIP ============ */}
+      <section className="gallery">
+        <div className="top-gallery">
+          {TOP_GALLERY.map((src) => (
+            <Link key={src} href="/stay#gallery">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={src} alt="Inside Kashiwaya" loading="lazy" decoding="async" />
             </Link>
-            <p style={{ marginTop: "1.2rem" }}>
-              <Link href="/ja">日本語ページはこちら →</Link>
-            </p>
-          </div>
+          ))}
         </div>
-        <div className="ft-bottom">
-          © Kashiwaya Inn · Midono-juku, Nagiso, Kiso Valley.
-        </div>
-      </footer>
+        <p className="top-access">
+          Nagiso 3993, Kiso Valley, Nagano — 15 minutes on foot from JR
+          Nagiso Station ·{" "}
+          <a href={GOOGLE_MAP_URL} target="_blank" rel="noopener noreferrer">
+            open the map
+          </a>
+        </p>
+      </section>
+
+      <SiteFooter lang="en" />
       <ChatWidget />
     </>
   );

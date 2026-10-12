@@ -86,7 +86,7 @@ export default function Page() {
         it&apos;s the most comfortable 50 km in the world.
       </p>
 
-      <Link href="/#book" className="article-cta">
+      <Link href="/stay#book" className="article-cta">
         Stay at Kashiwaya →
       </Link>
     </main>

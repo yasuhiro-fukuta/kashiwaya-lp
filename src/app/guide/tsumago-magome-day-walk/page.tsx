@@ -105,7 +105,7 @@ export default function Page() {
         Kashiwaya-exclusive craft beer. The next morning, a stroll out to
         Momosuke Bridge before the day warms up is the nicest send-off.
       </p>
-      <Link href="/#book" className="article-cta">
+      <Link href="/stay#book" className="article-cta">
         Stay at Kashiwaya →
       </Link>
     </main>
