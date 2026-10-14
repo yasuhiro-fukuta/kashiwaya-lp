@@ -56,13 +56,13 @@ export default function Page() {
         <div className="hero-inner">
           <span className="eyebrow">Nagiso · Kiso Valley · Nakasendo</span>
           <h1>
-            Dive into the local, <em>just the two of you.</em>
+            Dive into the local, <em>join into the history.</em>
           </h1>
           <p className="hero-lede">
             A 140-year-old samurai-style inn in a quiet post town on the
-            Nakasendo. One floor — or the whole house — to yourselves:
-            hearth-side dinners, beer brewed only for this house, and
-            mornings on the old road before anyone else wakes.
+            Nakasendo. One floor — or the whole house — entirely yours:
+            dinner by the hearth, beer brewed only for this house, and the
+            old road to yourself in the morning, before anyone else wakes.
           </p>
           <div className="hero-ctas">
             <Link href="/stay" className="btn-primary">
@@ -105,9 +105,9 @@ export default function Page() {
           </h2>
           <p>
             Most travellers pass through Tsumago and Magome and never see
-            what happens after the buses leave. Kashiwaya is for the two of
-            you who stay — an evening by the hearth over a nabe dinner, a
-            beer brewed only for this house, and a street that has carried
+            what happens after the buses leave. Kashiwaya is for the ones
+            who stay — an evening by the hearth over a nabe dinner, a beer
+            brewed only for this house, and a street that has carried
             travellers for 140 years, quiet again by nine.
           </p>
         </div>
