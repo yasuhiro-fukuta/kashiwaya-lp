@@ -90,7 +90,7 @@ const structuredData = {
         addressRegion: "Nagano",
         addressCountry: "JP",
       },
-      hasMap: "https://maps.app.goo.gl/ViXN6oJNxvjQkv2SA",
+      hasMap: "https://maps.google.com/?cid=11741213253604425485",
       sameAs: ["https://www.instagram.com/kashiwaya_nakasendo"],
       checkinTime: "16:00",
       checkoutTime: "10:00",
@@ -145,6 +145,14 @@ const structuredData = {
       "@type": "FAQPage",
       "@id": `${SITE_URL}/#faq`,
       mainEntity: [
+        {
+          "@type": "Question",
+          name: "Is Kashiwaya Inn open all year?",
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: "Kashiwaya Inn is closed December — February.",
+          },
+        },
         {
           "@type": "Question",
           name: "How do I get to Kashiwaya Inn?",
@@ -206,7 +214,7 @@ const structuredData = {
           name: "How much are dinner and breakfast at Kashiwaya Inn?",
           acceptedAnswer: {
             "@type": "Answer",
-            text: "Dinner sets come in two sizes (serves 2 / serves 3): chicken hot pot ¥6,000 / ¥8,000, pork shabu-shabu or chilled rei-shabu ¥8,000 / ¥11,000, wagyu sukiyaki ¥10,000 / ¥14,000, and vegan gluten-free hot or chilled pots ¥8,000 / ¥11,000. Solo travellers can order one set at half the two-person price. The ochazuke breakfast set (vegan & gluten-free) is ¥1,500 per person.",
+            text: "Dinner sets come in two sizes (serves 2 / serves 3): chicken hot pot ¥6,000 / ¥8,000, pork shabu-shabu or chilled rei-shabu ¥8,000 / ¥11,000, wagyu sukiyaki ¥10,000 / ¥14,000, and vegan gluten-free hot or chilled pots ¥8,000 / ¥11,000. Solo travellers can order one set at half the two-person price (not available for wagyu sukiyaki). The ochazuke breakfast set (vegan & gluten-free) is ¥1,500 per person.",
           },
         },
         {
@@ -246,7 +254,7 @@ const structuredData = {
           name: "Can luggage be forwarded to the next stop on the Nakasendo?",
           acceptedAnswer: {
             "@type": "Answer",
-            text: "Between Magome and Tsumago there is a no-reservation luggage shuttle. Between Nagiso and Nojiri stations Kashiwaya runs one — just ask. For the wider Kiso area (Matsumoto to Nakatsugawa), NLTS and Walk Lite offer booked luggage transfer.",
+            text: "Between Magome and Tsumago there is a no-reservation luggage shuttle. Between Nagiso and Kiso-Fukushima (stops at Nojiri, Suhara and Agematsu) Kashiwaya runs the Luggage Bus once a day: booking required by 21:00 the day before, paid (¥1,500 per zone plus ¥1,500 per bag), closed Mondays and December–March. Details and booking: https://nakasendo-ebike.com/luggage-shuttle. For the wider Kiso area (Matsumoto to Nakatsugawa), NLTS and Walk Lite offer booked luggage transfer.",
           },
         },
         {
@@ -262,7 +270,7 @@ const structuredData = {
           name: "How hard is the Magome Pass walk?",
           acceptedAnswer: {
             "@type": "Answer",
-            text: "Easy — sneakers are fine, sandals are not recommended. In winter, strap-on ice spikes are advised and can be rented at the inn.",
+            text: "Easy — sneakers are fine, sandals are not recommended. On frosty days in November and March, strap-on ice spikes are advised and can be rented at the inn.",
           },
         },
         {

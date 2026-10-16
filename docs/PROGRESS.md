@@ -14,7 +14,7 @@
 | 環境 | URL | 更新方法 |
 |---|---|---|
 | ステージング | https://kashiwaya-lp-git-staging-yakkuns-projects.vercel.app | `staging` ブランチにプッシュで自動更新 |
-| 本番 | https://www.kashiwayainn.com | `staging` → `main` にマージで反映 |
+| 本番 | https://www.kashiwaya-inn.com | `staging` → `main` にマージで反映 |
 
 チャット画面: 各URLの右下💬ボタン、または `/chat`
 
@@ -52,7 +52,7 @@
 - [ ] Googleドキュメントの共有設定が「リンクを知っている全員が閲覧可」に
       なっているか確認(未設定でもフォールバックで動くが、自動更新が効かない)
 - [ ] 導線の整備: 館内QRコード(`/chat` へ)、Booking.com のDMテンプレにURL追記
-- [ ] (任意) `staging.kashiwayainn.com` ドメインを staging ブランチに割り当て
+- [ ] (任意) `staging.kashiwaya-inn.com` ドメインを staging ブランチに割り当て
 - [ ] (任意) 会話ログの確認運用 — 答えられなかった質問をGoogleドキュメントに
       追記する改善ループ(Vercel の Logs で確認可能)
 

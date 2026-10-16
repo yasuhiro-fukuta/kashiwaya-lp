@@ -113,7 +113,7 @@ export default function DiningPage() {
             </li>
             <li>
               お一人でのご利用は1日1組まで、<strong>2名分の半額</strong>で
-              ご案内します — WhatsAppでご相談ください。
+              ご案内します(和牛すき焼きを除く) — WhatsAppでご相談ください。
             </li>
             <li>キャンセルは4日前まで無料・全額返金。3日前以降は返金不可です。</li>
             <li>

@@ -18,7 +18,7 @@ export async function getEbikeBlock(): Promise<string | null> {
     if (text.length < 300) throw new Error("ebike info suspiciously short");
 
     return `# E-bikeツアー・レンタル情報（Beyond Nakasendo Cycling / 一次優先情報）
-柏屋が運営するE-bike事業の公式情報。E-bikeの料金・ルート・予約方法・送迎(luggage shuttle)について聞かれたら、下記の記載を正確にそのまま使うこと。ここに無い料金や条件は推測しない。予約は下記のBookリンク(Square)か公式サイト https://nakasendo-ebike.com を案内する。
+柏屋が運営するE-bike事業の公式情報。E-bikeの料金・ルート・予約方法・送迎(luggage shuttle)について聞かれたら、下記の記載を正確にそのまま使うこと。ここに無い料金や条件は推測しない。予約は下記のBookリンク(WhatsAppで予約: https://nakasendo-ebike.com/book)か公式サイト https://nakasendo-ebike.com を案内する。
 
 ${text}`;
   } catch (err) {
