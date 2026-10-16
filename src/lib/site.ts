@@ -1,8 +1,9 @@
 /** サイト全体で共有する定数。ページ・コンポーネント双方から参照する。 */
 export const SITE_URL = "https://kashiwaya-inn.com";
 export const INSTAGRAM_URL = "https://www.instagram.com/kashiwaya_nakasendo";
-export const GOOGLE_MAP_URL = "https://maps.app.goo.gl/ViXN6oJNxvjQkv2SA?g_st=ac";
-export const EBIKE_LP_URL = "https://kiso-ebike-lp.vercel.app/";
+/** 柏屋の地点(FAQの埋め込み地図と同じ場所 0xa2f12b3f1d333f0d)。 */
+export const GOOGLE_MAP_URL = "https://maps.google.com/?cid=11741213253604425485";
+export const EBIKE_LP_URL = "https://nakasendo-ebike.com/";
 export const WHATSAPP_URL_EN =
   "https://wa.me/819038392354?text=Hello%20Kashiwaya%2C%20I%27d%20like%20to%20ask%20about%20a%20stay.";
 export const WHATSAPP_URL_JA =
@@ -11,5 +12,3 @@ export const WHATSAPP_URL_JA =
 /** マルショー(一棟貸し用デリバリー)の注文ページ。 */
 export const MARUSHO_SITE_URL = "https://marusho.vercel.app/";
 
-/** 求人リンク(note)。URLが決まるまで "#"(準備中表示)。 */
-export const RECRUIT_URL = "#";

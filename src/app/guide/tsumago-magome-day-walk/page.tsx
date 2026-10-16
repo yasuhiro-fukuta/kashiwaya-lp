@@ -77,8 +77,9 @@ export default function Page() {
       <h2>How hard is it?</h2>
       <p>
         Easy. The pass is a well-kept path with a gentle grade — sneakers are
-        fine, sandals aren&apos;t. In winter, icy patches appear; strap-on
-        spikes make it comfortable, and we rent them at the inn.
+        fine, sandals aren&apos;t. On frosty days in November and March,
+        icy patches can appear; strap-on spikes make it comfortable, and we
+        rent them at the inn.
       </p>
 
       <h2>What about bears?</h2>
@@ -93,9 +94,14 @@ export default function Page() {
       <h2>Luggage, solved</h2>
       <p>
         Moving on after your walk? Between Magome and Tsumago there&apos;s a
-        no-reservation luggage shuttle, and between Nagiso and Nojiri stations
-        we run one ourselves. For the wider Kiso area, NLTS and Walk Lite
-        forward bags with advance booking. Ask us and we&apos;ll set it up.
+        no-reservation luggage shuttle, and between Nagiso and Kiso-Fukushima
+        we run the Luggage Bus (booking required by 21:00 the day before,
+        paid, closed Mondays and December–March; details and booking at{" "}
+        <a href="https://nakasendo-ebike.com/luggage-shuttle" target="_blank" rel="noopener noreferrer">
+          nakasendo-ebike.com/luggage-shuttle
+        </a>
+        ). For the wider Kiso area, NLTS and Walk Lite forward bags with
+        advance booking.
       </p>
 
       <h2>Make it a loop from Kashiwaya</h2>
