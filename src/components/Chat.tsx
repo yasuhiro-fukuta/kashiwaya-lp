@@ -4,6 +4,16 @@ import { useEffect, useRef, useState } from "react";
 import { Check, Copy, Paperclip, Send, X } from "lucide-react";
 import AvatarLightbox from "./AvatarLightbox";
 
+const STAFF_KEY_STORAGE = "kashiwaya_staff_key";
+
+function readStaffKey(): string | undefined {
+  try {
+    return localStorage.getItem(STAFF_KEY_STORAGE) ?? undefined;
+  } catch {
+    return undefined;
+  }
+}
+
 type ChatMessage = { role: "user" | "assistant"; content: string; images?: string[] };
 
 const GREETING =
@@ -83,7 +93,18 @@ export default function Chat() {
   // staff can bookmark their usual questions; the person just taps send.
   useEffect(() => {
     try {
-      const q = new URLSearchParams(window.location.search).get("q");
+      const params = new URLSearchParams(window.location.search);
+      // Staff links carry ?k=<key>; remember it on this device so staff
+      // mode keeps working after the link is closed.
+      const k = params.get("k");
+      if (k) {
+        localStorage.setItem(STAFF_KEY_STORAGE, k.slice(0, 200));
+        // Drop the key from the address bar so it isn't shared by accident.
+        params.delete("k");
+        const rest = params.toString();
+        window.history.replaceState(null, "", window.location.pathname + (rest ? `?${rest}` : ""));
+      }
+      const q = params.get("q");
       if (q) {
         setInput(q.slice(0, 2000));
         requestAnimationFrame(() => {
@@ -172,7 +193,7 @@ export default function Chat() {
       const res = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages: payload }),
+        body: JSON.stringify({ messages: payload, staffKey: readStaffKey() }),
       });
       if (!res.ok || !res.body) {
         throw new Error(await res.text().catch(() => `HTTP ${res.status}`));
