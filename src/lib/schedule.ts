@@ -1,6 +1,6 @@
 // Staff-mode only: fetch the cleaning/serving schedule from the
 // kashiwayasheet Apps Script Web API and format it as a prompt block.
-// Guests never see this — it is appended only when STAFF_TAG_PATTERN matched.
+// Guests never see this — it is appended only in staff mode (checkStaffTag in staffAuth.ts).
 
 type BoardRow = {
   date: string;

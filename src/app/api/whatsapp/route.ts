@@ -3,7 +3,8 @@ import { getMenuBlock } from "@/lib/menu";
 import { getEbikeBlock } from "@/lib/ebike";
 import { getDmLogBlock, DMLOG_UNAVAILABLE_NOTE } from "@/lib/dmlog";
 import { getScheduleBlock, SCHEDULE_UNAVAILABLE_NOTE } from "@/lib/schedule";
-import { buildStaffSystemPrompt, buildSystemPrompt, STAFF_REPLY_RULES, STAFF_REPLY_TAG_PATTERN, STAFF_TAG_PATTERN } from "@/lib/prompt";
+import { buildStaffSystemPrompt, buildSystemPrompt, STAFF_REPLY_RULES } from "@/lib/prompt";
+import { checkStaffTag } from "@/lib/staffAuth";
 import Anthropic from "@anthropic-ai/sdk";
 
 export const runtime = "nodejs";
@@ -79,8 +80,7 @@ export async function POST(req: Request) {
     const question = m.text.body.slice(0, 2000);
 
     try {
-      const replyMode = STAFF_REPLY_TAG_PATTERN.test(question);
-      const staffMode = replyMode || STAFF_TAG_PATTERN.test(question);
+      const { staffMode, replyMode } = checkStaffTag(question);
       const knowledge = await getKnowledge();
       const schedule = staffMode ? await getScheduleBlock() : null;
       const dmlog = staffMode ? await getDmLogBlock() : null;

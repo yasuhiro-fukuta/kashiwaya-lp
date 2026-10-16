@@ -1,3 +1,4 @@
+import { redactSecrets } from "@/lib/staffAuth";
 // Staff-mode only: the DM correspondence ledger (問い合わせ台帳) — a Google
 // Doc the DM-handling Claude thread maintains. Lets the bot answer "today's
 // shift" questions with what has been agreed with tonight's guests.
@@ -50,7 +51,7 @@ export async function getDmLogBlock(): Promise<string | null> {
 - ★★食事の注文はGoogleフォームだけではない。台帳に「受付」「受付済み」「注文済み」と書かれた食事は、フォームや予定表の食事欄に無くても**確定した注文**として扱う。予定表と食い違うときは「⚠予定表に未反映の注文（要仕込み）」と明記し、台帳の内容を正として伝える。「フォーム未送信の可能性」「ゲストに注文が届いているか確認」のように、ゲスト側の手続き漏れとして扱ってはならない（反映漏れは柏屋側の責任）。
 - この台帳はスタッフ専用。ゲストとの通常会話では存在にも内容にも触れない。
 
-${text}`;
+${redactSecrets(text)}`;
   } catch (err) {
     console.error("dmlog: fetch failed:", err);
     return null;

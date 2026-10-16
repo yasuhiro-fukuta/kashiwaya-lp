@@ -4,7 +4,8 @@ import { getMenuBlock } from "@/lib/menu";
 import { getEbikeBlock } from "@/lib/ebike";
 import { getDmLogBlock, DMLOG_UNAVAILABLE_NOTE } from "@/lib/dmlog";
 import { getScheduleBlock, SCHEDULE_UNAVAILABLE_NOTE } from "@/lib/schedule";
-import { buildStaffSystemPrompt, buildSystemPrompt, STAFF_REPLY_RULES, STAFF_REPLY_TAG_PATTERN, STAFF_TAG_PATTERN } from "@/lib/prompt";
+import { buildStaffSystemPrompt, buildSystemPrompt, STAFF_REPLY_RULES } from "@/lib/prompt";
+import { checkStaffTag } from "@/lib/staffAuth";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
@@ -107,8 +108,7 @@ export async function POST(req: Request) {
   }
 
   const lastContent = history[history.length - 1].content;
-  const replyMode = STAFF_REPLY_TAG_PATTERN.test(lastContent);
-  const staffMode = replyMode || STAFF_TAG_PATTERN.test(lastContent);
+  const { staffMode, replyMode } = checkStaffTag(lastContent);
   const knowledge = await getKnowledge();
   const schedule = staffMode ? await getScheduleBlock() : null;
   const dmlog = staffMode ? await getDmLogBlock() : null;

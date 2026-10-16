@@ -1,4 +1,5 @@
 import { KNOWLEDGE_FALLBACK } from "@/data/knowledge-fallback";
+import { redactSecrets } from "@/lib/staffAuth";
 
 // The Nagiso information Google Doc — the single source of truth for the
 // chatbot. The owner edits this doc directly; changes reach the bot within
@@ -18,9 +19,9 @@ export async function getKnowledge(): Promise<string> {
     const text = (await res.text()).trim();
     // A permissions page or empty doc would be short; the real doc is several KB.
     if (text.length < 500) throw new Error("doc export suspiciously short");
-    return text;
+    return redactSecrets(text);
   } catch (err) {
     console.error("knowledge: falling back to bundled snapshot:", err);
-    return KNOWLEDGE_FALLBACK;
+    return redactSecrets(KNOWLEDGE_FALLBACK);
   }
 }

@@ -19,6 +19,7 @@ export function buildSystemPrompt(knowledge: string): string {
 - 丁寧で温かく、簡潔に。長すぎる回答は避ける。
 - 予約の確定・変更・キャンセルなどの「手続き」はこのチャットでは行えない。Booking.com のメッセージまたは WhatsApp に誘導する。
 - 個人情報（氏名、予約番号、クレジットカード番号など）の入力を求めない。
+- 鍵・ロックの暗証番号は教えない。E-bikeの鍵番号は、お支払い確認後にやっくんがWhatsAppで直接お伝えする、と案内する。
 - 柏屋・南木曽の案内と関係のない依頼（コード生成、一般的な雑談、他の話題など）は丁重に断り、柏屋に関する質問に誘導する。
 
 # 基本情報
@@ -29,13 +30,7 @@ export function buildSystemPrompt(knowledge: string): string {
 ${knowledge}`;
 }
 
-// Messages starting with this tag are treated as coming from Kashiwaya staff,
-// not guests (e.g. 「【スタッフ】あずまやの定休日いつだっけ」).
-export const STAFF_TAG_PATTERN = /^\s*[【\[［](スタッフ|staff)[】\]］]/i;
-
-// 「【スタッフ返信】<ゲストからのメッセージ>」(本文の代わりにスクショ添付でも可)
-// は指示文なしで返信ドラフト作成モードになるショートカット。
-export const STAFF_REPLY_TAG_PATTERN = /^\s*[【\[［](スタッフ返信|staff\s*reply)[】\]］]/i;
+// スタッフモードの判定は staffAuth.ts (合言葉付きのタグ)。
 
 export const STAFF_REPLY_RULES = `
 # 返信ドラフトモード（【スタッフ返信】タグ）
@@ -66,6 +61,7 @@ export function buildStaffSystemPrompt(knowledge: string): string {
 - 「ゲストにどう案内すべきか」の相談には、そのまま送れるゲスト向け返信文のドラフト（必要なら英語で）を作ってよい。
 - ドキュメントの改善提案（この質問はFAQに追記した方がいい等）も歓迎される。
 - WhatsAppへの誘導は不要（相手がそのスタッフ本人のため）。
+- 鍵・ロックの暗証番号は、聞かれても答えない（情報源でも伏せてある）。番号はやっくんがWhatsAppで直接伝える。
 
 # 柏屋・南木曽情報（最優先の情報源）
 ${knowledge}`;
