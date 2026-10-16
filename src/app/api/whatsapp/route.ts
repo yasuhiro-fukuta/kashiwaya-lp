@@ -79,8 +79,16 @@ export async function POST(req: Request) {
     const question = m.text.body.slice(0, 2000);
 
     try {
-      const replyMode = STAFF_REPLY_TAG_PATTERN.test(question);
-      const staffMode = replyMode || STAFF_TAG_PATTERN.test(question);
+      // Anyone can type the 【スタッフ】 tag; once STAFF_KEY is set, staff
+      // mode is limited to the numbers listed in STAFF_WHATSAPP_NUMBERS.
+      const staffAllowed =
+        !process.env.STAFF_KEY ||
+        (process.env.STAFF_WHATSAPP_NUMBERS ?? "")
+          .split(",")
+          .map((n) => n.replace(/\D/g, ""))
+          .includes(m.from.replace(/\D/g, ""));
+      const replyMode = staffAllowed && STAFF_REPLY_TAG_PATTERN.test(question);
+      const staffMode = replyMode || (staffAllowed && STAFF_TAG_PATTERN.test(question));
       const knowledge = await getKnowledge();
       const schedule = staffMode ? await getScheduleBlock() : null;
       const dmlog = staffMode ? await getDmLogBlock() : null;

@@ -97,8 +97,9 @@ export async function POST(req: Request) {
   }
 
   let history: unknown;
+  let staffKey: unknown;
   try {
-    history = (await req.json()).messages;
+    ({ messages: history, staffKey } = await req.json());
   } catch {
     return new Response("Invalid request.", { status: 400 });
   }
@@ -107,8 +108,12 @@ export async function POST(req: Request) {
   }
 
   const lastContent = history[history.length - 1].content;
-  const replyMode = STAFF_REPLY_TAG_PATTERN.test(lastContent);
-  const staffMode = replyMode || STAFF_TAG_PATTERN.test(lastContent);
+  // The 【スタッフ】 tag alone is public knowledge, so staff mode (shift
+  // table + guest DM ledger) also needs the key from the staff link. Without
+  // STAFF_KEY set, the tag alone still works (pre-key behaviour).
+  const staffAllowed = !process.env.STAFF_KEY || staffKey === process.env.STAFF_KEY;
+  const replyMode = staffAllowed && STAFF_REPLY_TAG_PATTERN.test(lastContent);
+  const staffMode = replyMode || (staffAllowed && STAFF_TAG_PATTERN.test(lastContent));
   const knowledge = await getKnowledge();
   const schedule = staffMode ? await getScheduleBlock() : null;
   const dmlog = staffMode ? await getDmLogBlock() : null;
