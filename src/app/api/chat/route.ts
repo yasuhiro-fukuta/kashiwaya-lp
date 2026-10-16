@@ -136,7 +136,8 @@ export async function POST(req: Request) {
 
   const stream = client.messages.stream({
     model: staffMode ? STAFF_MODEL : MODEL,
-    max_tokens: 1024,
+    // Staff answers (shift table + DM記録) run long; 1024 cut them mid-sentence.
+    max_tokens: staffMode ? 4096 : 1024,
     system,
     messages: toApiMessages(history),
   });

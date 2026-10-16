@@ -107,7 +107,7 @@ export async function POST(req: Request) {
       }
       const response = await client.messages.create({
         model: staffMode ? STAFF_MODEL : MODEL,
-        max_tokens: 1024,
+        max_tokens: staffMode ? 4096 : 1024,
         system,
         messages: [{ role: "user", content: question }],
       });
