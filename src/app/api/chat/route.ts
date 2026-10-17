@@ -3,6 +3,7 @@ import { getKnowledge } from "@/lib/knowledge";
 import { getMenuBlock } from "@/lib/menu";
 import { getEbikeBlock } from "@/lib/ebike";
 import { getDmLogBlock, DMLOG_UNAVAILABLE_NOTE } from "@/lib/dmlog";
+import { getOrdersBlock, ORDERS_UNAVAILABLE_NOTE } from "@/lib/orders";
 import { getScheduleBlock, SCHEDULE_UNAVAILABLE_NOTE } from "@/lib/schedule";
 import { buildStaffSystemPrompt, buildSystemPrompt, STAFF_REPLY_RULES, STAFF_REPLY_TAG_PATTERN, STAFF_TAG_PATTERN } from "@/lib/prompt";
 
@@ -112,6 +113,7 @@ export async function POST(req: Request) {
   const knowledge = await getKnowledge();
   const schedule = staffMode ? await getScheduleBlock() : null;
   const dmlog = staffMode ? await getDmLogBlock() : null;
+  const orders = staffMode ? await getOrdersBlock() : null;
   const meals = await getMenuBlock();
   const ebike = await getEbikeBlock();
   const client = new Anthropic();
@@ -128,11 +130,14 @@ export async function POST(req: Request) {
   if (meals) system.push({ type: "text", text: meals });
   if (ebike) system.push({ type: "text", text: ebike });
   if (schedule) system.push({ type: "text", text: schedule });
-  if (dmlog) system.push({ type: "text", text: dmlog });
-  else if (staffMode) system.push({ type: "text", text: DMLOG_UNAVAILABLE_NOTE });
   else if (staffMode && process.env.SHEET_API_URL) {
     system.push({ type: "text", text: SCHEDULE_UNAVAILABLE_NOTE });
   }
+  // The caterer's order sheet is the final word on meals (what is cooked and delivered).
+  if (orders) system.push({ type: "text", text: orders });
+  else if (staffMode) system.push({ type: "text", text: ORDERS_UNAVAILABLE_NOTE });
+  if (dmlog) system.push({ type: "text", text: dmlog });
+  else if (staffMode) system.push({ type: "text", text: DMLOG_UNAVAILABLE_NOTE });
 
   const stream = client.messages.stream({
     model: staffMode ? STAFF_MODEL : MODEL,
