@@ -1,7 +1,7 @@
 import { getKnowledge } from "@/lib/knowledge";
 import { getMenuBlock } from "@/lib/menu";
 import { getEbikeBlock } from "@/lib/ebike";
-import { getDmLogBlock, DMLOG_UNAVAILABLE_NOTE } from "@/lib/dmlog";
+import { getDmLogBlock, DMLOG_UNAVAILABLE_NOTE, DMLOG_NOT_LOADED_NOTE, wantsDmLog } from "@/lib/dmlog";
 import { getOrdersBlock, ORDERS_UNAVAILABLE_NOTE } from "@/lib/orders";
 import { getScheduleBlock, SCHEDULE_UNAVAILABLE_NOTE } from "@/lib/schedule";
 import { buildStaffSystemPrompt, buildSystemPrompt, STAFF_REPLY_RULES, STAFF_REPLY_TAG_PATTERN, STAFF_TAG_PATTERN } from "@/lib/prompt";
@@ -82,10 +82,11 @@ export async function POST(req: Request) {
     try {
       const replyMode = STAFF_REPLY_TAG_PATTERN.test(question);
       const staffMode = replyMode || STAFF_TAG_PATTERN.test(question);
+      const wantsDm = replyMode || wantsDmLog(question);
       const [knowledge, schedule, dmlog, orders, meals, ebike] = await Promise.all([
         getKnowledge(),
         staffMode ? getScheduleBlock() : Promise.resolve(null),
-        staffMode ? getDmLogBlock() : Promise.resolve(null),
+        staffMode && wantsDm ? getDmLogBlock() : Promise.resolve(null),
         staffMode ? getOrdersBlock() : Promise.resolve(null),
         getMenuBlock(),
         getEbikeBlock(),
@@ -111,7 +112,8 @@ export async function POST(req: Request) {
       if (orders) system.push({ type: "text", text: orders });
       else if (staffMode) system.push({ type: "text", text: ORDERS_UNAVAILABLE_NOTE });
       if (dmlog) system.push({ type: "text", text: dmlog });
-      else if (staffMode) system.push({ type: "text", text: DMLOG_UNAVAILABLE_NOTE });
+      else if (staffMode && wantsDm) system.push({ type: "text", text: DMLOG_UNAVAILABLE_NOTE });
+      else if (staffMode) system.push({ type: "text", text: DMLOG_NOT_LOADED_NOTE });
       const response = await client.messages.create({
         model: staffMode ? STAFF_MODEL : MODEL,
         max_tokens: staffMode ? 4096 : 1024,

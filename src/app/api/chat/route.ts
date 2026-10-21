@@ -2,7 +2,7 @@ import Anthropic from "@anthropic-ai/sdk";
 import { getKnowledge } from "@/lib/knowledge";
 import { getMenuBlock } from "@/lib/menu";
 import { getEbikeBlock } from "@/lib/ebike";
-import { getDmLogBlock, DMLOG_UNAVAILABLE_NOTE } from "@/lib/dmlog";
+import { getDmLogBlock, DMLOG_UNAVAILABLE_NOTE, DMLOG_NOT_LOADED_NOTE, wantsDmLog } from "@/lib/dmlog";
 import { getOrdersBlock, ORDERS_UNAVAILABLE_NOTE } from "@/lib/orders";
 import { getScheduleBlock, SCHEDULE_UNAVAILABLE_NOTE } from "@/lib/schedule";
 import { buildStaffSystemPrompt, buildSystemPrompt, STAFF_REPLY_RULES, STAFF_REPLY_TAG_PATTERN, STAFF_TAG_PATTERN } from "@/lib/prompt";
@@ -110,6 +110,8 @@ export async function POST(req: Request) {
   const lastContent = history[history.length - 1].content;
   const replyMode = STAFF_REPLY_TAG_PATTERN.test(lastContent);
   const staffMode = replyMode || STAFF_TAG_PATTERN.test(lastContent);
+  // The ledger is the biggest, slowest block; read it only when asked (社長 2026-10-21).
+  const wantsDm = replyMode || wantsDmLog(lastContent);
   // All sources are independent — fetch them at once. Run in series this was
   // 6 round trips (each 1-8s on a cache miss) before the model even started.
   const t0 = Date.now();
@@ -119,7 +121,7 @@ export async function POST(req: Request) {
   const [knowledge, schedule, dmlog, orders, meals, ebike] = await Promise.all([
     timed("knowledge", getKnowledge()),
     timed("schedule", staffMode ? getScheduleBlock() : Promise.resolve(null)),
-    timed("dmlog", staffMode ? getDmLogBlock() : Promise.resolve(null)),
+    timed("dmlog", staffMode && wantsDm ? getDmLogBlock() : Promise.resolve(null)),
     timed("orders", staffMode ? getOrdersBlock() : Promise.resolve(null)),
     timed("menu", getMenuBlock()),
     timed("ebike", getEbikeBlock()),
@@ -147,7 +149,8 @@ export async function POST(req: Request) {
   if (orders) system.push({ type: "text", text: orders });
   else if (staffMode) system.push({ type: "text", text: ORDERS_UNAVAILABLE_NOTE });
   if (dmlog) system.push({ type: "text", text: dmlog });
-  else if (staffMode) system.push({ type: "text", text: DMLOG_UNAVAILABLE_NOTE });
+  else if (staffMode && wantsDm) system.push({ type: "text", text: DMLOG_UNAVAILABLE_NOTE });
+  else if (staffMode) system.push({ type: "text", text: DMLOG_NOT_LOADED_NOTE });
   // Cache the whole system prefix (knowledge + sheets + ledger ≈ 50k tokens in
   // staff mode). The sources are themselves cached for 5 minutes, so repeat
   // questions hit the prompt cache instead of re-reading everything.
