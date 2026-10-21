@@ -23,7 +23,23 @@ export async function fetchDmLogText(bypassCache = false): Promise<string> {
   const text = (await res.text()).trim();
   // A permissions page would be short; the real ledger is tens of KB.
   if (text.length < 500) throw new Error("dm log suspiciously short");
-  return text;
+  return trimFinishedGuests(text);
+}
+
+// Section 3 (終わったお客さん) is the largest part of the ledger and is about
+// stays that are already over; it only slows every staff answer down. Drop it
+// and leave a one-line marker so the bot knows why past guests are missing.
+export function trimFinishedGuests(text: string): string {
+  const start = text.search(/^\s*3\.\s*終わったお客さん/m);
+  if (start < 0) return text;
+  const rest = text.slice(start);
+  const next = rest.search(/^\s*4\.\s/m);
+  if (next < 0) return text;
+  return (
+    text.slice(0, start) +
+    "3. 終わったお客さん（省略。過去のお客様の記録は座敷童では読めない。聞かれたら「台帳の『終わったお客さん』を見てください」と答える）\n\n" +
+    rest.slice(next)
+  );
 }
 
 export async function getDmLogBlock(): Promise<string | null> {

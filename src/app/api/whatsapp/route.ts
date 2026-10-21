@@ -82,12 +82,14 @@ export async function POST(req: Request) {
     try {
       const replyMode = STAFF_REPLY_TAG_PATTERN.test(question);
       const staffMode = replyMode || STAFF_TAG_PATTERN.test(question);
-      const knowledge = await getKnowledge();
-      const schedule = staffMode ? await getScheduleBlock() : null;
-      const dmlog = staffMode ? await getDmLogBlock() : null;
-      const orders = staffMode ? await getOrdersBlock() : null;
-      const meals = await getMenuBlock();
-      const ebike = await getEbikeBlock();
+      const [knowledge, schedule, dmlog, orders, meals, ebike] = await Promise.all([
+        getKnowledge(),
+        staffMode ? getScheduleBlock() : Promise.resolve(null),
+        staffMode ? getDmLogBlock() : Promise.resolve(null),
+        staffMode ? getOrdersBlock() : Promise.resolve(null),
+        getMenuBlock(),
+        getEbikeBlock(),
+      ]);
       const client = new Anthropic();
       const system: Anthropic.TextBlockParam[] = [
         {

@@ -110,12 +110,18 @@ export async function POST(req: Request) {
   const lastContent = history[history.length - 1].content;
   const replyMode = STAFF_REPLY_TAG_PATTERN.test(lastContent);
   const staffMode = replyMode || STAFF_TAG_PATTERN.test(lastContent);
-  const knowledge = await getKnowledge();
-  const schedule = staffMode ? await getScheduleBlock() : null;
-  const dmlog = staffMode ? await getDmLogBlock() : null;
-  const orders = staffMode ? await getOrdersBlock() : null;
-  const meals = await getMenuBlock();
-  const ebike = await getEbikeBlock();
+  // All sources are independent — fetch them at once. Run in series this was
+  // 6 round trips (each 1-8s on a cache miss) before the model even started.
+  const t0 = Date.now();
+  const [knowledge, schedule, dmlog, orders, meals, ebike] = await Promise.all([
+    getKnowledge(),
+    staffMode ? getScheduleBlock() : Promise.resolve(null),
+    staffMode ? getDmLogBlock() : Promise.resolve(null),
+    staffMode ? getOrdersBlock() : Promise.resolve(null),
+    getMenuBlock(),
+    getEbikeBlock(),
+  ]);
+  console.log(`chat: context fetched in ${Date.now() - t0}ms (staff=${staffMode})`);
   const client = new Anthropic();
 
   const system: Anthropic.TextBlockParam[] = [
@@ -138,6 +144,10 @@ export async function POST(req: Request) {
   else if (staffMode) system.push({ type: "text", text: ORDERS_UNAVAILABLE_NOTE });
   if (dmlog) system.push({ type: "text", text: dmlog });
   else if (staffMode) system.push({ type: "text", text: DMLOG_UNAVAILABLE_NOTE });
+  // Cache the whole system prefix (knowledge + sheets + ledger ≈ 50k tokens in
+  // staff mode). The sources are themselves cached for 5 minutes, so repeat
+  // questions hit the prompt cache instead of re-reading everything.
+  system[system.length - 1].cache_control = { type: "ephemeral" };
 
   const stream = client.messages.stream({
     model: staffMode ? STAFF_MODEL : MODEL,
