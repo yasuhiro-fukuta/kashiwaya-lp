@@ -158,6 +158,11 @@ export async function POST(req: Request) {
     model: staffMode ? STAFF_MODEL : MODEL,
     // Staff answers (shift table + DM記録) run long; 1024 cut them mid-sentence.
     max_tokens: staffMode ? 4096 : 1024,
+    // claude-sonnet-5 thinks adaptively (effort "high") by default. That was
+    // 20-35s of invisible thinking before the first visible character on every
+    // staff question (measured 2026-10-21). Lookups against the sheets don't
+    // need it; the rules in the system prompt carry the logic.
+    thinking: { type: "disabled" },
     system,
     messages: toApiMessages(history),
   });
