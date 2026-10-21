@@ -192,21 +192,21 @@ export async function fetchOrders(bypassCache = false): Promise<OrdersData> {
   const tabs = await listTabs(bypassCache);
   const lines: OrderLine[] = [];
   const months: OrdersData["months"] = [];
-  for (const { year, month } of targetMonths()) {
-    const label = `${year}-${String(month).padStart(2, "0")}`;
-    const tab = monthTabFor(tabs, year, month);
-    if (!tab) {
-      months.push({ label, status: "no-tab" });
-      continue;
-    }
-    const csv = await fetchText(`${BASE}/export?format=csv&gid=${tab.gid}`, bypassCache);
-    const parsed = parseMonth(parseCsv(csv), year, month);
-    if (!parsed) {
-      months.push({ label, status: "invalid" });
-      continue;
-    }
-    lines.push(...parsed);
-    months.push({ label, status: "ok" });
+  // The month tabs are independent — fetch them together.
+  const results = await Promise.all(
+    targetMonths().map(async ({ year, month }) => {
+      const label = `${year}-${String(month).padStart(2, "0")}`;
+      const tab = monthTabFor(tabs, year, month);
+      if (!tab) return { label, status: "no-tab" as const, parsed: null };
+      const csv = await fetchText(`${BASE}/export?format=csv&gid=${tab.gid}`, bypassCache);
+      const parsed = parseMonth(parseCsv(csv), year, month);
+      if (!parsed) return { label, status: "invalid" as const, parsed: null };
+      return { label, status: "ok" as const, parsed };
+    }),
+  );
+  for (const r of results) {
+    if (r.parsed) lines.push(...r.parsed);
+    months.push({ label: r.label, status: r.status });
   }
   if (!months.some((m) => m.status === "ok")) throw new Error("orders: no usable month tab");
   return { lines, months };
