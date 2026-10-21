@@ -16,12 +16,13 @@ export const DMLOG_UNAVAILABLE_NOTE = `# 問い合わせ台帳 接続エラー�
 // Staff questions read the ledger only when they ask for it ("DM履歴も調べて"
 // etc.). Reply mode (【スタッフ返信】) always reads it.
 export function wantsDmLog(text: string): boolean {
-  return /(DM|ＤＭ|ディーエム)\s*(履歴|記録)|台帳|やり取り|メッセージ履歴/i.test(text);
+  // Any mention of DM / the ledger / messages is enough ("DMも見て", "DM履歴も調べて", "台帳見て"…).
+  return /DM|ＤＭ|ディーエム|台帳|やり取り|メッセージ|WhatsApp|ワッツアップ|Lodgify|ロジファイ/i.test(text);
 }
 
 // Injected in staff mode when the ledger was deliberately not read.
 export const DMLOG_NOT_LOADED_NOTE = `# 問い合わせ台帳（DM記録）は今回読んでいない（内部情報）
-ゲストとのDMのやり取り（到着時刻・送迎・DMで受けた注文・支払い状況など）は、この回答では確認していない。回答に「## DM記録」の節は作らない。代わりに回答の最後に1行だけ「※DMのやり取りは見ていません。必要なら「DM履歴も調べて」と付けて聞いてください」と添える。`;
+ゲストとのDMのやり取り（到着時刻・送迎・DMで受けた注文・支払い状況など）は、この回答では確認していない。回答に「## DM記録」の節は作らない。「権限がない」「参照できない」「やっくんに確認して」とは書かない（読んでいないだけで、聞けば読める）。代わりに回答の最後に1行だけ「※DMのやり取りは見ていません。必要なら「DMも見て」と付けて聞いてください」と添える。`;
 
 export async function fetchDmLogText(bypassCache = false): Promise<string> {
   const res = await fetch(EXPORT_URL, {
