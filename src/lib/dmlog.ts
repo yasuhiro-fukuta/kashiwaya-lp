@@ -13,6 +13,16 @@ const EXPORT_URL = `https://docs.google.com/document/d/${DM_DOC_ID}/export?forma
 export const DMLOG_UNAVAILABLE_NOTE = `# 問い合わせ台帳 接続エラー（内部情報）
 現在、ゲストDM対応の台帳（問い合わせ台帳）への接続に一時的に失敗している。シフトや特定の日の予定を答えるときは、回答の最後に「## DM記録」の節を設け、「台帳に一時的に接続できないため確認できません。少し時間をおいてもう一度聞いてください」とだけ書くこと。「記録なし」とは書かない（記録が無いのか読めていないのか区別できないため）。`;
 
+// Staff questions read the ledger only when they ask for it ("DM履歴も調べて"
+// etc.). Reply mode (【スタッフ返信】) always reads it.
+export function wantsDmLog(text: string): boolean {
+  return /(DM|ＤＭ|ディーエム)\s*(履歴|記録)|台帳|やり取り|メッセージ履歴/i.test(text);
+}
+
+// Injected in staff mode when the ledger was deliberately not read.
+export const DMLOG_NOT_LOADED_NOTE = `# 問い合わせ台帳（DM記録）は今回読んでいない（内部情報）
+ゲストとのDMのやり取り（到着時刻・送迎・DMで受けた注文・支払い状況など）は、この回答では確認していない。回答に「## DM記録」の節は作らない。代わりに回答の最後に1行だけ「※DMのやり取りは見ていません。必要なら「DM履歴も調べて」と付けて聞いてください」と添える。`;
+
 export async function fetchDmLogText(bypassCache = false): Promise<string> {
   const res = await fetch(EXPORT_URL, {
     // The ledger changes through the day; 5 minutes keeps it fresh.
