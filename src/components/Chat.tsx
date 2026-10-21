@@ -18,7 +18,13 @@ const QUICK_QUESTIONS = [
   "Can you pick me up at Nagiso Station?",
   "Recommended hiking routes?",
   "食事の予約方法は？",
+  // Staff chips: pre-fill the input with the brackets empty so the staff
+  // member types スタッフ inside (the word is deliberately not on the chip).
+  "【】今日のシフトは？",
+  "【】今月のシフトは？",
 ];
+
+const PREFILL_PREFIX = "【】";
 
 const MAX_IMAGES = 3;
 
@@ -265,7 +271,22 @@ export default function Chat() {
         {messages.length === 0 && (
           <div className="chat-chips">
             {QUICK_QUESTIONS.map((q) => (
-              <button key={q} className="chat-chip" onClick={() => send(q)}>
+              <button
+                key={q}
+                className="chat-chip"
+                onClick={() => {
+                  if (!q.startsWith(PREFILL_PREFIX)) return send(q);
+                  setInput(q);
+                  requestAnimationFrame(() => {
+                    autoGrow();
+                    const el = inputRef.current;
+                    if (el) {
+                      el.focus();
+                      el.setSelectionRange(1, 1); // cursor between 【 and 】
+                    }
+                  });
+                }}
+              >
                 {q}
               </button>
             ))}
