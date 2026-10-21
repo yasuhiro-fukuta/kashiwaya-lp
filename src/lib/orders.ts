@@ -119,7 +119,8 @@ async function listTabs(bypassCache: boolean): Promise<Tab[]> {
 function monthTabFor(tabs: Tab[], year: number, month: number): Tab | undefined {
   const reiwa = year - 2018;
   return tabs.find((t) => {
-    const m = /^R\s*(\d+)\s*(\d+)\s*月$/.exec(clean(t.name));
+    // Tab names vary month to month: "R8　１０月", "R8年１１月" (with 年).
+    const m = /^R\s*(\d+)\s*年?\s*(\d+)\s*月$/.exec(clean(t.name));
     return !!m && Number(m[1]) === reiwa && Number(m[2]) === month;
   });
 }
@@ -133,7 +134,11 @@ function parseMonth(rows: string[][], year: number, month: number): OrderLine[] 
     .slice(0, 5)
     .flat()
     .map(clean)
-    .some((c) => c.replace(/\s/g, "") === `R${reiwa}年${month}月`);
+    // The header cell is "R8年10月" on some tabs and "R811月" (no 年) on others.
+    .some((c) => {
+      const v = c.replace(/\s/g, "");
+      return v === `R${reiwa}年${month}月` || v === `R${reiwa}${month}月`;
+    });
   if (!header) return null;
 
   const lines: OrderLine[] = [];
