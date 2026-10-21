@@ -113,15 +113,19 @@ export async function POST(req: Request) {
   // All sources are independent — fetch them at once. Run in series this was
   // 6 round trips (each 1-8s on a cache miss) before the model even started.
   const t0 = Date.now();
+  const timing: Record<string, number> = {};
+  const timed = <T,>(name: string, p: Promise<T>): Promise<T> =>
+    p.finally(() => { timing[name] = Date.now() - t0; });
   const [knowledge, schedule, dmlog, orders, meals, ebike] = await Promise.all([
-    getKnowledge(),
-    staffMode ? getScheduleBlock() : Promise.resolve(null),
-    staffMode ? getDmLogBlock() : Promise.resolve(null),
-    staffMode ? getOrdersBlock() : Promise.resolve(null),
-    getMenuBlock(),
-    getEbikeBlock(),
+    timed("knowledge", getKnowledge()),
+    timed("schedule", staffMode ? getScheduleBlock() : Promise.resolve(null)),
+    timed("dmlog", staffMode ? getDmLogBlock() : Promise.resolve(null)),
+    timed("orders", staffMode ? getOrdersBlock() : Promise.resolve(null)),
+    timed("menu", getMenuBlock()),
+    timed("ebike", getEbikeBlock()),
   ]);
-  console.log(`chat: context fetched in ${Date.now() - t0}ms (staff=${staffMode})`);
+  const contextMs = Date.now() - t0;
+  console.log(`chat: context fetched in ${contextMs}ms (staff=${staffMode})`, timing);
   const client = new Anthropic();
 
   const system: Anthropic.TextBlockParam[] = [
@@ -149,6 +153,7 @@ export async function POST(req: Request) {
   // questions hit the prompt cache instead of re-reading everything.
   system[system.length - 1].cache_control = { type: "ephemeral" };
 
+  const sizes = [knowledge, schedule, dmlog, orders, meals, ebike].map((b) => (b ? b.length : 0));
   const stream = client.messages.stream({
     model: staffMode ? STAFF_MODEL : MODEL,
     // Staff answers (shift table + DM記録) run long; 1024 cut them mid-sentence.
@@ -163,6 +168,12 @@ export async function POST(req: Request) {
       stream.on("text", (delta) => controller.enqueue(encoder.encode(delta)));
       stream
         .finalMessage()
+        .then((msg) => {
+          const u = msg.usage as unknown as Record<string, unknown>;
+          console.log(
+            `chat: done in ${Date.now() - t0}ms input=${u.input_tokens} cache_read=${u.cache_read_input_tokens} cache_write=${u.cache_creation_input_tokens} output=${u.output_tokens}`,
+          );
+        })
         .catch((err) => {
           console.error("chat: stream error:", err);
           controller.enqueue(
@@ -182,6 +193,10 @@ export async function POST(req: Request) {
     headers: {
       "Content-Type": "text/plain; charset=utf-8",
       "Cache-Control": "no-store",
+      // Diagnostics (no guest data): how long the context took and how big it is.
+      "X-Context-Ms": String(contextMs),
+      "X-Context-Detail": Object.entries(timing).map(([k, v]) => `${k}=${v}`).join(","),
+      "X-Context-Chars": sizes.join(","),
     },
   });
 }
