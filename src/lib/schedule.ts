@@ -23,6 +23,8 @@ type ScheduleData = {
   today?: string;
   board?: BoardRow[];
   staff?: string[];
+  // 清掃全体申し送り事項 (福田→全清掃スタッフ、年月日キー)
+  handover?: { date: string; text: string; by?: string }[];
   error?: string;
 };
 
@@ -106,5 +108,10 @@ function formatScheduleBlock(data: ScheduleData): string {
 - 特別清掃の予定・実績は各行の「特別清掃箇所:」で管理されている。「特別清掃って何やるんだっけ?」のような質問にはその内容を答える。
 
 ## 予定表（日付 | 部屋ごとに1行）
-${boardLines.join("\n")}`;
+${boardLines.join("\n")}
+
+## 清掃全体申し送り事項（福田から全清掃スタッフへ。日付＝申し送りが出た日）
+- 「○月から○月の清掃申し送り事項は？」と聞かれたら、その期間（月初〜月末、年の指定が無ければ今日を基準に直近の年）に日付が入る行を**日付順にすべて**、日付付きで箇条書きにする。要約や省略はせず原文のまま。該当が無ければ「その期間の申し送りはありません」。
+- 期間の指定が無い「申し送り事項は？」は直近3か月分を答える。
+${(data.handover ?? []).length ? (data.handover ?? []).map((h) => `- ${h.date}：${h.text}`).join("\n") : "(まだ登録なし)"}`;
 }
