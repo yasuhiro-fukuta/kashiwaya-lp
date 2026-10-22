@@ -22,6 +22,7 @@ const QUICK_QUESTIONS = [
   // member types スタッフ inside (the word is deliberately not on the chip).
   "【】今日のシフトは？",
   "【】今月のシフトは？",
+  "【】2026年7月から2026年9月の清掃申し送り事項は？",
 ];
 
 const PREFILL_PREFIX = "【】";
