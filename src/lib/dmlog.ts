@@ -36,7 +36,7 @@ export async function fetchDmLogText(bypassCache = false): Promise<string> {
   const token = process.env.SHEET_API_TOKEN;
   if (!url || !token) throw new Error("SHEET_API_URL / SHEET_API_TOKEN not set");
   const sep = url.includes("?") ? "&" : "?";
-  const res = await fetch(`${url}${sep}part=dmledger&token=${encodeURIComponent(token)}`, {
+  const res = await fetch(`${url}${sep}part=dmledger&days=10&token=${encodeURIComponent(token)}`, {
     // The ledger changes through the day; 5 minutes keeps it fresh.
     ...(bypassCache ? { cache: "no-store" as const } : { next: { revalidate: 300 } }),
     redirect: "follow",
@@ -72,7 +72,7 @@ export function formatLedger(d: DmLedgerData): string {
   const dms = d.dms ?? [];
   if (dms.length) {
     out.push("", `## 直近のメッセージ（${d.dmSince ?? ""} 以降。受＝お客様から、返＝こちらから）`);
-    dms.forEach((m) => out.push(`${m.日時}｜${m.媒体}｜${m.名前 || m.キー}｜${m.方向}｜${m.状態}｜${m.本文.replace(/\s+/g, " ")}`));
+    dms.forEach((m) => out.push(`${m.日時}｜${m.媒体}｜${m.名前 || m.キー}｜${m.方向}｜${m.状態}｜${m.本文.replace(/\s+/g, " ").slice(0, 300)}`));
   }
   out.push(
     "",
