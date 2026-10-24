@@ -1,11 +1,8 @@
-// Staff-mode only: the DM correspondence ledger (問い合わせ台帳) — a Google
-// Doc the DM-handling Claude thread maintains. Lets the bot answer "today's
-// shift" questions with what has been agreed with tonight's guests.
-
-const DM_DOC_ID =
-  process.env.DM_DOC_ID ?? "1fRbx2tZr_gWIGqBpYradw92IOLCLHn4vWMboAM-wJ3c";
-
-const EXPORT_URL = `https://docs.google.com/document/d/${DM_DOC_ID}/export?format=txt`;
+// Staff-mode only: the DM correspondence ledger (問い合わせ台帳). Since
+// 2026-10-24 it lives in kashiwaya_master_v2 as three sheets (DM台帳 /
+// お客様台帳 / 返信ルール) and is read through the sheet read-API
+// (kashiwayasheet WebApi.gs, ?part=dmledger). The old Google Doc ledger is
+// no longer read.
 
 // Injected instead of the ledger when it cannot be fetched, so the bot says
 // so instead of silently dropping the DM section (indistinguishable from
@@ -24,33 +21,64 @@ export function wantsDmLog(text: string): boolean {
 export const DMLOG_NOT_LOADED_NOTE = `# 問い合わせ台帳（DM記録）は今回読んでいない（内部情報）
 ゲストとのDMのやり取り（到着時刻・送迎・DMで受けた注文・支払い状況など）は、この回答では確認していない。回答に「## DM記録」の節は作らない。「権限がない」「参照できない」「やっくんに確認して」とは書かない（読んでいないだけで、聞けば読める）。代わりに回答の最後に1行だけ「※DMのやり取りは見ていません。必要なら「DMも見て」と付けて聞いてください」と添える。`;
 
+type DmLedgerData = {
+  generatedAt?: string;
+  today?: string;
+  dmSince?: string;
+  error?: string;
+  guests?: Record<string, string>[];
+  rules?: { 区分: string; 内容: string }[];
+  dms?: { 日時: string; 名前: string; キー: string; 媒体: string; 方向: string; 状態: string; 本文: string }[];
+};
+
 export async function fetchDmLogText(bypassCache = false): Promise<string> {
-  const res = await fetch(EXPORT_URL, {
+  const url = process.env.SHEET_API_URL;
+  const token = process.env.SHEET_API_TOKEN;
+  if (!url || !token) throw new Error("SHEET_API_URL / SHEET_API_TOKEN not set");
+  const sep = url.includes("?") ? "&" : "?";
+  const res = await fetch(`${url}${sep}part=dmledger&token=${encodeURIComponent(token)}`, {
     // The ledger changes through the day; 5 minutes keeps it fresh.
     ...(bypassCache ? { cache: "no-store" as const } : { next: { revalidate: 300 } }),
     redirect: "follow",
   });
-  if (!res.ok) throw new Error(`dm log export ${res.status}`);
-  const text = (await res.text()).trim();
-  // A permissions page would be short; the real ledger is tens of KB.
-  if (text.length < 500) throw new Error("dm log suspiciously short");
-  return trimFinishedGuests(text);
+  if (!res.ok) throw new Error(`dm ledger api ${res.status}`);
+  const data = (await res.json()) as DmLedgerData;
+  if (data.error) throw new Error(`dm ledger api: ${data.error}`);
+  if (!Array.isArray(data.guests)) throw new Error("dm ledger api: no guests");
+  return formatLedger(data);
 }
 
-// Section 3 (終わったお客さん) is the largest part of the ledger and is about
-// stays that are already over; it only slows every staff answer down. Drop it
-// and leave a one-line marker so the bot knows why past guests are missing.
-export function trimFinishedGuests(text: string): string {
-  const start = text.search(/^\s*3\.\s*終わったお客さん/m);
-  if (start < 0) return text;
-  const rest = text.slice(start);
-  const next = rest.search(/^\s*4\.\s/m);
-  if (next < 0) return text;
-  return (
-    text.slice(0, start) +
-    "3. 終わったお客さん（省略。過去のお客様の記録は座敷童では読めない。聞かれたら「台帳の『終わったお客さん』を見てください」と答える）\n\n" +
-    rest.slice(next)
+// Render the three sheets as one plain-text ledger, in the same spirit as the
+// old Google Doc: rules first, then one block per guest, then recent messages.
+export function formatLedger(d: DmLedgerData): string {
+  const out: string[] = [];
+  out.push(`問い合わせ台帳（kashiwaya_master_v2 の DM台帳・お客様台帳・返信ルール。${d.generatedAt ?? ""} 時点）`);
+  const rules = d.rules ?? [];
+  for (const kind of ["返信方針", "前例", "未確認"]) {
+    const rs = rules.filter((r) => r.区分 === kind);
+    if (!rs.length) continue;
+    out.push("", `## ${kind}`);
+    rs.forEach((r) => out.push(`- ${r.内容}`));
+  }
+  out.push("", "## お客様（対応中・今後の予約・直近7日に終わった人。実施日順）");
+  for (const g of d.guests ?? []) {
+    out.push("", `### ${g["対象の名前"] || g["連絡先キー"]}（${g["連絡先キー"]}${g["別名・ほかの連絡先"] && g["別名・ほかの連絡先"] !== g["対象の名前"] ? "／" + g["別名・ほかの連絡先"] : ""}）［${g["区分"]}］`);
+    if (g["実施日"]) out.push(`実施日：${g["実施日"]}`);
+    if (g["サービス"]) out.push(`サービス：${g["サービス"]}`);
+    if (g["決まったこと"]) out.push(`決まったこと：${g["決まったこと"]}`);
+    if (g["未解決"]) out.push(`未解決：${g["未解決"]}`);
+    if (g["経緯（要約）"]) out.push(`経緯：${g["経緯（要約）"]}`);
+  }
+  const dms = d.dms ?? [];
+  if (dms.length) {
+    out.push("", `## 直近のメッセージ（${d.dmSince ?? ""} 以降。受＝お客様から、返＝こちらから）`);
+    dms.forEach((m) => out.push(`${m.日時}｜${m.媒体}｜${m.名前 || m.キー}｜${m.方向}｜${m.状態}｜${m.本文.replace(/\s+/g, " ")}`));
+  }
+  out.push(
+    "",
+    "（終わったお客さん：実施日から7日より前の人は省略。過去のお客様の記録は座敷童では読めない。聞かれたら「スプレッドシートのお客様台帳を見てください」と答える）",
   );
+  return out.join("\n");
 }
 
 export async function getDmLogBlock(): Promise<string | null> {
