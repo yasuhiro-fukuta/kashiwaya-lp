@@ -55,8 +55,8 @@
 
 ## URL一覧
 
-- 本番LP: https://kashiwaya-lp.vercel.app/
-- E-bikeツアーLP(Beyond Nakasendo Cycling): https://kiso-ebike-lp.vercel.app/
+- 本番LP: https://www.kashiwaya-inn.com/
+- E-bikeツアーLP(Beyond Nakasendo Cycling): https://nakasendo-ebike.com/
 - GitHubリポジトリ: https://github.com/yasuhiro-fukuta/kashiwaya-lp
 
 ## 画像の追加・管理ルール

@@ -73,7 +73,7 @@ export default function Page() {
       <p>
         The master runs guided rides through{" "}
         <a
-          href="https://kiso-ebike-lp.vercel.app/"
+          href="https://nakasendo-ebike.com/"
           target="_blank"
           rel="noopener noreferrer"
           className="inline"

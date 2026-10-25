@@ -114,7 +114,8 @@ export default function DiningPage() {
             </li>
             <li>
               Travelling solo? One dinner set per day at{" "}
-              <strong>half the two-person price</strong> — message us on
+              <strong>half the two-person price</strong> (not available for
+              wagyu sukiyaki) — message us on
               WhatsApp.
             </li>
             <li>

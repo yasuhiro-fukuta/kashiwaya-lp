@@ -106,6 +106,7 @@ export default function FaqPage() {
         <div className="rules-card">
           <h4>House rules</h4>
           <ul>
+            <li>Closed December &mdash; February</li>
             <li>Check-in 16:00 &mdash; 18:00 &middot; check-out by 10:00</li>
             <li>
               Photo ID and the credit card used for booking are required at
@@ -308,7 +309,7 @@ export default function FaqPage() {
             ¥8,000 / ¥11,000, wagyu sukiyaki ¥10,000 / ¥14,000, and vegan
             gluten-free hot or chilled pots ¥8,000 / ¥11,000. Travelling
             solo? One set per day can be ordered at half the two-person
-            price. The ochazuke breakfast set (vegan &amp; gluten-free) is
+            price (not available for wagyu sukiyaki). The ochazuke breakfast set (vegan &amp; gluten-free) is
             ¥1,500 per person.
           </p>
         </details>
@@ -370,9 +371,16 @@ export default function FaqPage() {
           <summary>Can you forward my luggage to my next stop?</summary>
           <p>
             Between Magome and Tsumago there&apos;s a no-reservation luggage
-            shuttle. Between Nagiso and Nojiri stations we run one ourselves —
-            just ask. For the wider Kiso area (Matsumoto to Nakatsugawa), NLTS
-            and Walk Lite offer luggage transfer with advance booking.
+            shuttle. Between Nagiso and Kiso-Fukushima (stops at Nojiri,
+            Suhara and Agematsu) we run the Luggage Bus once a day: booking
+            required by 21:00 the day before, paid (¥1,500 per zone plus
+            ¥1,500 per bag), closed Mondays and December–March. Details and
+            booking:{" "}
+            <a href="https://nakasendo-ebike.com/luggage-shuttle" target="_blank" rel="noopener noreferrer">
+              nakasendo-ebike.com/luggage-shuttle
+            </a>
+            . For the wider Kiso area (Matsumoto to Nakatsugawa), NLTS and Walk
+            Lite offer luggage transfer with advance booking.
           </p>
         </details>
         <details className="faq-item">
@@ -388,9 +396,9 @@ export default function FaqPage() {
         <details className="faq-item">
           <summary>How hard is the Magome Pass walk?</summary>
           <p>
-            Easy — sneakers are fine (sandals aren&apos;t recommended). In
-            winter, strap-on spikes for icy patches are a good idea; we rent
-            those too.
+            Easy — sneakers are fine (sandals aren&apos;t recommended). On
+            frosty days in November and March, strap-on spikes for icy
+            patches are a good idea; we rent those too.
           </p>
         </details>
         <details className="faq-item">

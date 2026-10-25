@@ -9,7 +9,6 @@ import {
   EBIKE_LP_URL,
   GOOGLE_MAP_URL,
   INSTAGRAM_URL,
-  RECRUIT_URL,
   WHATSAPP_URL_EN,
   WHATSAPP_URL_JA,
 } from "@/lib/site";
@@ -119,9 +118,6 @@ export function SiteFooter({ lang }: { lang: Lang }) {
           </a>
           <a href={GOOGLE_MAP_URL} target="_blank" rel="noopener noreferrer">
             {isJa ? "Google マップ" : "Google Maps"}
-          </a>
-          <a href={RECRUIT_URL}>
-            {isJa ? "求人 — 谷で働く(準備中)" : "Work with us (coming soon)"}
           </a>
         </div>
       </div>
