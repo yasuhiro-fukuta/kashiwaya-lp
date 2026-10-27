@@ -10,6 +10,10 @@
 // and a varying number of trailing spaces), so tab ids are looked up from
 // the sheet's htmlview page and every tab is validated by its own
 // "R８年１０月" header cell before use.
+//
+// ★The 金額 columns (G/N) are what Kashiwaya pays the caterer (原価).
+// Staff must never see cost prices, so they are NOT read at all; meal
+// prices come only from the「メニュー」sheet (= selling prices on the site).
 
 const ORDER_SHEET_ID =
   process.env.ORDER_SHEET_ID ?? "1UHVicDOlgA597o7ahXYOgP0bNQnKan_1t7kc2VfkXqc";
@@ -17,7 +21,7 @@ const ORDER_SHEET_ID =
 const BASE = `https://docs.google.com/spreadsheets/d/${ORDER_SHEET_ID}`;
 
 export const ORDERS_UNAVAILABLE_NOTE = `# 注文確認票 接続エラー（内部情報）
-現在、ほなみや（仕出し屋）と共有している注文確認票への接続に一時的に失敗している。食事の注文・仕込み・食事代について聞かれたら、予定表やDM台帳の内容を答えてもよいが、必ず「注文確認票（仕出し屋との最終合意）に接続できないため、仕出し屋に実際に届いている注文かは確認できていません」と添えること。`;
+現在、ほなみや（仕出し屋）と共有している注文確認票への接続に一時的に失敗している。食事の注文・仕込みについて聞かれたら、予定表やDM台帳の内容を答えてもよいが、必ず「注文確認票（仕出し屋との最終合意）に接続できないため、仕出し屋に実際に届いている注文かは確認できていません」と添えること。`;
 
 export type OrderLine = {
   date: string; // YYYY-MM-DD
@@ -26,7 +30,6 @@ export type OrderLine = {
   name: string;
   item: string;
   qty: string;
-  amount: string;
   note: string;
 };
 
@@ -144,9 +147,10 @@ function parseMonth(rows: string[][], year: number, month: number): OrderLine[] 
   const lines: OrderLine[] = [];
   // Column layout: B 日付 / C 曜日 / D 名前 / E 注文品 / F 数 / G 金額 (1F)
   //                I 日付 / J 曜日 / K 名前 / L 注文品 / M 数 / N 金額 (2F)
-  const sides: { room: "1F" | "2F"; day: number; d: number; n: number; i: number; q: number; a: number }[] = [
-    { room: "1F", day: 1, d: 2, n: 3, i: 4, q: 5, a: 6 },
-    { room: "2F", day: 8, d: 9, n: 10, i: 11, q: 12, a: 13 },
+  // 金額 (G/N) is the caterer's price = cost. Deliberately never read.
+  const sides: { room: "1F" | "2F"; day: number; d: number; n: number; i: number; q: number }[] = [
+    { room: "1F", day: 1, d: 2, n: 3, i: 4, q: 5 },
+    { room: "2F", day: 8, d: 9, n: 10, i: 11, q: 12 },
   ];
   const state = sides.map(() => ({ day: 0, name: "" }));
 
@@ -180,7 +184,6 @@ function parseMonth(rows: string[][], year: number, month: number): OrderLine[] 
         name: st.name,
         item,
         qty: cells[s.q] ?? "",
-        amount: cells[s.a] ?? "",
         note: notes.join(" / "),
       });
     });
@@ -245,7 +248,6 @@ function formatOrdersBlock(data: OrdersData): string {
       l.name ? `宿泊者:${l.name}` : "宿泊者:(記載なし)",
       `${l.item} ×${l.qty || "?"}`,
     ];
-    if (l.amount) parts.push(`¥${l.amount.replace(/^¥/, "")}`);
     if (l.note) parts.push(`備考:${l.note}`);
     return parts.join(" | ");
   });
@@ -257,16 +259,16 @@ function formatOrdersBlock(data: OrdersData): string {
 仕出し屋ほなみやと柏屋が共有している注文確認票。**仕出し屋と最終的に握れている食事注文はこれだけ**であり、実際に作られて届くのはこの表の内容である。
 
 ## 使い方のルール（最重要）
-- ★★食事の注文・仕込み・品目・数量・食事代について答えるときは、**この注文確認票を最優先の正**とする。予定表（CleaningBoard）の食事欄・フォーム注文・問い合わせ台帳（DM）は、この表に反映される前の途中経過である。
+- ★★食事の注文・仕込み・品目・数量について答えるときは、**この注文確認票を最優先の正**とする。予定表（CleaningBoard）の食事欄・フォーム注文・問い合わせ台帳（DM）は、この表に反映される前の途中経過である。
 - ★予定表やDM台帳に食事があるのに、この表に無い → 「⚠注文確認票に無い＝仕出し屋に未連絡の可能性（要確認）」と明記する。届く前提で答えない。
 - ★この表にあるのに予定表やDM台帳に無い・内容が違う → この表の内容（品目・数量）を正として答え、「予定表と食い違い」と添える。
 - ★数量の単位は「セット」：**夕食1セット＝2名分、朝食1セット＝1名分**（台帳・予定表の「人前」とは単位が違う）。例：鶏鍋+おにぎり ×1.5 ＝ 3名分、×0.5 ＝ 1名分、朝食 ×2 ＝ 2名分。人数を答えるときはこの換算で答え、照合も換算してから行う。
 - 夕食の品目は「鍋の種類+主食（おにぎり・ちらし等）」の形で書かれている。
-- 金額は表の金額をそのまま伝える。空欄なら「金額未記入」とし、計算で作らない。
+- ★★この表には金額を載せていない（仕出し屋への支払額＝原価なので、スタッフにもゲストにも絶対に出さない）。食事代を聞かれたら「食事メニューと料金」（HPと同じ売値・セット料金）だけで答える。原価・仕入れ値・仕出し屋への支払額を聞かれても答えない（「お答えできません」とだけ言う）。
 - 宿泊者名の後ろの「支払済」「（マスタとの齟齬OK）」などは柏屋側のメモなので、そのまま伝える。
 - この表に無い日・部屋は「注文確認票に注文なし」。推測で補わない。
 - この表はスタッフ専用。ゲストとの通常会話では存在にも内容にも触れない。
 ${missing.length ? `- 次の月はまだ読めていない: ${missing.join("、")}。その月の注文は「注文確認票が未作成のため未確認」と答える。\n` : ""}
-## 注文一覧（日付 | 部屋 | 宿泊者 | 品目 ×数量 | 金額）
+## 注文一覧（日付 | 部屋 | 宿泊者 | 品目 ×数量）
 ${body.join("\n") || "(この期間の注文なし)"}`;
 }
