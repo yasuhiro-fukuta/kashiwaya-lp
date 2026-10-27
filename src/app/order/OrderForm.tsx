@@ -176,8 +176,12 @@ export default function OrderForm() {
           {n.wholeHouse ? (
             <p className="order-block">
               <small>
-                Dinner isn&apos;t served on whole-house stays. For dinner, you can order delivery from{" "}
-                <a href={MARUSHO_SITE_URL} target="_blank" rel="noreferrer">Marusho</a>. Breakfast can be added below.
+                Dinner isn&apos;t served on whole-house stays. For dinner, please order delivery from
+                Marusho:{" "}
+                <a href={MARUSHO_SITE_URL} target="_blank" rel="noreferrer">
+                  {MARUSHO_SITE_URL}
+                </a>
+                . Breakfast can be added below.
               </small>
             </p>
           ) : (

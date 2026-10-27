@@ -19,6 +19,13 @@ export async function POST(req: Request) {
   const booking = String(body.booking ?? "").replace(/[^0-9A-Za-z-]/g, "").slice(0, 30);
   const lastName = String(body.lastName ?? "").trim().slice(0, 60);
   const email = String(body.email ?? "").trim().slice(0, 120);
+  // Don't take money we can't record: paid orders are written to the sheet.
+  if (!process.env.SHEET_WRITE_URL || !process.env.SHEET_WRITE_TOKEN) {
+    return Response.json({
+      ok: false,
+      error: "Online meal orders are temporarily unavailable. Please message us on WhatsApp (+81 90 3839 2354) to order.",
+    }, { status: 503 });
+  }
   if (!booking) return Response.json({ ok: false, error: "Please enter your Booking.com reservation number." }, { status: 400 });
 
   try {
