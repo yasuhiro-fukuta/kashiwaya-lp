@@ -28,15 +28,7 @@ export async function GET() {
     errors?: { code?: string; detail?: string }[];
   };
   if (!res.ok) {
-    // Diagnose: is this a sandbox token pasted into production?
-    const sb = await fetch("https://connect.squareupsandbox.com/v2/locations", {
-      headers: { Authorization: `Bearer ${token}`, "Square-Version": "2025-01-23" },
-      cache: "no-store",
-    });
     return Response.json({
-      sandboxTokenWorks: sb.ok,
-      tokenLength: token.length,
-      tokenHasWhitespace: /\s/.test(token),
       ok: false,
       status: res.status,
       errors: (body.errors ?? []).map((e) => e.code),

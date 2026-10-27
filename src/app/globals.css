@@ -1781,3 +1781,24 @@ section.full {
 /* sub pages: heading block under the fixed nav */
 .page-head { padding: 8.5rem 2rem 0; max-width: 1180px; margin: 0 auto; }
 .page-head .section-head { margin-bottom: 0; }
+
+/* ============ MEAL ORDER PAGE (/order) ============ */
+.order-page { max-width: 640px; margin: 0 auto; padding: 0 16px 64px; }
+.order-form { display: flex; flex-direction: column; gap: 16px; }
+.order-form label { display: flex; flex-direction: column; gap: 6px; font-size: 0.95rem; }
+.order-form input, .order-form select {
+  font: inherit; padding: 10px 12px; border: 1px solid var(--ink-soft);
+  border-radius: 6px; background: #fff; color: var(--ink); max-width: 100%;
+}
+.order-night { border: 1px solid var(--paper-deep); border-radius: 8px; padding: 12px 14px; background: #fffaf0; }
+.order-night[disabled] { opacity: 0.55; }
+.order-night legend { font-weight: 600; padding: 0 6px; }
+.order-block { display: flex; flex-direction: column; gap: 8px; margin-top: 8px; }
+.order-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.order-row select:first-child { flex: 1 1 220px; min-width: 0; }
+.order-link { background: none; border: 0; color: var(--ink-soft); text-decoration: underline; cursor: pointer; padding: 4px 0; font: inherit; align-self: flex-start; }
+.order-total { font-size: 1.2rem; font-weight: 600; }
+.order-error { color: #a12a1a; }
+.order-summary { padding-left: 1.2em; line-height: 1.8; }
+.order-form .btn-primary { align-self: flex-start; border: 0; cursor: pointer; }
+.order-form .btn-primary[disabled] { opacity: 0.5; cursor: default; }
