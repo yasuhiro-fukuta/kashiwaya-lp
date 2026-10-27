@@ -84,7 +84,7 @@ export async function findStay(lastName: string, arrival: string): Promise<Stay 
     const guests = rows.reduce((s, r) => s + (Number(String(r.guests).replace(/[^0-9]/g, "")) || 0), 0);
     nights.push({
       date: d,
-      room: (rows[0].room as "1F" | "2F"),
+      room: rows.some((r) => r.room === "1F") ? "1F" : "2F",
       guests,
       wholeHouse,
       bothRooms,

@@ -16,6 +16,18 @@ export type MenuOption = {
   persons: number; // people per set
   price: number; // JPY per set
   item: string; // DMからの食事注文 item name (鶏鍋 / 朝食 …)
+  boardLabel: string; // CleaningBoard meal label (kashiwayasheet CONFIG.MEALS)
+};
+
+/** DM-sheet item → the label CleaningBoard uses, so "(paid) X(n人前)" parses. */
+const BOARD_LABEL: Record<string, string> = {
+  鶏鍋: "Chicken Hot Pot",
+  豚しゃぶ: "Shabu-Shabu",
+  冷しゃぶ: "Cold Shabu-Shabu",
+  すき焼き: "Wagyu Sukiyaki",
+  ビーガン鍋: "Vegan Hot Pot & Chirashi",
+  ビーガン冷しゃぶ: "Vegan Cold Shabu-Shabu",
+  朝食: "Ochazuke Breakfast",
 };
 
 /** Map a menu row name to the item names used in the DM order sheet. */
@@ -47,6 +59,7 @@ export async function getMenuOptions(): Promise<MenuOption[] | null> {
       persons,
       price: r.price,
       item,
+      boardLabel: BOARD_LABEL[item] ?? item,
     });
   }
   return out;

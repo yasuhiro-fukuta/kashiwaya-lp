@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { SiteNav, SiteFooter } from "@/components/SiteChrome";
-import { getOrder, isPaid, setOrderMetadata, type SquareOrder } from "@/lib/square";
-import { appendDmOrders, type DmOrderRow } from "@/lib/sheetWrite";
+import { findOrdersForGuest, getOrder, isPaid, setOrderMetadata, type SquareOrder } from "@/lib/square";
+import { appendDmOrders, appendOverrides, type DmOrderRow, type OverrideRow } from "@/lib/sheetWrite";
 import { todayJst } from "@/lib/mealOrder";
 import { WHATSAPP_URL_EN } from "@/lib/site";
 
@@ -40,8 +40,44 @@ async function logOnce(order: SquareOrder): Promise<"logged" | "already" | "fail
         ].filter(Boolean).join(" / "),
       };
     });
+  // One CleaningOverride row per night+room, every item marked "(paid)" so
+  // staff on site never charge it again. The batch keys overrides by
+  // night+room and the LAST row wins, so the row must carry every paid item
+  // of that night — including earlier orders from this page by the same
+  // guest (a second order for the same night would otherwise hide the first).
+  const nightsHere = new Set(
+    (order.line_items ?? [])
+      .filter((li) => li.metadata?.date && li.metadata?.label)
+      .map((li) => `${li.metadata!.date}|${li.metadata!.room === "2F" ? "2F" : "1F"}`),
+  );
+  let paidOrders: SquareOrder[] = [order];
+  try {
+    const others = await findOrdersForGuest(md.guest ?? "");
+    paidOrders = [order, ...others.filter((o) => o.id !== order.id && isPaid(o))];
+  } catch (err) {
+    console.error("order/done: could not look up earlier orders", err);
+  }
+  const byNight = new Map<string, OverrideRow>();
+  for (const o of paidOrders) {
+    for (const li of o.line_items ?? []) {
+      const m = li.metadata;
+      if (!m?.date || !m?.label) continue;
+      const room = m.room === "2F" ? "2F" : "1F";
+      const k = `${m.date}|${room}`;
+      if (!nightsHere.has(k)) continue; // only rewrite nights this order touches
+      const part = `(paid) ${m.label}(${Number(m.persons) || 1}人前)`;
+      const cur = byNight.get(k);
+      if (cur) {
+        cur.meal += `, ${part}`;
+        if (!cur.memo!.includes(o.id)) cur.memo += ` ${o.id}`;
+      } else {
+        byNight.set(k, { date: m.date, room, meal: part, memo: `注文ページ Square支払済 ${o.id}` });
+      }
+    }
+  }
   try {
     await appendDmOrders(rows);
+    await appendOverrides([...byNight.values()]);
     await setOrderMetadata(order, { logged: "1" }).catch((e) => console.error("order/done: metadata", e));
     return "logged";
   } catch (err) {
