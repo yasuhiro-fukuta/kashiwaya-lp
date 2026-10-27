@@ -34,8 +34,26 @@ export async function GET() {
       errors: (body.errors ?? []).map((e) => e.code),
     });
   }
+  // Also confirm the sheet write API answers (ping only — writes nothing).
+  let sheetWrite: string = "env vars not set";
+  if (process.env.SHEET_WRITE_URL && process.env.SHEET_WRITE_TOKEN) {
+    try {
+      const r = await fetch(process.env.SHEET_WRITE_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ token: process.env.SHEET_WRITE_TOKEN, action: "ping" }),
+        redirect: "follow",
+        cache: "no-store",
+      });
+      const j = (await r.json().catch(() => ({}))) as { ok?: boolean; error?: string };
+      sheetWrite = j.ok ? "ok" : `error: ${j.error ?? r.status}`;
+    } catch (e) {
+      sheetWrite = `error: ${e instanceof Error ? e.message : String(e)}`;
+    }
+  }
   return Response.json({
     ok: true,
+    sheetWrite,
     location: body.location?.name,
     currency: body.location?.currency,
     status: body.location?.status,
