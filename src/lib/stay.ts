@@ -47,7 +47,7 @@ async function fetchBoard(): Promise<BoardRow[]> {
   return data.board;
 }
 
-export type Stay = { guestName: string; room: "1F" | "2F" | "Whole house"; nights: Night[] };
+export type Stay = { guestName: string; room: "1F" | "2F" | "1F + 2F"; nights: Night[] };
 
 /**
  * Find the stay whose guest name contains `lastName` and whose first night is
@@ -88,6 +88,6 @@ export async function findStay(lastName: string, arrival: string): Promise<Stay 
     next.setUTCDate(next.getUTCDate() + 1);
     d = next.toISOString().slice(0, 10);
   }
-  const room = nights.some((n) => n.wholeHouse) ? "Whole house" : nights[0].room;
+  const room = nights.some((n) => n.wholeHouse) ? "1F + 2F" : nights[0].room;
   return { guestName, room, nights };
 }

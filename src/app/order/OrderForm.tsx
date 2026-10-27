@@ -167,11 +167,11 @@ export default function OrderForm() {
       {nights.map((n) => (
         <fieldset key={n.date} className="order-night" disabled={!n.orderable}>
           <legend>
-            {niceDate(n.date)} · {n.wholeHouse ? "Whole house" : n.room}
+            {niceDate(n.date)} · {n.wholeHouse ? "1F + 2F" : n.room}
             {!n.orderable && " — closed"}
           </legend>
 
-          {!n.wholeHouse && (
+          {(
             <div className="order-block">
               <strong>Dinner</strong> <small>(one set feeds the number of people shown)</small>
               {(dinners[n.date] ?? []).map((p, i) => (
