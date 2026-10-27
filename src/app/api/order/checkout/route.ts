@@ -43,6 +43,7 @@ export async function POST(req: Request) {
         date: l.date,
         room: l.room,
         item: l.option.item,
+        label: l.option.boardLabel,
         persons: String(l.option.persons * l.sets),
         kind: l.option.kind,
       },

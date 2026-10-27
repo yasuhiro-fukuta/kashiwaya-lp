@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { SiteNav, SiteFooter } from "@/components/SiteChrome";
 import { getOrder, isPaid, setOrderMetadata, type SquareOrder } from "@/lib/square";
-import { appendDmOrders, type DmOrderRow } from "@/lib/sheetWrite";
+import { appendDmOrders, appendOverrides, type DmOrderRow, type OverrideRow } from "@/lib/sheetWrite";
 import { todayJst } from "@/lib/mealOrder";
 import { WHATSAPP_URL_EN } from "@/lib/site";
 
@@ -40,8 +40,23 @@ async function logOnce(order: SquareOrder): Promise<"logged" | "already" | "fail
         ].filter(Boolean).join(" / "),
       };
     });
+  // One CleaningOverride row per night+room, every item marked "(paid)" so
+  // staff on site never charge it again. (The batch keys overrides by
+  // night+room, so all of a night's items go in one row.)
+  const byNight = new Map<string, OverrideRow>();
+  for (const li of order.line_items ?? []) {
+    const m = li.metadata;
+    if (!m?.date || !m?.label) continue;
+    const room = m.room === "2F" ? "2F" : "1F";
+    const k = `${m.date}|${room}`;
+    const part = `(paid) ${m.label}(${Number(m.persons) || 1}人前)`;
+    const cur = byNight.get(k);
+    if (cur) cur.meal += `, ${part}`;
+    else byNight.set(k, { date: m.date, room, meal: part, memo: `注文ページ Square支払済 ${order.id}` });
+  }
   try {
     await appendDmOrders(rows);
+    await appendOverrides([...byNight.values()]);
     await setOrderMetadata(order, { logged: "1" }).catch((e) => console.error("order/done: metadata", e));
     return "logged";
   } catch (err) {
