@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { MARUSHO_SITE_URL } from "@/lib/site";
 
 type MenuOption = {
   id: string;
@@ -15,6 +16,7 @@ type Night = {
   room: string;
   guests: number;
   wholeHouse: boolean;
+  bothRooms: boolean;
   orderable: boolean;
 };
 
@@ -167,11 +169,18 @@ export default function OrderForm() {
       {nights.map((n) => (
         <fieldset key={n.date} className="order-night" disabled={!n.orderable}>
           <legend>
-            {niceDate(n.date)} · {n.wholeHouse ? "1F + 2F" : n.room}
+            {niceDate(n.date)} · {n.wholeHouse ? "Whole house" : n.bothRooms ? "1F + 2F" : n.room}
             {!n.orderable && " — closed"}
           </legend>
 
-          {(
+          {n.wholeHouse ? (
+            <p className="order-block">
+              <small>
+                Dinner isn&apos;t served on whole-house stays. For dinner, you can order delivery from{" "}
+                <a href={MARUSHO_SITE_URL} target="_blank" rel="noreferrer">Marusho</a>. Breakfast can be added below.
+              </small>
+            </p>
+          ) : (
             <div className="order-block">
               <strong>Dinner</strong> <small>(one set feeds the number of people shown)</small>
               {(dinners[n.date] ?? []).map((p, i) => (

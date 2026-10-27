@@ -11,6 +11,7 @@ type BoardRow = {
   guests: string;
   state: string;
   guestName: string;
+  note?: string;
 };
 
 const NIGHT_STATES = ["IN", "OUT→IN", "連泊"];
@@ -75,19 +76,24 @@ export async function findStay(lastName: string, arrival: string): Promise<Stay 
   for (let i = 0; i < 60; i++) {
     const rows = byDate.get(d);
     if (!rows) break;
-    const wholeHouse = rows.some((r) => r.room === "1F") && rows.some((r) => r.room === "2F");
+    // Whole-house stays are expanded to 1F + 2F rows tagged「一棟貸し」in the
+    // board note (kashiwayasheet House.gs). A guest who simply booked both
+    // rooms has no such tag and can still order dinner.
+    const wholeHouse = rows.some((r) => String(r.note ?? "").includes("一棟貸し"));
+    const bothRooms = rows.some((r) => r.room === "1F") && rows.some((r) => r.room === "2F");
     const guests = rows.reduce((s, r) => s + (Number(String(r.guests).replace(/[^0-9]/g, "")) || 0), 0);
     nights.push({
       date: d,
       room: (rows[0].room as "1F" | "2F"),
       guests,
       wholeHouse,
+      bothRooms,
       orderable: d >= cutoff,
     });
     const next = new Date(`${d}T00:00:00Z`);
     next.setUTCDate(next.getUTCDate() + 1);
     d = next.toISOString().slice(0, 10);
   }
-  const room = nights.some((n) => n.wholeHouse) ? "1F + 2F" : nights[0].room;
+  const room = byDate.get(arrival)!.length > 1 ? "1F + 2F" : nights[0].room;
   return { guestName, room, nights };
 }

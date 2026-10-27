@@ -72,7 +72,8 @@ export type Night = {
   date: string; // the evening (dinner) / the night before (breakfast)
   room: "1F" | "2F";
   guests: number;
-  wholeHouse: boolean; // both rooms booked by the same guest (informational)
+  wholeHouse: boolean; // whole-house rental: no dinner (breakfast only)
+  bothRooms: boolean; // 1F + 2F (whole house, or one group in both rooms)
   orderable: boolean;
 };
 
@@ -115,6 +116,9 @@ export function priceOrder(req: OrderRequest, nights: Night[], menu: MenuOption[
     if (!night.orderable) throw new Error(`Orders for ${l.date} are closed (${ORDER_DEADLINE_DAYS} days before).`);
     const option = menu.find((m) => m.id === l.optionId);
     if (!option) throw new Error("That menu item is no longer available. Please reload the page.");
+    if (option.kind === "dinner" && night.wholeHouse) {
+      throw new Error("Dinner is not served on whole-house stays — breakfast only.");
+    }
     const sets = Math.floor(Number(l.sets));
     if (!(sets >= 1 && sets <= 10)) throw new Error("Please choose 1–10 sets.");
     return { ...l, sets, option, amount: option.price * sets, room: night.room };
