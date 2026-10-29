@@ -93,8 +93,15 @@ export default async function OrderDonePage({
 }) {
   const { orderId } = await searchParams;
   let order: SquareOrder | null = null;
+  // Square redirects here right after payment, sometimes before the tender
+  // is attached to the order — so wait for it (up to ~15s) instead of
+  // reporting "couldn't confirm" on a payment that did go through.
   try {
-    if (orderId) order = await getOrder(orderId);
+    for (let i = 0; orderId && i < 8; i++) {
+      order = await getOrder(orderId);
+      if (order.metadata?.src !== "kashiwaya-order" || isPaid(order)) break;
+      await new Promise((r) => setTimeout(r, 2000));
+    }
   } catch (err) {
     console.error("order/done: getOrder", err);
   }
