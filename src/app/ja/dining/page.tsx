@@ -3,7 +3,7 @@ import Link from "next/link";
 import { ArrowRight, UtensilsCrossed, Beer } from "lucide-react";
 import ChatWidget from "@/components/ChatWidget";
 import { SiteNav, SiteFooter } from "@/components/SiteChrome";
-import { MARUSHO_SITE_URL, WHATSAPP_URL_JA } from "@/lib/site";
+import { MARUSHO_SITE_URL } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "食べる — 夕食・朝食",
@@ -43,7 +43,7 @@ export default function DiningPage() {
             柏屋のお食事はすべて事前予約制のオプションです。夕食は伝統の鍋、
             朝食はお茶漬け。食事制限にも合わせてお作りします。
             公式サイトからの直接予約なら予約手続きの画面でそのまま追加、
-            Booking.com経由の方はWhatsAppでご注文ください。
+            Booking.com経由の方は食事注文ページでご注文・お支払いください。
           </p>
         </div>
         <div className="meal-order">
@@ -103,10 +103,8 @@ export default function DiningPage() {
             <li>
               <strong>Booking.com経由の方:</strong>{" "}
               アドオンはご利用いただけないため、
-              <a href={WHATSAPP_URL_JA} target="_blank" rel="noopener noreferrer">
-                WhatsApp
-              </a>
-              でご注文ください。
+              <Link href="/order">食事注文ページ</Link>
+              で泊まる日ごとにご注文・お支払いください（お名前の姓とチェックイン日だけで使えます）。
             </li>
             <li>
               ご注文は<strong>ご宿泊の3日前まで</strong>。
@@ -160,7 +158,7 @@ export default function DiningPage() {
             <li>
               柏屋の<strong>朝食お茶漬けセット(お一人¥1,500)</strong>も
               一棟貸しでご注文いただけます — 直接予約なら予約時に
-              アドオンで、Booking.com経由ならWhatsAppでどうぞ。
+              アドオンで、Booking.com経由なら<Link href="/order">食事注文ページ</Link>でどうぞ。
             </li>
           </ul>
         </div>

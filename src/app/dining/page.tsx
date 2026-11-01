@@ -3,7 +3,7 @@ import Link from "next/link";
 import { ArrowRight, UtensilsCrossed, Beer } from "lucide-react";
 import ChatWidget from "@/components/ChatWidget";
 import { SiteNav, SiteFooter } from "@/components/SiteChrome";
-import { MARUSHO_SITE_URL, WHATSAPP_URL_EN } from "@/lib/site";
+import { MARUSHO_SITE_URL } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Dining — Dinner & Breakfast",
@@ -44,7 +44,7 @@ export default function DiningPage() {
             traditional nabe dinner and an ochazuke breakfast, cooked around
             any dietary needs. Booking direct on this site? Add them at
             checkout when you book your room. Booked via Booking.com?
-            Order your meals on WhatsApp.
+            Order and pay for your meals on our meal order page.
           </p>
         </div>
         <div className="meal-order">
@@ -103,11 +103,10 @@ export default function DiningPage() {
             </li>
             <li>
               <strong>Booked via Booking.com?</strong> Meal add-ons aren&apos;t
-              available there — order your meals on{" "}
-              <a href={WHATSAPP_URL_EN} target="_blank" rel="noopener noreferrer">
-                WhatsApp
-              </a>{" "}
-              instead.
+              available there — order and pay for each night&apos;s dinner and
+              breakfast on our{" "}
+              <Link href="/order">meal order page</Link> (your last name and
+              check-in date are all you need).
             </li>
             <li>
               Order at least <strong>3 days before your stay</strong>.
@@ -170,7 +169,8 @@ export default function DiningPage() {
               Prefer Kashiwaya&apos;s <strong>ochazuke breakfast set
               (¥1,500 per person)</strong>? It&apos;s available for
               whole-house stays too &mdash; add it at checkout when booking
-              direct, or order it on WhatsApp if you booked via Booking.com.
+              direct, or on our <Link href="/order">meal order page</Link> if
+              you booked via Booking.com.
             </li>
           </ul>
         </div>
