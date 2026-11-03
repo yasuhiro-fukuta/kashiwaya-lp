@@ -19,7 +19,7 @@ export function wantsDmLog(text: string): boolean {
 
 // Injected in staff mode when the ledger was deliberately not read.
 export const DMLOG_NOT_LOADED_NOTE = `# 問い合わせ台帳（DM記録）は今回読んでいない（内部情報）
-ゲストとのDMのやり取り（到着時刻・送迎・DMで受けた注文・支払い状況など）は、この回答では確認していない。回答に「## DM記録」の節は作らない。「権限がない」「参照できない」「やっくんに確認して」とは書かない（読んでいないだけで、聞けば読める）。代わりに回答の最後に1行だけ「※DMのやり取りは見ていません。必要なら「DMも見て」と付けて聞いてください」と添える。`;
+ゲストとのDMのやり取り（到着時刻・送迎・DMで受けた注文・支払い状況など）は、この回答では確認していない。回答に「## DM記録」の節は作らない。「権限がない」「参照できない」「やっくんに確認して」とは書かない（読んでいないだけで、聞けば読める）。DMを見ていないことの断り書きも付けない。`;
 
 type DmLedgerData = {
   generatedAt?: string;
