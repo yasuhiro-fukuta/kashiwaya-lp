@@ -151,7 +151,7 @@ export default function StayPage() {
                   <li>The entire 140-year-old kominka, for one group</li>
                   <li>Both floors (140 m&sup2;) &middot; garden &amp; kitchen all to yourselves</li>
                   <li>Offered on select dates only &mdash; about one night a week</li>
-                  <li>Unmanned stay &mdash; self check-in via key box</li>
+                  <li>Unmanned stay &mdash; self check-in (key with a bell in the mailbox by the front door)</li>
                   <li>
                     Kashiwaya&apos;s dinner isn&apos;t available &mdash;
                     local shop{" "}
