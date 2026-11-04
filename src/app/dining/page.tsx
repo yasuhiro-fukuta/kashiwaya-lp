@@ -59,28 +59,28 @@ export default function DiningPage() {
           </div>
           <ul className="food-menu">
             <li>
-              <span>Chicken hot pot dinner (serves 2 / 3)</span>
-              <span>¥6,000 / ¥8,000</span>
+              <span>Chicken hot pot dinner (serves 2 / each extra person)</span>
+              <span>¥6,000 / +¥2,000</span>
             </li>
             <li>
-              <span>Pork shabu-shabu hot pot dinner (serves 2 / 3)</span>
-              <span>¥8,000 / ¥11,000</span>
+              <span>Pork shabu-shabu hot pot dinner (serves 2 / each extra person)</span>
+              <span>¥8,000 / +¥3,000</span>
             </li>
             <li>
-              <span>Pork chilled shabu (rei-shabu) dinner (serves 2 / 3)</span>
-              <span>¥8,000 / ¥11,000</span>
+              <span>Pork chilled shabu (rei-shabu) dinner (serves 2 / each extra person)</span>
+              <span>¥8,000 / +¥3,000</span>
             </li>
             <li>
-              <span>Wagyu sukiyaki dinner (serves 2 / 3)</span>
-              <span>¥10,000 / ¥14,000</span>
+              <span>Wagyu sukiyaki dinner (serves 2 / serves 4 / each extra 2 people; even numbers only)</span>
+              <span>¥10,000 / ¥18,000 / +¥8,000</span>
             </li>
             <li>
-              <span>Vegan gluten-free hot pot dinner (serves 2 / 3)</span>
-              <span>¥8,000 / ¥11,000</span>
+              <span>Vegan gluten-free hot pot dinner (serves 2 / each extra person)</span>
+              <span>¥8,000 / +¥3,000</span>
             </li>
             <li>
-              <span>Vegan gluten-free chilled pot dinner (serves 2 / 3)</span>
-              <span>¥8,000 / ¥11,000</span>
+              <span>Vegan gluten-free chilled pot dinner (serves 2 / each extra person)</span>
+              <span>¥8,000 / +¥3,000</span>
             </li>
             <li>
               <span>Ochazuke breakfast set (vegan &amp; gluten-free)</span>

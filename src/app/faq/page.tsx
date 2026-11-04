@@ -303,10 +303,12 @@ export default function FaqPage() {
         <details className="faq-item">
           <summary>How much are dinner and breakfast?</summary>
           <p>
-            Dinner sets come in two sizes (serves 2 / serves 3): chicken hot
-            pot ¥6,000 / ¥8,000, pork shabu-shabu or chilled rei-shabu
-            ¥8,000 / ¥11,000, wagyu sukiyaki ¥10,000 / ¥14,000, and vegan
-            gluten-free hot or chilled pots ¥8,000 / ¥11,000. Travelling
+            Dinner sets start at 2 people, plus a set price for each extra
+            person: chicken hot pot ¥6,000 for 2 (+¥2,000 per extra person),
+            pork shabu-shabu or chilled rei-shabu ¥8,000 for 2 (+¥3,000), and
+            vegan gluten-free hot or chilled pots ¥8,000 for 2 (+¥3,000).
+            Wagyu sukiyaki comes in even numbers only: ¥10,000 for 2, ¥18,000
+            for 4, then +¥8,000 for every 2 more people. Travelling
             solo? One set per day can be ordered at half the two-person
             price. The ochazuke breakfast set (vegan &amp; gluten-free) is
             ¥1,500 per person.
