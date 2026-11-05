@@ -225,8 +225,10 @@ export default function FaqPage() {
             shabu-shabu on the 5th: add both sets at checkout, then message
             us &quot;Sukiyaki on the 3rd, Shabu-shabu on the 5th&quot;. The
             same goes for breakfast mornings. Booked via Booking.com? Order
-            your meals on WhatsApp, with the same name as your room booking.
-            Orders are accepted up to 3 days before your stay — see the{" "}
+            and pay for each night&apos;s meals on our{" "}
+            <Link href="/order">meal order page</Link> (your last name and
+            check-in date are all you need). Orders are accepted up to 3 days
+            before your stay — see the{" "}
             <Link href="/dining">Dining page</Link> for the menu.
           </p>
         </details>

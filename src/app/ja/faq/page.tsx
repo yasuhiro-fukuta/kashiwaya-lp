@@ -181,8 +181,8 @@ export default function FaqPage() {
             </a>
             で到着時刻をお知らせください。荷物の配送や、チェックイン前後の
             アクティビティのご希望もあわせてどうぞ。お食事は公式サイトなら
-            予約時にアドオンで追加、Booking.com経由の方はWhatsAppで
-            ご注文ください。
+            予約時にアドオンで追加、Booking.com経由の方は
+            <Link href="/order">食事注文ページ</Link>でご注文・お支払いください。
           </p>
         </details>
         <details className="faq-item">
