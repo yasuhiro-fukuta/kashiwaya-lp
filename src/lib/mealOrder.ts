@@ -136,6 +136,11 @@ export function buildNights(arrival: string, count: number, stayType: string, gu
   });
 }
 
+/** Mark each night as whole-house or rooms from the dates Lodgify sells the house on. */
+export function applyHouseNights(nights: Night[], house: Set<string>): Night[] {
+  return nights.map((n) => ({ ...n, wholeHouse: house.has(n.date), bothRooms: house.has(n.date) }));
+}
+
 /**
  * Validate an order against the guest's nights and the live menu.
  * Throws an Error with a guest-readable message when something is off.

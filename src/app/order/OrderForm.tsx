@@ -44,7 +44,6 @@ export default function OrderForm() {
   const [arrival, setArrival] = useState("");
   const [email, setEmail] = useState("");
   const [nightCount, setNightCount] = useState(1);
-  const [stayType, setStayType] = useState<"room" | "house">("room");
   const [guests, setGuests] = useState(2);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
@@ -67,7 +66,7 @@ export default function OrderForm() {
       const res = await fetch("/api/order/stay", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ lastName, arrival, booking, nights: nightCount, stayType, guests }),
+        body: JSON.stringify({ lastName, arrival, booking, nights: nightCount, guests }),
       });
       const data = await res.json();
       if (!data.ok) throw new Error(data.error);
@@ -121,7 +120,7 @@ export default function OrderForm() {
       const res = await fetch("/api/order/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ booking, lastName, arrival, nights: nightCount, stayType, guests, email, time, rice, lines }),
+        body: JSON.stringify({ booking, lastName, arrival, nights: nightCount, guests, email, time, rice, lines }),
       });
       const data = await res.json();
       if (!data.ok) throw new Error(data.error);
@@ -155,13 +154,6 @@ export default function OrderForm() {
                 {k} {k === 1 ? "night" : "nights"}
               </option>
             ))}
-          </select>
-        </label>
-        <label>
-          What did you book?
-          <select value={stayType} onChange={(e) => setStayType(e.target.value === "house" ? "house" : "room")}>
-            <option value="room">A private room</option>
-            <option value="house">The whole house</option>
           </select>
         </label>
         <label>

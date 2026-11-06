@@ -180,3 +180,54 @@ export async function findStayInLodgify(lastName: string, arrival: string, booki
   if (nights.length === 0) return null;
   return { guestName: String(hit.guest?.name ?? lastName), room: bothRooms ? "1F + 2F" : nights[0].room, nights };
 }
+
+// ---- Whole-house or rooms, decided from the date (2026-11-06 社長決定) ----
+// Lodgify sells the whole house (room type 917713) only on chosen dates; on
+// the other dates it is a closed period and the two rooms are sold instead.
+// A date is a whole-house night when the house is booked or still open for
+// sale on it. Guests no longer choose this on the order page.
+const HOUSE_PROPERTY_ID = 850548;
+const HOUSE_ROOM_TYPE_ID = 917713;
+
+type AvailabilityPeriod = {
+  start: string;
+  end: string;
+  available: number;
+  closed_period: unknown;
+  bookings?: { id: number }[];
+};
+
+/** The dates in [start, end] that are whole-house nights. Throws when Lodgify can't be read. */
+export async function houseNights(start: string, end: string): Promise<Set<string>> {
+  const url = process.env.INBOX_API_URL || DEFAULT_INBOX_API_URL;
+  const token = process.env.INBOX_API_TOKEN || process.env.SHEET_WRITE_TOKEN;
+  if (!token) throw new Error("INBOX_API_TOKEN / SHEET_WRITE_TOKEN not set");
+  const res = await fetch(url, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      token,
+      action: "lodgify.get",
+      path: `/v2/availability/${HOUSE_PROPERTY_ID}/${HOUSE_ROOM_TYPE_ID}?start=${start}&end=${end}`,
+    }),
+    cache: "no-store",
+    redirect: "follow",
+  });
+  if (!res.ok) throw new Error(`inbox api ${res.status}`);
+  const data = (await res.json()) as { ok?: boolean; body?: unknown; error?: string };
+  if (!data.ok) throw new Error(`inbox api: ${data.error ?? "not ok"}`);
+  const body = typeof data.body === "string" ? JSON.parse(data.body) : data.body;
+  const periods = ((body as { periods?: AvailabilityPeriod[] }[] | null)?.[0]?.periods ?? []) as AvailabilityPeriod[];
+  const out = new Set<string>();
+  for (const p of periods) {
+    const house = (p.bookings?.length ?? 0) > 0 || (!p.closed_period && Number(p.available) > 0);
+    if (!house) continue;
+    for (let d = p.start; d <= p.end; ) {
+      out.add(d);
+      const n = new Date(`${d}T00:00:00Z`);
+      n.setUTCDate(n.getUTCDate() + 1);
+      d = n.toISOString().slice(0, 10);
+    }
+  }
+  return out;
+}

@@ -27,7 +27,7 @@ function langTargets(pathname: string): { en: string; ja: string } {
 }
 
 /** 固定ナビ。solid=true のページ(ヒーローなし)では常に不透明スタイル。 */
-export function SiteNav({ lang, solid = false }: { lang: Lang; solid?: boolean }) {
+export function SiteNav({ lang, solid = false, hideBook = false }: { lang: Lang; solid?: boolean; hideBook?: boolean }) {
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname() ?? "/";
   const t = langTargets(pathname);
@@ -64,9 +64,11 @@ export function SiteNav({ lang, solid = false }: { lang: Lang; solid?: boolean }
             日本語
           </Link>
         </div>
-        <Link href={isJa ? "/ja/stay#book" : "/stay#book"} className="nav-book">
-          {isJa ? "予約する" : "Book"} <ArrowRight size={14} />
-        </Link>
+        {!hideBook && (
+          <Link href={isJa ? "/ja/stay#book" : "/stay#book"} className="nav-book">
+            {isJa ? "予約する" : "Book"} <ArrowRight size={14} />
+          </Link>
+        )}
         <ShareMenu lang={lang} />
       </div>
     </nav>
