@@ -1800,6 +1800,6 @@ section.full {
 .order-total { font-size: 1.2rem; font-weight: 600; }
 .order-error { color: #a12a1a; }
 .order-summary { padding-left: 1.2em; line-height: 1.8; }
-.order-form .btn-primary { align-self: flex-start; border: 0; cursor: pointer; background: var(--rust); color: #fff; font-weight: 600; padding: 1rem 1.8rem; font-size: 1rem; }
+.order-form .btn-primary { align-self: flex-start; border: 0; cursor: pointer; background: var(--rust); color: #fff; font-family: var(--sans); font-weight: 600; padding: 1rem 1.8rem; font-size: 1rem; }
 .order-form .btn-primary:hover { background: #9a4530; color: #fff; }
 .order-form .btn-primary[disabled] { opacity: 0.5; cursor: default; }
