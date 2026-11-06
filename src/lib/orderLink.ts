@@ -48,6 +48,12 @@ async function locate(o: SquareOrder): Promise<Stay | null> {
   return findStay(md.lastName ?? md.guest ?? "", arrival, booking).catch(() => null);
 }
 
+/**
+ * Orders whose sheet rows were already written before marking them as logged
+ * failed (Square metadata limit, 2026-11-07). Only mark them; don't append again.
+ */
+const ALREADY_IN_SHEET = new Set<string>(["aSCglcPwLZGgGC4tJ5w3xWkYaXPZY"]);
+
 export async function linkPendingOrders(): Promise<LinkReport> {
   const report: LinkReport = { linked: [], unmatched: [], problems: [], cancelled: [], skipped: 0 };
   const all = await listOrderPageOrders();
@@ -134,8 +140,10 @@ export async function linkPendingOrders(): Promise<LinkReport> {
     }
 
     try {
-      await appendDmOrders(rows);
-      await appendOverrides([...byNight.values()]);
+      if (!ALREADY_IN_SHEET.has(o.id)) {
+        await appendDmOrders(rows);
+        await appendOverrides([...byNight.values()]);
+      }
       await setOrderMetadata(o, { logged: "1", guest: stay.guestName.slice(0, 200) });
       report.linked.push({ orderId: o.id, guest: stay.guestName, room: stay.room, booking, items: items(o) });
     } catch (err) {
