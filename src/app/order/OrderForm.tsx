@@ -13,7 +13,7 @@ type MenuOption = {
 
 type Night = {
   date: string;
-  room: string;
+  room: string; // "" = not linked yet
   guests: number;
   wholeHouse: boolean;
   bothRooms: boolean;
@@ -43,6 +43,9 @@ export default function OrderForm() {
   const [lastName, setLastName] = useState("");
   const [arrival, setArrival] = useState("");
   const [email, setEmail] = useState("");
+  const [nightCount, setNightCount] = useState(1);
+  const [stayType, setStayType] = useState<"room" | "house">("room");
+  const [guests, setGuests] = useState(2);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
 
@@ -56,7 +59,7 @@ export default function OrderForm() {
   const dinnerMenu = menu.filter((m) => m.kind === "dinner");
   const breakfast = menu.find((m) => m.kind === "breakfast");
 
-  async function findStay(e: React.FormEvent) {
+  async function startOrder(e: React.FormEvent) {
     e.preventDefault();
     setError("");
     setBusy(true);
@@ -64,7 +67,7 @@ export default function OrderForm() {
       const res = await fetch("/api/order/stay", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ lastName, arrival, booking }),
+        body: JSON.stringify({ lastName, arrival, booking, nights: nightCount, stayType, guests }),
       });
       const data = await res.json();
       if (!data.ok) throw new Error(data.error);
@@ -118,7 +121,7 @@ export default function OrderForm() {
       const res = await fetch("/api/order/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ booking, lastName, arrival, email, time, rice, lines }),
+        body: JSON.stringify({ booking, lastName, arrival, nights: nightCount, stayType, guests, email, time, rice, lines }),
       });
       const data = await res.json();
       if (!data.ok) throw new Error(data.error);
@@ -131,7 +134,7 @@ export default function OrderForm() {
 
   if (!nights) {
     return (
-      <form className="order-form" onSubmit={findStay}>
+      <form className="order-form" onSubmit={startOrder}>
         <label>
           Booking.com reservation number
           <input value={booking} onChange={(e) => setBooking(e.target.value)} inputMode="numeric" required />
@@ -145,12 +148,39 @@ export default function OrderForm() {
           <input type="date" value={arrival} onChange={(e) => setArrival(e.target.value)} required />
         </label>
         <label>
+          Number of nights
+          <select value={nightCount} onChange={(e) => setNightCount(Number(e.target.value))}>
+            {[1, 2, 3, 4, 5, 6, 7].map((k) => (
+              <option key={k} value={k}>
+                {k} {k === 1 ? "night" : "nights"}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label>
+          What did you book?
+          <select value={stayType} onChange={(e) => setStayType(e.target.value === "house" ? "house" : "room")}>
+            <option value="room">A private room</option>
+            <option value="house">The whole house</option>
+          </select>
+        </label>
+        <label>
+          Number of guests
+          <select value={guests} onChange={(e) => setGuests(Number(e.target.value))}>
+            {[1, 2, 3, 4, 5, 6].map((k) => (
+              <option key={k} value={k}>
+                {k}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label>
           Email for the receipt (optional)
           <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} autoComplete="email" />
         </label>
         {error && <p className="order-error">{error}</p>}
         <button className="btn-primary" type="submit" disabled={busy}>
-          {busy ? "Checking…" : "Find my stay"}
+          {busy ? "Loading…" : "Choose meals"}
         </button>
       </form>
     );
@@ -169,7 +199,8 @@ export default function OrderForm() {
       {nights.map((n) => (
         <fieldset key={n.date} className="order-night" disabled={!n.orderable}>
           <legend>
-            {niceDate(n.date)} · {n.wholeHouse ? "Whole house" : n.bothRooms ? "1F + 2F" : n.room}
+            {niceDate(n.date)}
+            {n.wholeHouse ? " · Whole house" : ""}
             {!n.orderable && " — closed"}
           </legend>
 
@@ -256,6 +287,14 @@ export default function OrderForm() {
         </div>
       )}
 
+      <p>
+        <small>
+          Booking.com #{booking} · {lastName} ·{" "}
+          <button type="button" className="order-link" onClick={() => setNights(null)}>
+            Change details
+          </button>
+        </small>
+      </p>
       <p className="order-total">Total: {yen(total)}</p>
       {error && <p className="order-error">{error}</p>}
       <button className="btn-primary" type="button" onClick={pay} disabled={busy || lines.length === 0}>

@@ -1,28 +1,35 @@
-// POST {lastName, arrival, booking?} → the guest's nights + the live menu.
-// Returns only the matched guest's own nights (no other board data).
-import { findStay } from "@/lib/stay";
-import { getMenuOptions } from "@/lib/mealOrder";
+// POST {lastName, arrival, booking, nights, stayType, guests} → the nights to
+// order for + the live menu.
+// 2026-11-06 社長決定：注文ページでは予約を照合しない（Booking.com → Lodgify の
+// 同期に時間差があるため）。入力どおりに夜を並べて注文・決済を受け、部屋と
+// 一棟貸しの確認は定時チェックが /api/order/link で後から紐づける。
+import { buildNights, getMenuOptions } from "@/lib/mealOrder";
 
 export const runtime = "nodejs";
 
 export async function POST(req: Request) {
-  const body = (await req.json().catch(() => ({}))) as { lastName?: string; arrival?: string; booking?: string };
+  const body = (await req.json().catch(() => ({}))) as {
+    lastName?: string;
+    arrival?: string;
+    booking?: string;
+    nights?: number;
+    stayType?: string;
+    guests?: number;
+  };
   const lastName = String(body.lastName ?? "").trim();
-  const arrival = String(body.arrival ?? "").trim();
   const booking = String(body.booking ?? "").replace(/[^0-9A-Za-z-]/g, "").slice(0, 30);
-  if (lastName.length < 2 || !/^\d{4}-\d{2}-\d{2}$/.test(arrival)) {
-    return Response.json({ ok: false, error: "Please enter your last name and check-in date." }, { status: 400 });
+  if (!booking) return Response.json({ ok: false, error: "Please enter your Booking.com reservation number." }, { status: 400 });
+  if (lastName.length < 2) return Response.json({ ok: false, error: "Please enter your last name." }, { status: 400 });
+  let nights;
+  try {
+    nights = buildNights(String(body.arrival ?? "").trim(), Number(body.nights), String(body.stayType ?? ""), Number(body.guests));
+  } catch (err) {
+    return Response.json({ ok: false, error: err instanceof Error ? err.message : "Please check your details." }, { status: 400 });
   }
   try {
-    const [stay, menu] = await Promise.all([findStay(lastName, arrival, booking), getMenuOptions()]);
+    const menu = await getMenuOptions();
     if (!menu) return Response.json({ ok: false, error: "The menu is temporarily unavailable. Please try again in a few minutes." }, { status: 503 });
-    if (!stay) {
-      return Response.json({
-        ok: false,
-        error: "We couldn't find a stay with that last name and check-in date. Please check both, or message us on WhatsApp.",
-      }, { status: 404 });
-    }
-    return Response.json({ ok: true, room: stay.room, nights: stay.nights, menu });
+    return Response.json({ ok: true, nights, menu });
   } catch (err) {
     console.error("order/stay:", err);
     return Response.json({ ok: false, error: "Something went wrong. Please try again in a few minutes." }, { status: 500 });

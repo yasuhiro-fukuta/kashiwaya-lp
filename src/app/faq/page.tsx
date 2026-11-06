@@ -235,10 +235,11 @@ export default function FaqPage() {
         <details className="faq-item">
           <summary>Can I cancel a meal order?</summary>
           <p>
-            Yes — cancellation is free with a full refund up to 4 days before
-            your stay. From 3 days before onward, meal orders are
-            non-refundable, as the meals are already being prepared. To cancel,
-            please message us on WhatsApp.
+            Yes. Meal orders follow the same cancellation policy as room
+            bookings: 100% refundable if cancelled 7 days before arrival or
+            earlier, non-refundable after that. If your room booking is
+            cancelled, we cancel your meals on the same terms — no need to
+            message us. To cancel meals only, please message us on WhatsApp.
           </p>
         </details>
         <details className="faq-item">
@@ -290,8 +291,7 @@ export default function FaqPage() {
           <p>
             Prepayments are 100% refundable if you cancel 7 days before
             arrival or earlier; cancellations after that are non-refundable.
-            (Meal orders follow their own policy — free until 4 days before
-            your stay, non-refundable from 3 days before.)
+            Meal orders follow the same policy.
           </p>
         </details>
         <details className="faq-item">

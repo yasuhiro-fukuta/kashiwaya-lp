@@ -1,10 +1,12 @@
 // POST OrderRequest → a Square hosted checkout URL.
-// Everything is re-checked server-side: the stay (name + check-in date), the
-// order deadline and the prices (from the「メニュー」sheet). The client never
-// sends a price.
+// Re-checked server-side: the nights (from what the guest typed), the order
+// deadline and the prices (from the「メニュー」sheet). The client never sends
+// a price.
+// 2026-11-06 社長決定：ここでは予約を照合しない。支払い済みの注文は
+// /api/order/link（定時チェックが呼ぶ）が Booking 予約番号で Lodgify の予約に
+// 紐づけてから、シート（DMからの食事注文・CleaningOverride）に書く。
 import { randomUUID } from "crypto";
-import { findStay } from "@/lib/stay";
-import { getMenuOptions, priceOrder, type OrderRequest } from "@/lib/mealOrder";
+import { buildNights, getMenuOptions, priceOrder, type OrderRequest } from "@/lib/mealOrder";
 import { createPaymentLink } from "@/lib/square";
 import { SITE_URL } from "@/lib/site";
 
@@ -19,6 +21,7 @@ export async function POST(req: Request) {
   const booking = String(body.booking ?? "").replace(/[^0-9A-Za-z-]/g, "").slice(0, 30);
   const lastName = String(body.lastName ?? "").trim().slice(0, 60);
   const email = String(body.email ?? "").trim().slice(0, 120);
+  const arrival = String(body.arrival ?? "").trim();
   // Don't take money we can't record: paid orders are written to the sheet.
   if (!process.env.SHEET_WRITE_URL || !process.env.SHEET_WRITE_TOKEN) {
     return Response.json({
@@ -27,13 +30,16 @@ export async function POST(req: Request) {
     }, { status: 503 });
   }
   if (!booking) return Response.json({ ok: false, error: "Please enter your Booking.com reservation number." }, { status: 400 });
+  if (lastName.length < 2) return Response.json({ ok: false, error: "Please enter your last name." }, { status: 400 });
 
   try {
-    const [stay, menu] = await Promise.all([findStay(lastName, String(body.arrival ?? ""), booking), getMenuOptions()]);
-    if (!stay || !menu) {
-      return Response.json({ ok: false, error: "We couldn't confirm your stay. Please reload and try again." }, { status: 404 });
+    const stayType = body.stayType === "house" ? "house" : "room";
+    const nights = buildNights(arrival, Number(body.nights), stayType, Number(body.guests));
+    const menu = await getMenuOptions();
+    if (!menu) {
+      return Response.json({ ok: false, error: "The menu is temporarily unavailable. Please try again in a few minutes." }, { status: 503 });
     }
-    const priced = priceOrder({ ...body, booking, lastName }, stay.nights, menu);
+    const priced = priceOrder({ ...body, booking, lastName }, nights, menu);
 
     const lineItems = priced.map((l) => ({
       name: `${shortDate(l.date)} · ${l.option.label}`,
@@ -41,7 +47,6 @@ export async function POST(req: Request) {
       base_price_money: { amount: l.option.price, currency: "JPY" as const },
       metadata: {
         date: l.date,
-        room: l.room,
         item: l.option.item,
         label: l.option.boardLabel,
         persons: String(l.option.persons * l.sets),
@@ -57,7 +62,11 @@ export async function POST(req: Request) {
       metadata: {
         src: "kashiwaya-order",
         booking,
-        guest: stay.guestName.slice(0, 200),
+        lastName: lastName.slice(0, 200),
+        arrival,
+        nights: String(nights.length),
+        stayType,
+        guests: String(nights[0].guests),
         time: body.time,
         rice: body.rice,
       },
@@ -69,7 +78,7 @@ export async function POST(req: Request) {
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);
     console.error("order/checkout:", msg);
-    // priceOrder throws guest-readable messages; Square errors start with "square".
+    // buildNights / priceOrder throw guest-readable messages; Square errors start with "square".
     const guestMsg = msg.startsWith("square") || msg.includes("not set")
       ? "Payment could not be started. Please try again in a few minutes."
       : msg;

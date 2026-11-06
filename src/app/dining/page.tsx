@@ -117,8 +117,8 @@ export default function DiningPage() {
               WhatsApp.
             </li>
             <li>
-              Cancellation is free until 4 days before your stay;
-              non-refundable from 3 days before.
+              Cancellation follows the same policy as your room: 100% refundable
+              up to 7 days before arrival, non-refundable after.
             </li>
             <li>
               <strong>Luggage transport</strong> and <strong>activities</strong>{" "}

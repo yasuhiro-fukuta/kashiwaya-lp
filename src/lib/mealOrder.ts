@@ -83,7 +83,7 @@ export function firstOrderableNight(): string {
 
 export type Night = {
   date: string; // the evening (dinner) / the night before (breakfast)
-  room: "1F" | "2F";
+  room: "1F" | "2F" | ""; // "" = not linked to a booking yet (the order page never looks it up)
   guests: number;
   wholeHouse: boolean; // whole-house rental: no dinner (breakfast only)
   bothRooms: boolean; // 1F + 2F (whole house, or one group in both rooms)
@@ -100,6 +100,9 @@ export type OrderRequest = {
   booking: string;
   lastName: string;
   arrival: string;
+  nights?: number; // number of nights (guest-entered)
+  stayType?: "room" | "house"; // what the guest says they booked
+  guests?: number;
   email?: string;
   time: string;
   rice: string;
@@ -109,8 +112,29 @@ export type OrderRequest = {
 export type PricedLine = OrderLine & {
   option: MenuOption;
   amount: number;
-  room: "1F" | "2F";
+  room: "1F" | "2F" | "";
 };
+
+export const MAX_NIGHTS = 7;
+export const MAX_GUESTS = 6;
+
+/**
+ * Nights from what the guest typed (2026-11-06 社長決定：注文ページでは予約を
+ * 照合しない。部屋・一棟貸しの確認は定時チェックが /api/order/link で後から行う).
+ */
+export function buildNights(arrival: string, count: number, stayType: string, guests: number): Night[] {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(arrival)) throw new Error("Please enter your check-in date.");
+  const n = Math.floor(Number(count));
+  if (!(n >= 1 && n <= MAX_NIGHTS)) throw new Error(`Please choose 1–${MAX_NIGHTS} nights.`);
+  const g = Math.floor(Number(guests));
+  if (!(g >= 1 && g <= MAX_GUESTS)) throw new Error(`Please choose 1–${MAX_GUESTS} guests.`);
+  const wholeHouse = stayType === "house";
+  const cutoff = firstOrderableNight();
+  return Array.from({ length: n }, (_, i) => {
+    const date = addDays(arrival, i);
+    return { date, room: "" as const, guests: g, wholeHouse, bothRooms: wholeHouse, orderable: date >= cutoff };
+  });
+}
 
 /**
  * Validate an order against the guest's nights and the live menu.

@@ -174,7 +174,7 @@ const structuredData = {
           name: "Can I cancel a meal order?",
           acceptedAnswer: {
             "@type": "Answer",
-            text: "Cancellation is free with a full refund up to 4 days before your stay. From 3 days before onward, meal orders are non-refundable, as the meals are already being prepared.",
+            text: "Meal orders follow the same cancellation policy as room bookings: 100% refundable if cancelled 7 days before arrival or earlier, non-refundable after that. If your room booking is cancelled, we cancel your meals on the same terms, so there is no need to message us.",
           },
         },
         {
@@ -286,7 +286,7 @@ const structuredData = {
           name: "What is the cancellation policy for room bookings at Kashiwaya Inn?",
           acceptedAnswer: {
             "@type": "Answer",
-            text: "100% of paid prepayments are refundable when canceled 7 days before arrival or earlier; 0% refundable if canceled after. Meal orders follow their own policy: free until 4 days before the stay, non-refundable from 3 days before.",
+            text: "100% of paid prepayments are refundable when canceled 7 days before arrival or earlier; 0% refundable if canceled after. Meal orders follow the same policy.",
           },
         },
         {

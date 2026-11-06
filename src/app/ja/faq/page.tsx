@@ -223,8 +223,7 @@ export default function FaqPage() {
           <p>
             到着7日前までのキャンセルは、前払い金を全額(100%)返金します。
             それ以降のキャンセルは返金できません。
-            (お食事のご注文は別ポリシーです — ご宿泊の4日前まで無料、
-            3日前以降は返金不可。)
+            お食事のご注文も同じ条件です。
           </p>
         </details>
         <details className="faq-item">
@@ -285,9 +284,10 @@ export default function FaqPage() {
         <details className="faq-item">
           <summary>食事のキャンセルはできますか?</summary>
           <p>
-            ご宿泊の4日前までは無料・全額返金です。3日前以降は準備が
-            始まっているため返金できません。キャンセルはWhatsAppで
-            ご連絡ください。
+            宿泊と同じ条件です。到着7日前までのキャンセルは全額返金、
+            それ以降は返金できません。宿泊をキャンセルされた場合は、
+            お食事も同じ条件でこちらで取り消しますので、ご連絡は不要です。
+            お食事だけを取り消す場合はWhatsAppでご連絡ください。
           </p>
         </details>
         <details className="faq-item">
