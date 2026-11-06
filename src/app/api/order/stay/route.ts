@@ -1,4 +1,4 @@
-// POST {lastName, arrival} → the guest's nights + the live menu.
+// POST {lastName, arrival, booking?} → the guest's nights + the live menu.
 // Returns only the matched guest's own nights (no other board data).
 import { findStay } from "@/lib/stay";
 import { getMenuOptions } from "@/lib/mealOrder";
@@ -6,14 +6,15 @@ import { getMenuOptions } from "@/lib/mealOrder";
 export const runtime = "nodejs";
 
 export async function POST(req: Request) {
-  const body = (await req.json().catch(() => ({}))) as { lastName?: string; arrival?: string };
+  const body = (await req.json().catch(() => ({}))) as { lastName?: string; arrival?: string; booking?: string };
   const lastName = String(body.lastName ?? "").trim();
   const arrival = String(body.arrival ?? "").trim();
+  const booking = String(body.booking ?? "").replace(/[^0-9A-Za-z-]/g, "").slice(0, 30);
   if (lastName.length < 2 || !/^\d{4}-\d{2}-\d{2}$/.test(arrival)) {
     return Response.json({ ok: false, error: "Please enter your last name and check-in date." }, { status: 400 });
   }
   try {
-    const [stay, menu] = await Promise.all([findStay(lastName, arrival), getMenuOptions()]);
+    const [stay, menu] = await Promise.all([findStay(lastName, arrival, booking), getMenuOptions()]);
     if (!menu) return Response.json({ ok: false, error: "The menu is temporarily unavailable. Please try again in a few minutes." }, { status: 503 });
     if (!stay) {
       return Response.json({

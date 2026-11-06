@@ -64,7 +64,7 @@ export default function OrderForm() {
       const res = await fetch("/api/order/stay", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ lastName, arrival }),
+        body: JSON.stringify({ lastName, arrival, booking }),
       });
       const data = await res.json();
       if (!data.ok) throw new Error(data.error);

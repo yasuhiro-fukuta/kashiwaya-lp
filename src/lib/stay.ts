@@ -54,7 +54,21 @@ export type Stay = { guestName: string; room: "1F" | "2F" | "1F + 2F"; nights: N
  * Find the stay whose guest name contains `lastName` and whose first night is
  * `arrival`. Returns null when nothing matches.
  */
-export async function findStay(lastName: string, arrival: string): Promise<Stay | null> {
+export async function findStay(lastName: string, arrival: string, booking = ""): Promise<Stay | null> {
+  const fromBoard = await findStayOnBoard(lastName, arrival).catch((err) => {
+    console.error("findStay: board lookup failed", err);
+    return null;
+  });
+  if (fromBoard) return fromBoard;
+  // The board is refreshed by an hourly batch, so a guest who booked minutes
+  // ago is not on it yet. Ask Lodgify directly before giving up.
+  return findStayInLodgify(lastName, arrival, booking).catch((err) => {
+    console.error("findStay: lodgify lookup failed", err);
+    return null;
+  });
+}
+
+async function findStayOnBoard(lastName: string, arrival: string): Promise<Stay | null> {
   const board = await fetchBoard();
   const mine = board.filter(
     (r) => NIGHT_STATES.includes(r.state) && (r.room === "1F" || r.room === "2F") && nameMatches(r.guestName, lastName),
@@ -96,4 +110,72 @@ export async function findStay(lastName: string, arrival: string): Promise<Stay 
   }
   const room = byDate.get(arrival)!.length > 1 ? "1F + 2F" : nights[0].room;
   return { guestName, room, nights };
+}
+
+// ---- Live fallback: Lodgify through the inbox API (kashiwaya-autoreply) ----
+
+// Lodgify room_type_id → room (kashiwaya_master_v2 LodgifyBookings).
+const ROOM_TYPES: Record<number, "1F" | "2F" | "HOUSE"> = { 860944: "1F", 860952: "2F", 917713: "HOUSE" };
+const DEFAULT_INBOX_API_URL =
+  "https://script.google.com/macros/s/AKfycbxwx6B3UXvr2vOzpWIGzFOJVbGAhCVPlIa6AxAim3Vs1r1LaIBeoJdyJKZ1iJdw5fNW/exec";
+
+type LodgifyBooking = {
+  arrival: string;
+  departure: string;
+  status: string;
+  source_text?: string | null;
+  guest?: { name?: string | null } | null;
+  rooms?: { room_type_id: number; people?: number }[];
+};
+
+async function fetchLodgifyArrivals(arrival: string): Promise<LodgifyBooking[]> {
+  const url = process.env.INBOX_API_URL || DEFAULT_INBOX_API_URL;
+  const token = process.env.INBOX_API_TOKEN || process.env.SHEET_WRITE_TOKEN;
+  if (!token) throw new Error("INBOX_API_TOKEN / SHEET_WRITE_TOKEN not set");
+  const res = await fetch(url, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      token,
+      action: "lodgify.get",
+      path: `/v2/reservations/bookings?page=1&size=10&stayFilter=ArrivalDate&stayFilterDate=${arrival}`,
+    }),
+    cache: "no-store",
+    redirect: "follow",
+  });
+  if (!res.ok) throw new Error(`inbox api ${res.status}`);
+  const data = (await res.json()) as { ok?: boolean; body?: unknown; error?: string };
+  if (!data.ok) throw new Error(`inbox api: ${data.error ?? "not ok"}`);
+  const body = typeof data.body === "string" ? JSON.parse(data.body) : data.body;
+  const items = (body as { items?: LodgifyBooking[] } | null)?.items;
+  return Array.isArray(items) ? items : [];
+}
+
+async function findStayInLodgify(lastName: string, arrival: string, booking: string): Promise<Stay | null> {
+  const items = (await fetchLodgifyArrivals(arrival)).filter((b) => b.status === "Booked" && b.arrival === arrival);
+  const bookingNo = booking.replace(/[^0-9A-Za-z]/g, "");
+  const hit =
+    (bookingNo.length >= 6 &&
+      items.find((b) => String(b.source_text ?? "").split("|")[0].replace(/[^0-9A-Za-z]/g, "") === bookingNo)) ||
+    items.find((b) => nameMatches(String(b.guest?.name ?? ""), lastName));
+  if (!hit) return null;
+
+  const kinds = (hit.rooms ?? []).map((r) => ROOM_TYPES[r.room_type_id]).filter(Boolean);
+  const wholeHouse = kinds.includes("HOUSE");
+  const has1F = wholeHouse || kinds.includes("1F");
+  const has2F = wholeHouse || kinds.includes("2F");
+  if (!has1F && !has2F) return null;
+  const bothRooms = has1F && has2F;
+  const guests = (hit.rooms ?? []).reduce((s, r) => s + (Number(r.people) || 0), 0);
+  const cutoff = firstOrderableNight();
+  const nights: Night[] = [];
+  let d = arrival;
+  for (let i = 0; i < 60 && d < hit.departure; i++) {
+    nights.push({ date: d, room: has1F ? "1F" : "2F", guests, wholeHouse, bothRooms, orderable: d >= cutoff });
+    const next = new Date(`${d}T00:00:00Z`);
+    next.setUTCDate(next.getUTCDate() + 1);
+    d = next.toISOString().slice(0, 10);
+  }
+  if (nights.length === 0) return null;
+  return { guestName: String(hit.guest?.name ?? lastName), room: bothRooms ? "1F + 2F" : nights[0].room, nights };
 }

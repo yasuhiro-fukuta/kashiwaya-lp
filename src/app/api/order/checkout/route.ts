@@ -29,7 +29,7 @@ export async function POST(req: Request) {
   if (!booking) return Response.json({ ok: false, error: "Please enter your Booking.com reservation number." }, { status: 400 });
 
   try {
-    const [stay, menu] = await Promise.all([findStay(lastName, String(body.arrival ?? "")), getMenuOptions()]);
+    const [stay, menu] = await Promise.all([findStay(lastName, String(body.arrival ?? ""), booking), getMenuOptions()]);
     if (!stay || !menu) {
       return Response.json({ ok: false, error: "We couldn't confirm your stay. Please reload and try again." }, { status: 404 });
     }
