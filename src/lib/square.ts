@@ -26,6 +26,8 @@ export type SquareOrder = {
   tenders?: { id: string }[];
   total_money?: Money;
   net_amount_due_money?: Money;
+  created_at?: string;
+  refunds?: { id: string; status?: string }[];
 };
 
 function env() {
@@ -117,14 +119,10 @@ export async function setOrderMetadata(order: SquareOrder, extra: Record<string,
   });
 }
 
-/**
- * Other orders from the meal order page for the same guest (paid or not),
- * newest first. Used to merge every paid item of one night into the single
- * CleaningOverride row the board reads for that night.
- */
-export async function findOrdersForGuest(guest: string): Promise<SquareOrder[]> {
+/** Every order created by the meal order page in the last `days` days, newest first. */
+export async function listOrderPageOrders(days = 120): Promise<SquareOrder[]> {
   const { locationId } = env();
-  const since = new Date(Date.now() - 180 * 86400_000).toISOString();
+  const since = new Date(Date.now() - days * 86400_000).toISOString();
   const out: SquareOrder[] = [];
   let cursor: string | undefined;
   for (let page = 0; page < 10; page++) {
@@ -137,12 +135,7 @@ export async function findOrdersForGuest(guest: string): Promise<SquareOrder[]> 
         sort: { sort_field: "CREATED_AT", sort_order: "DESC" },
       },
     });
-    for (const o of res.orders ?? []) {
-      const md = o.metadata ?? {};
-      // Match on the board guest name (exact, from our own lookup); the booking
-      // number is typed by the guest and may differ between orders.
-      if (md.src === "kashiwaya-order" && md.guest === guest) out.push(o);
-    }
+    for (const o of res.orders ?? []) if (o.metadata?.src === "kashiwaya-order") out.push(o);
     if (!res.cursor) break;
     cursor = res.cursor;
   }
