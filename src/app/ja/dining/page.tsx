@@ -113,7 +113,7 @@ export default function DiningPage() {
               お一人でのご利用は1日1組まで、<strong>2名分の半額</strong>で
               ご案内します — WhatsAppでご相談ください。
             </li>
-            <li>キャンセルは4日前まで無料・全額返金。3日前以降は返金不可です。</li>
+            <li>キャンセルは宿泊と同じ条件です（到着7日前まで全額返金、それ以降は返金不可）。</li>
             <li>
               <strong>荷物の配送</strong>や、チェックイン前後の
               <strong>アクティビティ</strong>もWhatsAppでご相談いただけます。

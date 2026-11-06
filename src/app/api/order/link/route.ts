@@ -2,7 +2,7 @@
 // sheet. Called by 定時チェック (6・12・18時). token = the sheet write API's
 // 合言葉 (SHEET_WRITE_TOKEN), so no new secret is needed.
 import { timingSafeEqual } from "crypto";
-import { linkPendingOrders } from "@/lib/orderLink";
+import { linkPendingOrders, markCancelHandled } from "@/lib/orderLink";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
@@ -14,12 +14,16 @@ function same(a: string, b: string): boolean {
 }
 
 export async function POST(req: Request) {
-  const body = (await req.json().catch(() => ({}))) as { token?: string };
+  const body = (await req.json().catch(() => ({}))) as { token?: string; markCancelHandled?: string };
   const secret = process.env.SHEET_WRITE_TOKEN ?? "";
   if (!secret || !same(String(body.token ?? ""), secret)) {
     return Response.json({ ok: false, error: "unauthorized" }, { status: 401 });
   }
   try {
+    if (body.markCancelHandled) {
+      await markCancelHandled(String(body.markCancelHandled));
+      return Response.json({ ok: true, marked: body.markCancelHandled });
+    }
     const report = await linkPendingOrders();
     return Response.json({ ok: true, ...report });
   } catch (err) {

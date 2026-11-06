@@ -4,17 +4,29 @@
 // POST /api/order/link を呼び、ここで Booking 予約番号 → Lodgify の予約に紐づける。
 // 紐づかない注文・一棟貸しの夕食などは書かずに返し、定時チェックが社長に聞く。
 
-import { findStay, findStayInLodgify, type Stay } from "@/lib/stay";
+import { fetchLodgifyArrivals, findStay, findStayInLodgify, nameMatches, type LodgifyBooking, type Stay } from "@/lib/stay";
 import { listOrderPageOrders, isPaid, setOrderMetadata, type SquareOrder } from "@/lib/square";
 import { appendDmOrders, appendOverrides, type DmOrderRow, type OverrideRow } from "@/lib/sheetWrite";
-import { todayJst } from "@/lib/mealOrder";
+import { addDays, todayJst } from "@/lib/mealOrder";
 
 export type LinkReport = {
   linked: { orderId: string; guest: string; room: string; booking: string; items: string[] }[];
   unmatched: { orderId: string; booking: string; lastName: string; arrival: string; createdAt: string; total: number; items: string[] }[];
   problems: { orderId: string; booking: string; guest: string; reason: string; total: number; items: string[] }[];
+  /** 紐づけ済みの注文で、宿泊がキャンセルされたもの（食事も宿泊と同じ条件で取消・返金。2026-11-06 社長決定） */
+  cancelled: {
+    orderId: string; booking: string; guest: string; arrival: string; total: number; items: string[];
+    lodgifyStatus: string; daysBeforeArrival: number | null; policy: string;
+  }[];
   skipped: number;
 };
+
+/** 食事のキャンセル規定＝宿泊と同じ：到着7日前までのキャンセルは全額返金、それ以降は返金なし */
+export const MEAL_FREE_CANCEL_DAYS = 7;
+
+function daysBetween(from: string, to: string): number {
+  return Math.round((Date.parse(`${to}T00:00:00Z`) - Date.parse(`${from}T00:00:00Z`)) / 86400_000);
+}
 
 function items(o: SquareOrder): string[] {
   return (o.line_items ?? []).map((li) => `${li.name} ×${li.quantity}`);
@@ -37,7 +49,7 @@ async function locate(o: SquareOrder): Promise<Stay | null> {
 }
 
 export async function linkPendingOrders(): Promise<LinkReport> {
-  const report: LinkReport = { linked: [], unmatched: [], problems: [], skipped: 0 };
+  const report: LinkReport = { linked: [], unmatched: [], problems: [], cancelled: [], skipped: 0 };
   const all = await listOrderPageOrders();
   const pending = all.filter((o) => isPaid(o) && o.metadata?.logged !== "1");
   report.skipped = all.length - pending.length;
@@ -133,5 +145,57 @@ export async function linkPendingOrders(): Promise<LinkReport> {
       });
     }
   }
+  await findCancelled(all, report);
   return report;
+}
+
+/**
+ * 紐づけ済み・未返金・これから到着の注文について、Lodgify の予約がキャンセルに
+ * なっていないか確かめる。見つけたら report.cancelled に入れる（返金は社長が
+ * Square で行う。Claude は返金しない）。社長が「返金しない」と決めた注文は
+ * metadata.cancelHandled=1 で以後出さない（markCancelHandled）。
+ */
+async function findCancelled(all: SquareOrder[], report: LinkReport) {
+  const today = todayJst();
+  const watch = all.filter(
+    (o) => isPaid(o) && o.metadata?.logged === "1" && o.metadata?.cancelHandled !== "1" && !(o.refunds ?? []).length,
+  );
+  const cache = new Map<string, LodgifyBooking[]>();
+  for (const o of watch) {
+    const md = o.metadata ?? {};
+    // Arrival: new orders carry it; older ones only have line dates.
+    const dates = (o.line_items ?? []).map((li) => li.metadata?.date).filter((d): d is string => !!d).sort();
+    const arrival = md.arrival || dates[0] || "";
+    if (!arrival || (dates[dates.length - 1] ?? arrival) < today) continue;
+    let items = cache.get(arrival);
+    if (!items) {
+      items = await fetchLodgifyArrivals(arrival).catch(() => [] as LodgifyBooking[]);
+      cache.set(arrival, items);
+    }
+    const bookingNo = String(md.booking ?? "").replace(/[^0-9A-Za-z]/g, "");
+    const mine = items.filter(
+      (b) =>
+        (bookingNo.length >= 6 && String(b.source_text ?? "").split("|")[0].replace(/[^0-9A-Za-z]/g, "") === bookingNo) ||
+        nameMatches(String(b.guest?.name ?? ""), md.guest ?? md.lastName ?? ""),
+    );
+    if (mine.length === 0 || mine.some((b) => b.status === "Booked")) continue;
+    const st = mine[0].status;
+    const days = daysBetween(today, arrival);
+    report.cancelled.push({
+      orderId: o.id, booking: md.booking ?? "", guest: md.guest ?? md.lastName ?? "", arrival,
+      total: o.total_money?.amount ?? 0, items: (o.line_items ?? []).map((li) => `${li.name} ×${li.quantity}`),
+      lodgifyStatus: st, daysBeforeArrival: days,
+      policy: days >= MEAL_FREE_CANCEL_DAYS
+        ? `到着${days}日前のキャンセルを検知：規定（${MEAL_FREE_CANCEL_DAYS}日前まで）内なので全額返金の対象。ただし実際のキャンセル日は Lodgify で確認`
+        : `到着${days}日前に検知：キャンセルが${addDays(arrival, -MEAL_FREE_CANCEL_DAYS)}より前なら全額返金、それ以降なら返金なし（Lodgify のキャンセル日で判断）`,
+    });
+  }
+}
+
+/** 社長が「返金しない／返金済み」と決めたキャンセル注文を、以後の報告から外す */
+export async function markCancelHandled(orderId: string): Promise<void> {
+  const all = await listOrderPageOrders();
+  const o = all.find((x) => x.id === orderId);
+  if (!o) throw new Error("order not found");
+  await setOrderMetadata(o, { cancelHandled: "1" });
 }

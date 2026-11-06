@@ -119,7 +119,8 @@ const ROOM_TYPES: Record<number, "1F" | "2F" | "HOUSE"> = { 860944: "1F", 860952
 const DEFAULT_INBOX_API_URL =
   "https://script.google.com/macros/s/AKfycbxwx6B3UXvr2vOzpWIGzFOJVbGAhCVPlIa6AxAim3Vs1r1LaIBeoJdyJKZ1iJdw5fNW/exec";
 
-type LodgifyBooking = {
+export type LodgifyBooking = {
+  id?: number;
   arrival: string;
   departure: string;
   status: string;
@@ -128,7 +129,7 @@ type LodgifyBooking = {
   rooms?: { room_type_id: number; people?: number }[];
 };
 
-async function fetchLodgifyArrivals(arrival: string): Promise<LodgifyBooking[]> {
+export async function fetchLodgifyArrivals(arrival: string): Promise<LodgifyBooking[]> {
   const url = process.env.INBOX_API_URL || DEFAULT_INBOX_API_URL;
   const token = process.env.INBOX_API_TOKEN || process.env.SHEET_WRITE_TOKEN;
   if (!token) throw new Error("INBOX_API_TOKEN / SHEET_WRITE_TOKEN not set");
