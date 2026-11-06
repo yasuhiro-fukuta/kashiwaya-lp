@@ -106,38 +106,16 @@ export function isPaid(order: SquareOrder): boolean {
   return (order.tenders?.length ?? 0) > 0 && (due === undefined || due === 0);
 }
 
-/** Square allows at most 10 metadata entries per order. */
-const SQUARE_METADATA_MAX = 10;
-/**
- * Keys written by the checkout that nothing reads after the order is linked
- * (orderLink / done page only use src, booking, lastName, arrival, time,
- * logged, guest, cancelHandled). Dropped, in this order, when adding keys
- * would go over the limit. 2026-11-07: checkout writes 9 keys, so adding
- * logged+guest (11) failed with ARRAY_LENGTH_TOO_LONG after the sheet rows
- * were already written → the same order was re-written every run.
- */
-const DROPPABLE_AFTER_LINK = ["nights", "guests", "stayType", "rice"];
-
 /** Merge keys into the order's metadata (used to mark it as logged). */
 export async function setOrderMetadata(order: SquareOrder, extra: Record<string, string>) {
   const { locationId } = env();
-  const merged: Record<string, string> = { ...(order.metadata ?? {}), ...extra };
-  const clear: string[] = [];
-  for (const k of DROPPABLE_AFTER_LINK) {
-    if (Object.keys(merged).length <= SQUARE_METADATA_MAX) break;
-    if (k in merged && !(k in extra)) {
-      delete merged[k];
-      clear.push(`metadata.${k}`);
-    }
-  }
   await call("PUT", `/orders/${encodeURIComponent(order.id)}`, {
     idempotency_key: `${order.id}-meta-${Object.keys(extra).join("-")}`,
     order: {
       location_id: locationId,
       version: order.version,
-      metadata: merged,
+      metadata: { ...(order.metadata ?? {}), ...extra },
     },
-    ...(clear.length ? { fields_to_clear: clear } : {}),
   });
 }
 

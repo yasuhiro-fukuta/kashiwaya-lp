@@ -49,6 +49,19 @@ async function locate(o: SquareOrder): Promise<Stay | null> {
 }
 
 /**
+ * metadata.logged: "1" = linked and written to the sheet, "c" = linked and the
+ * owner decided on its cancellation (no more reports). Older orders may carry
+ * cancelHandled="1" instead. Square allows at most 10 metadata entries and the
+ * checkout writes 9, so linking must add only one key (2026-11-07).
+ */
+function isLinked(o: SquareOrder): boolean {
+  return o.metadata?.logged === "1" || o.metadata?.logged === "c";
+}
+function isCancelHandled(o: SquareOrder): boolean {
+  return o.metadata?.logged === "c" || o.metadata?.cancelHandled === "1";
+}
+
+/**
  * Orders whose sheet rows were already written before marking them as logged
  * failed (Square metadata limit, 2026-11-07). Only mark them; don't append again.
  */
@@ -57,7 +70,7 @@ const ALREADY_IN_SHEET = new Set<string>(["aSCglcPwLZGgGC4tJ5w3xWkYaXPZY"]);
 export async function linkPendingOrders(): Promise<LinkReport> {
   const report: LinkReport = { linked: [], unmatched: [], problems: [], cancelled: [], skipped: 0 };
   const all = await listOrderPageOrders();
-  const pending = all.filter((o) => isPaid(o) && o.metadata?.logged !== "1");
+  const pending = all.filter((o) => isPaid(o) && !isLinked(o));
   report.skipped = all.length - pending.length;
 
   for (const o of pending) {
@@ -117,7 +130,9 @@ export async function linkPendingOrders(): Promise<LinkReport> {
     // include this guest's earlier linked orders for the same nights.
     const nightsHere = new Set(rows.map((r) => `${r.date}|${r.room}`));
     const earlier = all.filter(
-      (x) => x.id !== o.id && isPaid(x) && x.metadata?.logged === "1" && x.metadata?.guest === stay.guestName && !(x.refunds ?? []).length,
+      (x) =>
+        x.id !== o.id && isPaid(x) && isLinked(x) && !(x.refunds ?? []).length &&
+        ((!!booking && x.metadata?.booking === booking) || x.metadata?.guest === stay.guestName),
     );
     const byNight = new Map<string, OverrideRow>();
     for (const x of [o, ...earlier]) {
@@ -144,7 +159,8 @@ export async function linkPendingOrders(): Promise<LinkReport> {
         await appendDmOrders(rows);
         await appendOverrides([...byNight.values()]);
       }
-      await setOrderMetadata(o, { logged: "1", guest: stay.guestName.slice(0, 200) });
+      // Only one new key: checkout already writes 9 and Square allows 10.
+      await setOrderMetadata(o, { logged: "1" });
       report.linked.push({ orderId: o.id, guest: stay.guestName, room: stay.room, booking, items: items(o) });
     } catch (err) {
       report.problems.push({
@@ -166,7 +182,7 @@ export async function linkPendingOrders(): Promise<LinkReport> {
 async function findCancelled(all: SquareOrder[], report: LinkReport) {
   const today = todayJst();
   const watch = all.filter(
-    (o) => isPaid(o) && o.metadata?.logged === "1" && o.metadata?.cancelHandled !== "1" && !(o.refunds ?? []).length,
+    (o) => isPaid(o) && isLinked(o) && !isCancelHandled(o) && !(o.refunds ?? []).length,
   );
   const cache = new Map<string, LodgifyBooking[]>();
   for (const o of watch) {
@@ -205,5 +221,6 @@ export async function markCancelHandled(orderId: string): Promise<void> {
   const all = await listOrderPageOrders();
   const o = all.find((x) => x.id === orderId);
   if (!o) throw new Error("order not found");
-  await setOrderMetadata(o, { cancelHandled: "1" });
+  // Overwrite `logged` instead of adding a key (Square metadata limit is 10).
+  await setOrderMetadata(o, { logged: "c" });
 }
