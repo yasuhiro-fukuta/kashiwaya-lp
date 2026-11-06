@@ -6,7 +6,8 @@
 // /api/order/link（定時チェックが呼ぶ）が Booking 予約番号で Lodgify の予約に
 // 紐づけてから、シート（DMからの食事注文・CleaningOverride）に書く。
 import { randomUUID } from "crypto";
-import { buildNights, getMenuOptions, priceOrder, type OrderRequest } from "@/lib/mealOrder";
+import { applyHouseNights, buildNights, getMenuOptions, priceOrder, type OrderRequest } from "@/lib/mealOrder";
+import { houseNights } from "@/lib/stay";
 import { createPaymentLink } from "@/lib/square";
 import { SITE_URL } from "@/lib/site";
 
@@ -33,9 +34,16 @@ export async function POST(req: Request) {
   if (lastName.length < 2) return Response.json({ ok: false, error: "Please enter your last name." }, { status: 400 });
 
   try {
-    const stayType = body.stayType === "house" ? "house" : "room";
-    const nights = buildNights(arrival, Number(body.nights), stayType, Number(body.guests));
-    const menu = await getMenuOptions();
+    let nights = buildNights(arrival, Number(body.nights), "room", Number(body.guests));
+    const [menu, house] = await Promise.all([
+      getMenuOptions(),
+      houseNights(nights[0].date, nights[nights.length - 1].date).catch((err) => {
+        console.error("order/checkout: house lookup failed", err);
+        return new Set<string>();
+      }),
+    ]);
+    nights = applyHouseNights(nights, house);
+    const stayType = nights.some((n) => n.wholeHouse) ? "house" : "room";
     if (!menu) {
       return Response.json({ ok: false, error: "The menu is temporarily unavailable. Please try again in a few minutes." }, { status: 503 });
     }

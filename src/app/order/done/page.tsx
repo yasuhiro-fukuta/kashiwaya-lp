@@ -36,7 +36,7 @@ export default async function OrderDonePage({
 
   return (
     <>
-      <SiteNav lang="en" solid />
+      <SiteNav lang="en" solid hideBook />
       <div className="page-head">
         <div className="section-head">
           <span className="eyebrow-dark">Meal order</span>
