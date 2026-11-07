@@ -22,8 +22,6 @@ type Night = {
 
 type DinnerPick = { optionId: string; sets: number };
 
-const TIMES = ["18:00", "18:30"];
-const RICE = ["Chirashi sushi", "Onigiri"];
 
 function yen(n: number) {
   return "¥" + n.toLocaleString("en-US");
@@ -52,8 +50,6 @@ export default function OrderForm() {
   const [menu, setMenu] = useState<MenuOption[]>([]);
   const [dinners, setDinners] = useState<Record<string, DinnerPick[]>>({});
   const [breakfasts, setBreakfasts] = useState<Record<string, number>>({});
-  const [time, setTime] = useState(TIMES[0]);
-  const [rice, setRice] = useState(RICE[0]);
 
   const dinnerMenu = menu.filter((m) => m.kind === "dinner");
   const breakfast = menu.find((m) => m.kind === "breakfast");
@@ -120,7 +116,7 @@ export default function OrderForm() {
       const res = await fetch("/api/order/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ booking, lastName, arrival, nights: nightCount, guests, email, time, rice, lines }),
+        body: JSON.stringify({ booking, lastName, arrival, nights: nightCount, guests, email, lines }),
       });
       const data = await res.json();
       if (!data.ok) throw new Error(data.error);
@@ -259,24 +255,9 @@ export default function OrderForm() {
       ))}
 
       {hasDinner && (
-        <div className="order-block">
-          <label>
-            Dinner time
-            <select value={time} onChange={(e) => setTime(e.target.value)}>
-              {TIMES.map((t) => (
-                <option key={t}>{t}</option>
-              ))}
-            </select>
-          </label>
-          <label>
-            Rice with dinner
-            <select value={rice} onChange={(e) => setRice(e.target.value)}>
-              {RICE.map((r) => (
-                <option key={r}>{r}</option>
-              ))}
-            </select>
-          </label>
-        </div>
+        <p>
+          <small>Dinner comes with onigiri (rice balls). We&apos;ll confirm the dinner time with you at check-in.</small>
+        </p>
       )}
 
       <p>

@@ -66,8 +66,8 @@ export default async function OrderDonePage({
             </ul>
             <p>
               Total paid: ¥{(order.total_money?.amount ?? 0).toLocaleString("en-US")}. A receipt has been
-              sent by Square. Dinner is served at {order.metadata?.time}; breakfast is left in your fridge the
-              night before. We&apos;ll match your order to your Booking.com reservation — no need to do
+              sent by Square. We&apos;ll confirm the dinner time at check-in; breakfast is left in your fridge
+              the night before. We&apos;ll match your order to your Booking.com reservation — no need to do
               anything else.
             </p>
             <p>
