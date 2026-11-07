@@ -19,6 +19,8 @@ export type LinkReport = {
     lodgifyStatus: string; daysBeforeArrival: number | null; policy: string;
   }[];
   skipped: number;
+  /** 直近3日の、支払いが確認できない注文（状態の確認用） */
+  unpaidRecent?: { orderId: string; state?: string; tenders: number; due?: number; total?: number; createdAt?: string; booking?: string; lastName?: string }[];
 };
 
 /** 食事のキャンセル規定＝宿泊と同じ：到着7日前までのキャンセルは全額返金、それ以降は返金なし */
@@ -72,6 +74,14 @@ export async function linkPendingOrders(): Promise<LinkReport> {
   const all = await listOrderPageOrders();
   const pending = all.filter((o) => isPaid(o) && !isLinked(o));
   report.skipped = all.length - pending.length;
+  const since = Date.now() - 3 * 86400_000;
+  report.unpaidRecent = all
+    .filter((o) => !isPaid(o) && Date.parse(o.created_at ?? "") > since)
+    .map((o) => ({
+      orderId: o.id, state: (o as { state?: string }).state, tenders: o.tenders?.length ?? 0,
+      due: o.net_amount_due_money?.amount, total: o.total_money?.amount, createdAt: o.created_at,
+      booking: o.metadata?.booking, lastName: o.metadata?.lastName,
+    }));
 
   for (const o of pending) {
     const md = o.metadata ?? {};
