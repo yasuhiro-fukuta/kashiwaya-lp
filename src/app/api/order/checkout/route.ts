@@ -6,7 +6,7 @@
 // /api/order/link（定時チェックが呼ぶ）が Booking 予約番号で Lodgify の予約に
 // 紐づけてから、シート（DMからの食事注文・CleaningOverride）に書く。
 import { randomUUID } from "crypto";
-import { applyHouseNights, buildNights, getMenuOptions, priceOrder, type OrderRequest } from "@/lib/mealOrder";
+import { applyHouseNights, buildNights, DINNER_RICE, getMenuOptions, priceOrder, type OrderRequest } from "@/lib/mealOrder";
 import { houseNights } from "@/lib/stay";
 import { createPaymentLink } from "@/lib/square";
 import { SITE_URL } from "@/lib/site";
@@ -75,8 +75,7 @@ export async function POST(req: Request) {
         nights: String(nights.length),
         stayType,
         guests: String(nights[0].guests),
-        time: body.time,
-        rice: body.rice,
+        rice: priced.some((l) => l.option.kind === "dinner") ? DINNER_RICE : "",
       },
       lineItems,
       redirectUrl: (orderId) => `${base}/order/done?orderId=${encodeURIComponent(orderId)}`,
