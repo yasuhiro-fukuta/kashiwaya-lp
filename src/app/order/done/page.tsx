@@ -13,9 +13,9 @@ export const dynamic = "force-dynamic";
 export default async function OrderDonePage({
   searchParams,
 }: {
-  searchParams: Promise<{ orderId?: string }>;
+  searchParams: Promise<{ orderId?: string; transactionId?: string }>;
 }) {
-  const { orderId } = await searchParams;
+  const { orderId, transactionId } = await searchParams;
   let order: SquareOrder | null = null;
   // Square redirects here right after payment, sometimes before the tender
   // is attached to the order — so wait for it (up to ~15s) instead of
@@ -31,6 +31,11 @@ export default async function OrderDonePage({
   }
   const ours = order?.metadata?.src === "kashiwaya-order";
   const paid = order && ours && isPaid(order);
+  // Square only adds transactionId to the redirect after the card payment
+  // went through. The tender can take longer than our wait to appear on the
+  // order, so show "received" instead of a scary "couldn't confirm"
+  // (2026-11-07: a real paid order showed "couldn't confirm").
+  const received = !paid && ours && !!transactionId;
   // The sheet is written later by /api/order/link (定時チェック), once the
   // order is linked to the booking (2026-11-06 社長決定).
 
@@ -40,7 +45,13 @@ export default async function OrderDonePage({
       <div className="page-head">
         <div className="section-head">
           <span className="eyebrow-dark">Meal order</span>
-          <h2>{paid ? <>Thank you — <em>your meals are booked.</em></> : <>We couldn&apos;t confirm <em>your payment.</em></>}</h2>
+          <h2>
+            {paid || received ? (
+              <>Thank you — <em>your meals are booked.</em></>
+            ) : (
+              <>We couldn&apos;t confirm <em>your payment.</em></>
+            )}
+          </h2>
         </div>
       </div>
       <section className="order-page">
@@ -58,6 +69,24 @@ export default async function OrderDonePage({
               sent by Square. Dinner is served at {order.metadata?.time}; breakfast is left in your fridge the
               night before. We&apos;ll match your order to your Booking.com reservation — no need to do
               anything else.
+            </p>
+            <p>
+              Need to change something? Message us on{" "}
+              <a href={WHATSAPP_URL_EN}>WhatsApp</a> at least 3 days before.
+            </p>
+          </>
+        ) : received && order ? (
+          <>
+            <ul className="order-summary">
+              {(order.line_items ?? []).map((li, i) => (
+                <li key={i}>
+                  {li.name} × {li.quantity}
+                </li>
+              ))}
+            </ul>
+            <p>
+              Your payment has been received — Square will email you a receipt shortly. We&apos;ll match
+              your order to your Booking.com reservation, so there is nothing else to do.
             </p>
             <p>
               Need to change something? Message us on{" "}
