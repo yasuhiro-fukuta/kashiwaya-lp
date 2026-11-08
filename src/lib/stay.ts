@@ -115,7 +115,7 @@ async function findStayOnBoard(lastName: string, arrival: string): Promise<Stay 
 // ---- Live fallback: Lodgify through the inbox API (kashiwaya-autoreply) ----
 
 // Lodgify room_type_id → room (kashiwaya_master_v2 LodgifyBookings).
-const ROOM_TYPES: Record<number, "1F" | "2F" | "HOUSE"> = { 860944: "1F", 860952: "2F", 917713: "HOUSE" };
+export const ROOM_TYPES: Record<number, "1F" | "2F" | "HOUSE"> = { 860944: "1F", 860952: "2F", 917713: "HOUSE" };
 const DEFAULT_INBOX_API_URL =
   "https://script.google.com/macros/s/AKfycbxwx6B3UXvr2vOzpWIGzFOJVbGAhCVPlIa6AxAim3Vs1r1LaIBeoJdyJKZ1iJdw5fNW/exec";
 
