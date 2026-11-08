@@ -4,7 +4,7 @@
 // POST /api/order/link を呼び、ここで Booking 予約番号 → Lodgify の予約に紐づける。
 // 紐づかない注文・一棟貸しの夕食などは書かずに返し、定時チェックが社長に聞く。
 
-import { fetchLodgifyArrivals, findStay, findStayInLodgify, nameMatches, type LodgifyBooking, type Stay } from "@/lib/stay";
+import { fetchLodgifyArrivals, findStay, findStayInLodgify, nameMatches, ROOM_TYPES, type LodgifyBooking, type Stay } from "@/lib/stay";
 import { listOrderPageOrders, isPaid, setOrderMetadata, type SquareOrder } from "@/lib/square";
 import { appendDmOrders, appendOverrides, type DmOrderRow, type OverrideRow } from "@/lib/sheetWrite";
 import { addDays, todayJst } from "@/lib/mealOrder";
@@ -17,6 +17,8 @@ export type LinkReport = {
   cancelled: {
     orderId: string; booking: string; guest: string; arrival: string; total: number; items: string[];
     lodgifyStatus: string; daysBeforeArrival: number | null; policy: string;
+    /** true＝取消行（DMからの食事注文）と CleaningOverride の打ち消し行を書き終えた */
+    cleared: boolean;
   }[];
   skipped: number;
   /** 直近3日の、支払いが確認できない注文（状態の確認用） */
@@ -56,8 +58,13 @@ async function locate(o: SquareOrder): Promise<Stay | null> {
  * cancelHandled="1" instead. Square allows at most 10 metadata entries and the
  * checkout writes 9, so linking must add only one key (2026-11-07).
  */
+// logged: "1" = linked, "x" = linked and its cancellation rows written (still
+// reported until refunded or handled), "c" = owner handled (no more reports).
 function isLinked(o: SquareOrder): boolean {
-  return o.metadata?.logged === "1" || o.metadata?.logged === "c";
+  return o.metadata?.logged === "1" || o.metadata?.logged === "x" || o.metadata?.logged === "c";
+}
+function isCancelCleared(o: SquareOrder): boolean {
+  return o.metadata?.logged === "x" || o.metadata?.logged === "c";
 }
 function isCancelHandled(o: SquareOrder): boolean {
   return o.metadata?.logged === "c" || o.metadata?.cancelHandled === "1";
@@ -215,7 +222,36 @@ async function findCancelled(all: SquareOrder[], report: LinkReport) {
     if (mine.length === 0 || mine.some((b) => b.status === "Booked")) continue;
     const st = mine[0].status;
     const days = daysBetween(today, arrival);
+    // Write the cancellation into the sheets once (2026-11-08): a 取消 row per
+    // line in「DMからの食事注文」, and an empty-meal CleaningOverride row per
+    // night+room so the stale "(paid)" line can't attach to whoever books that
+    // night next (applyOverride takes the last row per night+room).
+    let cleared = isCancelCleared(o);
+    if (!cleared) {
+      try {
+        const kinds = mine.flatMap((b) => (b.rooms ?? []).map((r) => ROOM_TYPES[r.room_type_id])).filter(Boolean);
+        const rooms: ("1F" | "2F")[] = kinds.includes("HOUSE") ? ["1F", "2F"]
+          : (["1F", "2F"] as const).filter((r) => kinds.includes(r));
+        const guest = md.guest ?? md.lastName ?? "";
+        const lines = (o.line_items ?? []).filter((li) => li.metadata?.date && li.metadata?.item);
+        const dm: DmOrderRow[] = lines.map((li) => ({
+          date: li.metadata!.date, room: rooms[0] ?? "1F", guest, item: li.metadata!.item,
+          persons: Number(li.metadata!.persons) || 1, time: "", channel: "Booking", dmDate: today, status: "取消",
+          memo: `宿泊キャンセル（Lodgify ${st}）に伴う自動取消 / ${li.name} ×${li.quantity} / Booking予約番号:${md.booking ?? "?"} / Square注文:${o.id}`,
+        }));
+        const nights = new Set(lines.map((li) => li.metadata!.date));
+        const ovr: OverrideRow[] = [];
+        for (const d of nights) for (const r of rooms) ovr.push({ date: d, room: r, meal: "", memo: `宿泊キャンセルで食事取消 ${o.id}` });
+        if (dm.length) await appendDmOrders(dm);
+        if (ovr.length) await appendOverrides(ovr);
+        await setOrderMetadata(o, { logged: "x" });
+        cleared = true;
+      } catch (err) {
+        console.error("order/link: cancel cleanup", o.id, err);
+      }
+    }
     report.cancelled.push({
+      cleared,
       orderId: o.id, booking: md.booking ?? "", guest: md.guest ?? md.lastName ?? "", arrival,
       total: o.total_money?.amount ?? 0, items: (o.line_items ?? []).map((li) => `${li.name} ×${li.quantity}`),
       lodgifyStatus: st, daysBeforeArrival: days,

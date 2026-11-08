@@ -13,7 +13,7 @@ export type DmOrderRow = {
   time: string;
   channel: string;
   dmDate: string;
-  status: "有効";
+  status: "有効" | "取消";
   memo: string;
 };
 
