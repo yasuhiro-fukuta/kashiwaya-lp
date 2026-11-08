@@ -110,7 +110,10 @@ export function isPaid(order: SquareOrder): boolean {
 export async function setOrderMetadata(order: SquareOrder, extra: Record<string, string>) {
   const { locationId } = env();
   await call("PUT", `/orders/${encodeURIComponent(order.id)}`, {
-    idempotency_key: `${order.id}-meta-${Object.keys(extra).join("-")}`,
+    // Key must change with the values and the order version: with only the key
+    // names, logged="x"/"c" reused the key of the earlier logged="1" write, Square
+    // replayed that old response, and the new value was never saved (2026-11-09).
+    idempotency_key: `${order.id}-meta-${Object.entries(extra).map(([k, v]) => `${k}${v}`).join("-")}-v${order.version ?? 0}`,
     order: {
       location_id: locationId,
       version: order.version,
