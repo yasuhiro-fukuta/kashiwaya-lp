@@ -61,8 +61,7 @@ export default function Page() {
       <h2>Plan C: hot water</h2>
       <p>
         A natural day-trip onsen sits a short drive up the valley (closed
-        Wednesdays). We can arrange a taxi, or drive you ourselves when
-        we&apos;re free — there are few better uses of a rainy afternoon than
+        Wednesdays). We can arrange a taxi for you — there are few better uses of a rainy afternoon than
         an outdoor bath in it.
       </p>
 

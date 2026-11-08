@@ -94,7 +94,7 @@ export default function FaqPage() {
               <li>E-bikeレンタル&ガイドツアー(有料)</li>
               <li>宿を出てすぐハイキング・サイクリング</li>
               <li>習字体験(開催日はご相談)</li>
-              <li>駅送迎・荷物転送</li>
+              <li>荷物転送(ラゲッジバス)</li>
               <li>英語・日本語対応</li>
             </ul>
           </div>
@@ -170,7 +170,7 @@ export default function FaqPage() {
           <summary>アクセスは?</summary>
           <p>
             JR中央本線・南木曽駅から徒歩15分、三留野宿(南木曽3993)にあります。
-            送迎をご希望の場合は事前にお知らせください。
+            送迎はありません。必要な場合はタクシーの手配をお手伝いします。
           </p>
         </details>
         <details className="faq-item">
@@ -229,9 +229,8 @@ export default function FaqPage() {
         <details className="faq-item">
           <summary>駅や妻籠から送迎はありますか?</summary>
           <p>
-            はい。南木曽駅・妻籠宿・十二兼駅は、16時から18時の間、
-            無料送迎エリアです。事前にご相談ください。
-            ご出発時はタクシーの手配をお手伝いします。
+            送迎サービスは終了しました。南木曽駅から徒歩約15分です。
+            妻籠宿からはバスで南木曽駅へ。必要な場合はタクシーの手配をお手伝いします。
           </p>
         </details>
         <details className="faq-item">
