@@ -5,7 +5,7 @@
 // 紐づかない注文・一棟貸しの夕食などは書かずに返し、定時チェックが社長に聞く。
 
 import { fetchLodgifyArrivals, findStay, findStayInLodgify, nameMatches, ROOM_TYPES, type LodgifyBooking, type Stay } from "@/lib/stay";
-import { listOrderPageOrders, isPaid, setOrderMetadata, type SquareOrder } from "@/lib/square";
+import { listOrderPageOrders, isPaid, isRefunded, setOrderMetadata, type SquareOrder } from "@/lib/square";
 import { appendDmOrders, appendOverrides, type DmOrderRow, type OverrideRow } from "@/lib/sheetWrite";
 import { addDays, todayJst } from "@/lib/mealOrder";
 
@@ -203,6 +203,9 @@ async function findCancelled(all: SquareOrder[], report: LinkReport) {
   );
   const cache = new Map<string, LodgifyBooking[]>();
   for (const o of watch) {
+    // Refunded from the Square dashboard (order.refunds stays empty): no longer
+    // waiting for a refund, so stop reporting it.
+    if (await isRefunded(o)) continue;
     const md = o.metadata ?? {};
     // Arrival: new orders carry it; older ones only have line dates.
     const dates = (o.line_items ?? []).map((li) => li.metadata?.date).filter((d): d is string => !!d).sort();
