@@ -106,13 +106,17 @@ export function isPaid(order: SquareOrder): boolean {
   return (order.tenders?.length ?? 0) > 0 && (due === undefined || due === 0);
 }
 
-/** Merge keys into the order's metadata (used to mark it as logged). */
-export async function setOrderMetadata(order: SquareOrder, extra: Record<string, string>) {
+/**
+ * Merge keys into the order's metadata (used to mark it as logged).
+ * Returns the updated order and throws when Square answered OK but the new
+ * values are not in the returned order (2026-11-09: logged="x" never stuck and
+ * the cancellation rows were written again on every run).
+ */
+export async function setOrderMetadata(order: SquareOrder, extra: Record<string, string>): Promise<SquareOrder> {
   const { locationId } = env();
-  await call("PUT", `/orders/${encodeURIComponent(order.id)}`, {
+  const res = await call<{ order?: SquareOrder }>("PUT", `/orders/${encodeURIComponent(order.id)}`, {
     // Key must change with the values and the order version: with only the key
-    // names, logged="x"/"c" reused the key of the earlier logged="1" write, Square
-    // replayed that old response, and the new value was never saved (2026-11-09).
+    // names, logged="x"/"c" reused the key of the earlier logged="1" write.
     idempotency_key: `${order.id}-meta-${Object.entries(extra).map(([k, v]) => `${k}${v}`).join("-")}-v${order.version ?? 0}`,
     order: {
       location_id: locationId,
@@ -120,6 +124,15 @@ export async function setOrderMetadata(order: SquareOrder, extra: Record<string,
       metadata: { ...(order.metadata ?? {}), ...extra },
     },
   });
+  const saved = res.order?.metadata ?? {};
+  const missing = Object.entries(extra).filter(([k, v]) => saved[k] !== v);
+  if (missing.length) {
+    throw new Error(
+      `square metadata not saved (state=${res.order?.state ?? order.state ?? "?"}, version ${order.version ?? "?"}→${res.order?.version ?? "?"}): ` +
+        missing.map(([k, v]) => `${k}=${v} but got ${saved[k] ?? "(none)"}`).join(", "),
+    );
+  }
+  return res.order ?? order;
 }
 
 /** Every order created by the meal order page in the last `days` days, newest first. */

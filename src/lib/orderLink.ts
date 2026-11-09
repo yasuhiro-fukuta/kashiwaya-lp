@@ -19,6 +19,10 @@ export type LinkReport = {
     lodgifyStatus: string; daysBeforeArrival: number | null; policy: string;
     /** true＝取消行（DMからの食事注文）と CleaningOverride の打ち消し行を書き終えた */
     cleared: boolean;
+    /** Square の metadata.logged と注文の状態（確認用） */
+    logged?: string; state?: string;
+    /** 取消処理が失敗した理由（あれば） */
+    error?: string;
   }[];
   skipped: number;
   /** 直近3日の、支払いが確認できない注文（状態の確認用） */
@@ -227,6 +231,7 @@ async function findCancelled(all: SquareOrder[], report: LinkReport) {
     // night+room so the stale "(paid)" line can't attach to whoever books that
     // night next (applyOverride takes the last row per night+room).
     let cleared = isCancelCleared(o);
+    let cancelError: string | undefined;
     if (!cleared) {
       try {
         const kinds = mine.flatMap((b) => (b.rooms ?? []).map((r) => ROOM_TYPES[r.room_type_id])).filter(Boolean);
@@ -242,16 +247,19 @@ async function findCancelled(all: SquareOrder[], report: LinkReport) {
         const nights = new Set(lines.map((li) => li.metadata!.date));
         const ovr: OverrideRow[] = [];
         for (const d of nights) for (const r of rooms) ovr.push({ date: d, room: r, meal: "", memo: `宿泊キャンセルで食事取消 ${o.id}` });
+        // Mark first, then write: if the mark can't be saved, write nothing,
+        // so a failed mark can never repeat the rows on the next run.
+        await setOrderMetadata(o, { logged: "x" });
         if (dm.length) await appendDmOrders(dm);
         if (ovr.length) await appendOverrides(ovr);
-        await setOrderMetadata(o, { logged: "x" });
         cleared = true;
       } catch (err) {
         console.error("order/link: cancel cleanup", o.id, err);
+        cancelError = err instanceof Error ? err.message : String(err);
       }
     }
     report.cancelled.push({
-      cleared,
+      cleared, logged: md.logged ?? "", state: o.state ?? "", ...(cancelError ? { error: cancelError } : {}),
       orderId: o.id, booking: md.booking ?? "", guest: md.guest ?? md.lastName ?? "", arrival,
       total: o.total_money?.amount ?? 0, items: (o.line_items ?? []).map((li) => `${li.name} ×${li.quantity}`),
       lodgifyStatus: st, daysBeforeArrival: days,
