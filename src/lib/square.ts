@@ -106,6 +106,24 @@ export function isPaid(order: SquareOrder): boolean {
   return (order.tenders?.length ?? 0) > 0 && (due === undefined || due === 0);
 }
 
+/**
+ * True when any money on the order has been refunded. order.refunds is not
+ * filled for refunds made from the Square dashboard (2026-11-10: the owner's
+ * test orders ¥20,000・¥24,000 were refunded but still reported as 返金待ち),
+ * so also read each tender's payment and check refunded_money.
+ */
+export async function isRefunded(order: SquareOrder): Promise<boolean> {
+  if ((order.refunds ?? []).length > 0) return true;
+  for (const t of order.tenders ?? []) {
+    const r = await call<{ payment?: { refunded_money?: { amount?: number } } }>(
+      "GET",
+      `/payments/${encodeURIComponent(t.id)}`,
+    ).catch(() => ({}) as { payment?: { refunded_money?: { amount?: number } } });
+    if ((r.payment?.refunded_money?.amount ?? 0) > 0) return true;
+  }
+  return false;
+}
+
 /** Merge keys into the order's metadata (used to mark it as logged). */
 export async function setOrderMetadata(order: SquareOrder, extra: Record<string, string>) {
   const { locationId } = env();
