@@ -1,4 +1,4 @@
-// POST {token, days?} → read-only list of Square payments (all locations) for
+// POST {token, days?} → read-only list of Square payments (both accounts, all locations) for
 // the last `days` days (default 14, max 60), with each payment's order line
 // item names. Used by 入金チェック / 定時チェック to confirm whether a guest
 // paid by Square (E-bike before 11/1, luggage shuttle, guide tours), because
@@ -69,12 +69,21 @@ export async function POST(req: Request) {
   if (!secret || !same(String(body.token ?? ""), secret)) {
     return Response.json({ ok: false, error: "unauthorized" }, { status: 401 });
   }
-  const token = process.env.SQUARE_ACCESS_TOKEN;
-  if (!token) return Response.json({ ok: false, error: "SQUARE_ACCESS_TOKEN not set" }, { status: 500 });
+  // Two Square accounts: 柏屋 (meal page / inn POS) and 合同会社From Scratch
+  // (Beyond Nakasendo: E-bike before 11/1, bear spray, luggage, guide).
+  const accounts = [
+    { account: "kashiwaya", token: process.env.SQUARE_ACCESS_TOKEN },
+    { account: "fromscratch", token: process.env.SQUARE_FS_ACCESS_TOKEN },
+  ];
+  const missing = accounts.filter((a) => !a.token).map((a) => a.account);
 
   const days = Math.min(Math.max(Number(body.days) || 14, 1), 60);
   const begin = new Date(Date.now() - days * 86400_000).toISOString();
 
+  const all: Record<string, unknown>[] = [];
+  const errors: Record<string, string> = {};
+  for (const { account, token } of accounts) {
+    if (!token) continue;
   try {
     // Payments across all locations (no location_id), newest first.
     const payments: Payment[] = [];
@@ -117,6 +126,7 @@ export async function POST(req: Request) {
         recipient?.display_name,
       ].filter((s) => s && String(s).trim());
       return {
+        account,
         id: p.id,
         createdAt: p.created_at,
         status: p.status,
@@ -134,9 +144,23 @@ export async function POST(req: Request) {
         note: p.note ?? "",
       };
     });
-    return Response.json({ ok: true, since: begin, count: items.length, payments: items });
+    all.push(...items);
   } catch (err) {
-    console.error("square/payments:", err);
-    return Response.json({ ok: false, error: err instanceof Error ? err.message : String(err) }, { status: 500 });
+    console.error("square/payments:", account, err);
+    errors[account] = err instanceof Error ? err.message : String(err);
   }
+  }
+  all.sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt)));
+  // notRead: accounts that could not be read. Callers must treat payments in
+  // those accounts as 未確認 (unknown), never as unpaid.
+  const notRead = [...missing, ...Object.keys(errors)];
+  return Response.json({
+    ok: Object.keys(errors).length === 0,
+    since: begin,
+    count: all.length,
+    notRead,
+    missingToken: missing,
+    errors,
+    payments: all,
+  });
 }
