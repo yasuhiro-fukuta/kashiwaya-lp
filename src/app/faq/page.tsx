@@ -113,7 +113,7 @@ export default function FaqPage() {
             </li>
             <li>
               Please let us know your arrival time in advance &mdash;
-              self-check-in via key box can also be arranged
+              self-check-in can also be arranged
             </li>
             <li>
               Children welcome (no age limit) &middot; no cots, and extra
@@ -278,7 +278,7 @@ export default function FaqPage() {
             whole-house calendar only opens on the days it&apos;s available.
             Book it from the <Link href="/stay#book">booking section</Link>{" "}
             like any room. Please note the whole-house stay is unmanned
-            (self check-in via key box) and Kashiwaya&apos;s dinner
+            (self check-in) and Kashiwaya&apos;s dinner
             isn&apos;t available &mdash; instead, local shop Marusho
             delivers dinner sets to the house (¥1,500–¥3,500, see the{" "}
             <Link href="/dining#marusho">Dining page</Link>). The ochazuke

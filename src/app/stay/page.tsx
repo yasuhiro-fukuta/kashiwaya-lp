@@ -127,7 +127,7 @@ export default function StayPage() {
                 <h3>Superior Family Room</h3>
                 <div className="room-sub">2nd modern floor</div>
                 <ul className="room-feats">
-                  <li>60 m&sup2; &middot; up to 3 adults &middot; 4 futons</li>
+                  <li>60 m&sup2; &middot; up to 4 adults &middot; 4 futons</li>
                   <li>Balcony &amp; mountain view &middot; private toilet on 1F &middot; stairs only</li>
                 </ul>
                 <LodgifyBox rentalId="793801" />
@@ -151,7 +151,7 @@ export default function StayPage() {
                   <li>The entire 140-year-old kominka, for one group</li>
                   <li>Both floors (140 m&sup2;) &middot; garden &amp; kitchen all to yourselves</li>
                   <li>Offered on select dates only &mdash; about one night a week</li>
-                  <li>Unmanned stay &mdash; self check-in via key box</li>
+                  <li>Unmanned stay &mdash; self check-in (we send directions after booking)</li>
                   <li>
                     Kashiwaya&apos;s dinner isn&apos;t available &mdash;
                     local shop{" "}

@@ -126,7 +126,7 @@ export default function StayPage() {
                 <h3>スーペリアファミリールーム</h3>
                 <div className="room-sub">モダンな2階</div>
                 <ul className="room-feats">
-                  <li>60㎡ · 大人3名まで · 布団4組</li>
+                  <li>60㎡ · 大人4名まで · 布団4組</li>
                   <li>バルコニー・山の眺め · 専用トイレは1階 · 階段のみ</li>
                 </ul>
                 <LodgifyBox rentalId="793801" language="ja" />
@@ -150,7 +150,7 @@ export default function StayPage() {
                   <li>築140年の家を、1組様で貸切</li>
                   <li>両フロア(計140㎡)· 庭もキッチンも独占</li>
                   <li>週に1日ほどの限定販売</li>
-                  <li>無人運営 — キーボックスでセルフチェックイン</li>
+                  <li>無人運営 — セルフチェックイン（入り方は予約後にご案内）</li>
                   <li>
                     柏屋の夕食はご提供なし —{" "}
                     <a
