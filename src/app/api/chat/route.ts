@@ -1,6 +1,7 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { getKnowledge } from "@/lib/knowledge";
 import { getMenuBlock } from "@/lib/menu";
+import { getMealBillBlock } from "@/lib/mealBill";
 import { getEbikeBlock } from "@/lib/ebike";
 import { getDmLogBlock, DMLOG_UNAVAILABLE_NOTE, DMLOG_NOT_LOADED_NOTE, wantsDmLog } from "@/lib/dmlog";
 import { getOrdersBlock, ORDERS_UNAVAILABLE_NOTE } from "@/lib/orders";
@@ -118,13 +119,14 @@ export async function POST(req: Request) {
   const timing: Record<string, number> = {};
   const timed = <T,>(name: string, p: Promise<T>): Promise<T> =>
     p.finally(() => { timing[name] = Date.now() - t0; });
-  const [knowledge, schedule, dmlog, orders, meals, ebike] = await Promise.all([
+  const [knowledge, schedule, dmlog, orders, meals, ebike, bill] = await Promise.all([
     timed("knowledge", getKnowledge()),
     timed("schedule", staffMode ? getScheduleBlock() : Promise.resolve(null)),
     timed("dmlog", staffMode && wantsDm ? getDmLogBlock() : Promise.resolve(null)),
     timed("orders", staffMode ? getOrdersBlock() : Promise.resolve(null)),
     timed("menu", getMenuBlock()),
     timed("ebike", getEbikeBlock()),
+    timed("bill", staffMode ? getMealBillBlock() : Promise.resolve(null)),
   ]);
   const contextMs = Date.now() - t0;
   console.log(`chat: context fetched in ${contextMs}ms (staff=${staffMode})`, timing);
@@ -147,6 +149,8 @@ export async function POST(req: Request) {
   }
   // The caterer's order sheet is the final word on meals (what is cooked and delivered).
   if (orders) system.push({ type: "text", text: orders });
+  // Paid/unpaid and the amount to collect, computed in code (2026-11-11).
+  if (bill) system.push({ type: "text", text: bill });
   else if (staffMode) system.push({ type: "text", text: ORDERS_UNAVAILABLE_NOTE });
   if (dmlog) system.push({ type: "text", text: dmlog });
   else if (staffMode && wantsDm) system.push({ type: "text", text: DMLOG_UNAVAILABLE_NOTE });
