@@ -84,6 +84,29 @@ function addDays(ymd: string, d: number): string {
 
 export type BillLine = { date: string; weekday: string; room: string; text: string };
 
+// English dish names for the line staff show the guest (staff speak little English).
+function enName(kind: Kind, item: string, persons: number): string {
+  const n = Number.isFinite(persons) ? persons : "?";
+  if (kind === "breakfast") return `Breakfast for ${n}`;
+  const dish = /牛すき|すき焼|sukiyaki|wagyu/i.test(item)
+    ? "Wagyu Sukiyaki"
+    : /鶏鍋|chicken/i.test(item)
+      ? "Chicken Hot Pot"
+      : /冷しゃぶ|chilled/i.test(item)
+        ? "Chilled Pork Shabu-shabu"
+        : /豚しゃぶ|shabu|pork/i.test(item)
+          ? "Pork Shabu-shabu"
+          : /ビーガン|ヴィーガン|vegan/i.test(item)
+            ? "Vegan Hot Pot"
+            : "Dinner";
+  return `${dish} for ${n}`;
+}
+
+// One "会計カード" per night+room. The amount to collect comes FIRST and in
+// plain words, because on 2026-11-11 staff read a line full of
+// 【支払い済み】【未払い】 brackets as "everything is paid" and collected
+// nothing (¥10,000 lost). Never write "支払い済み" at room level unless the
+// amount to collect really is zero.
 export function computeBill(lines: OrderLine[], board: BoardRow[], menu: MenuItem[] | null): BillLine[] {
   const groups = new Map<string, OrderLine[]>();
   for (const l of lines) {
@@ -99,31 +122,47 @@ export function computeBill(lines: OrderLine[], board: BoardRow[], menu: MenuIte
     const paid = row ? paidKinds(row.meal ?? "") : new Set<Kind>();
     let total = 0;
     let unknown = false;
-    const parts = items.map((l) => {
+    const collect: string[] = [];
+    const already: string[] = [];
+    const enCollect: string[] = [];
+    const enPaid: string[] = [];
+    for (const l of items) {
       const kind = kindOf(l.item)!;
       const qty = Number(l.qty);
       const persons = Number.isFinite(qty) ? Math.round(qty * (kind === "dinner" ? 2 : 1) * 10) / 10 : NaN;
-      const amount = `${l.item} ${l.qty || "?"}セット（${Number.isFinite(persons) ? persons : "?"}名分）`;
-      if (paid.has(kind)) return `${amount}【支払い済み・会計しない】`;
+      const what = `${l.item} ${Number.isFinite(persons) ? persons : "?"}名分`;
+      if (paid.has(kind)) {
+        already.push(`  ・${what} → もらわない（前払い済み）`);
+        enPaid.push(enName(kind, l.item, persons));
+        continue;
+      }
       const price = Number.isFinite(persons) ? priceOf(menu, kind, l.item, persons) : null;
       if (price == null) {
         unknown = true;
-        return `${amount}【未払い・チェックイン時に会計／金額は料金表に無いので社長に確認】`;
+        collect.push(`  ・${what} → 金額は社長に電話で確認してからもらう`);
+      } else {
+        total += price;
+        collect.push(`  ・${what} → ${yen(price)} もらう`);
       }
-      total += price;
-      return `${amount}【未払い・チェックイン時に会計 ${yen(price)}】`;
-    });
-    const sum = unknown
-      ? `いただく合計：料金表に無い品目があるため社長に確認${total ? `（分かっている分 ${yen(total)}）` : ""}`
-      : total
-        ? `いただく合計 ${yen(total)}`
-        : "いただく金額なし（すべて支払い済み）";
+      enCollect.push(enName(kind, l.item, persons) + (price == null ? "" : `: ${yen(price)}`));
+    }
     const name = items.find((l) => l.name)?.name ?? row?.guestName ?? "";
+    const head = `■${date}(${items[0].weekday}) ${room}${name ? ` ${name}様` : ""}`;
+    let lead: string;
+    if (collect.length === 0) lead = "◎チェックイン時にもらうお金：なし（食事は全部前払い済み）";
+    else if (unknown) lead = `★チェックイン時にお金をもらう：金額が決まらない品があるので社長に電話${total ? `（分かっている分 ${yen(total)}）` : ""}`;
+    else lead = `★チェックイン時に ${yen(total)} をもらう`;
+    const en: string[] = [];
+    if (enCollect.length) {
+      en.push(
+        `  お客様に見せる英語：「Please pay ${unknown ? "for" : `${yen(total)} for`} your meals now: ${enCollect.join(", ")}.${enPaid.length ? ` (${enPaid.join(", ")}: already paid.)` : ""}」`,
+      );
+    }
     out.push({
       date,
       weekday: items[0].weekday,
       room,
-      text: `${date}(${items[0].weekday}) ${room}${name ? ` ${name}` : ""}：${parts.join("・")}／${sum}`,
+      text: [head, lead, ...collect, ...already, ...en].join("\n"),
     });
   }
   return out.sort((a, b) => (a.date + a.room).localeCompare(b.date + b.room));
@@ -137,12 +176,12 @@ export async function getMealBillBlock(): Promise<string | null> {
     const to = addDays(today, 14);
     const bill = computeBill(orders.lines, schedule.board ?? [], menu).filter((b) => b.date >= from && b.date <= to);
     return `# 食事と会計（プログラムで計算済み・スタッフ専用）
-★★★シフト・食事・会計・「いくらもらう？」を聞かれたら、その日・その部屋の下の行を**一字一句そのまま写す**。支払い済みかどうかの判定や金額の計算を自分でしない・言い換えない・足し算し直さない（2026-11-11 社長指示。AIの判定が聞くたびに入れ替わり、スタッフが誤った金額で会計しかけた）。
-- 下に行が無い部屋は「仕出しなし」。
+★★★シフト・食事・会計・「いくらもらう？」を聞かれたら、答えの**一番最初**に、その日・その部屋の下の「会計カード」（■から始まるかたまり）を**改行も含めて一字一句そのまま**貼る。シフトの他の内容はその後に書く。支払い済みかどうかの判定や金額の計算を自分でしない・言い換えない・足し算し直さない（2026-11-11 社長指示。AIの判定が聞くたびに入れ替わり、スタッフが誤った金額で会計しかけた）。
+- 会計カードを要約・言い換え・並べ替えしない。「支払い済み」という言葉を部屋全体に使わない（2026-11-11 スタッフが「全部支払い済み」と読み違えて¥10,000をもらい損ねた）。\n- 下にカードが無い部屋は「仕出しなし（もらうお金なし）」。
 - 金額は売値（HPの料金）。仕出し屋への支払額（原価）は出さない。
 - 判定元：品目と数＝注文確認票／支払い済み＝予定表の食事欄の「(paid)」／金額＝「メニュー」シート。今日: ${today}
 
-${bill.map((b) => `- ${b.text}`).join("\n") || "(この期間の仕出しなし)"}`;
+${bill.map((b) => b.text).join("\n\n") || "(この期間の仕出しなし)"}`;
   } catch (err) {
     console.error("mealBill: failed:", err);
     return `# 食事と会計（計算に失敗）
