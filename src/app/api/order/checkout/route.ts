@@ -75,7 +75,9 @@ export async function POST(req: Request) {
         nights: String(nights.length),
         stayType,
         guests: String(nights[0].guests),
-        rice: priced.some((l) => l.option.kind === "dinner") ? DINNER_RICE : "",
+        // 朝食だけの注文では rice を付けない（空文字の metadata は Square が拒否し、
+        // 「Payment could not be started」になっていた：2026-11-11 Yan Ng様の報告）
+        ...(priced.some((l) => l.option.kind === "dinner") ? { rice: DINNER_RICE } : {}),
       },
       lineItems,
       redirectUrl: (orderId) => `${base}/order/done?orderId=${encodeURIComponent(orderId)}`,
