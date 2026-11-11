@@ -30,6 +30,17 @@ export type SquareOrder = {
   refunds?: { id: string; status?: string }[];
 };
 
+/** Square rejects blank metadata values: drop them so one empty field can't block checkout. */
+export function cleanMetadata(m?: Record<string, string>): Record<string, string> | undefined {
+  if (!m) return undefined;
+  const out: Record<string, string> = {};
+  for (const [k, v] of Object.entries(m)) {
+    const val = v == null ? "" : String(v).slice(0, 255);
+    if (val.trim() !== "") out[k] = val;
+  }
+  return Object.keys(out).length ? out : undefined;
+}
+
 function env() {
   const token = process.env.SQUARE_ACCESS_TOKEN;
   const locationId = process.env.SQUARE_LOCATION_ID;
@@ -75,8 +86,8 @@ export async function createPaymentLink(opts: {
     order: {
       location_id: locationId,
       reference_id: opts.referenceId,
-      metadata: opts.metadata,
-      line_items: opts.lineItems,
+      metadata: cleanMetadata(opts.metadata),
+      line_items: opts.lineItems.map((li) => ({ ...li, metadata: cleanMetadata(li.metadata) })),
     },
     checkout_options: { ask_for_shipping_address: false },
     ...(opts.buyerEmail ? { pre_populated_data: { buyer_email: opts.buyerEmail } } : {}),
