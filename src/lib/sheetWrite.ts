@@ -59,3 +59,55 @@ async function post(action: string, rows: unknown[]): Promise<void> {
     throw new Error(`${action} failed: ${data.error ?? res.status}`);
   }
 }
+
+export type PaymentRow = {
+  provider: "square" | "stripe";
+  account: string;
+  id: string;
+  at: string; // yyyy-MM-dd HH:mm (JST)
+  status: string;
+  amount: number;
+  refunded: number;
+  items: string;
+  name: string;
+  email: string;
+  card: string; // brand + last 4 only
+  orderId: string;
+  ref: string;
+  receipt: string;
+};
+
+/** 入金台帳 (PaymentLedger.gs): one row per payment, deduped by provider:id. */
+export async function upsertPayments(rows: PaymentRow[]): Promise<{ added: number; updated: number; unchanged: number }> {
+  const totals = { added: 0, updated: 0, unchanged: 0 };
+  for (let i = 0; i < rows.length; i += 400) {
+    const r = (await postJson("payment.upsert", rows.slice(i, i + 400))) as Partial<typeof totals>;
+    totals.added += r.added ?? 0;
+    totals.updated += r.updated ?? 0;
+    totals.unchanged += r.unchanged ?? 0;
+  }
+  return totals;
+}
+
+async function postJson(action: string, rows: unknown[]): Promise<Record<string, unknown>> {
+  const url = process.env.SHEET_WRITE_URL;
+  const token = process.env.SHEET_WRITE_TOKEN;
+  if (!url || !token) throw new Error("SHEET_WRITE_URL / SHEET_WRITE_TOKEN not set");
+  for (let attempt = 0; attempt < 3; attempt++) {
+    const res = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ token, action, rows }),
+      redirect: "follow",
+      cache: "no-store",
+    });
+    const data = (await res.json().catch(() => ({}))) as { ok?: boolean; error?: string };
+    if (data.ok) return data as Record<string, unknown>;
+    if (data.error && /busy/i.test(data.error) && attempt < 2) {
+      await new Promise((r) => setTimeout(r, 20_000));
+      continue;
+    }
+    throw new Error(`${action} failed: ${data.error ?? res.status}`);
+  }
+  throw new Error(`${action} failed`);
+}
