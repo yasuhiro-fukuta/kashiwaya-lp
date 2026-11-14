@@ -55,14 +55,14 @@ function priceOf(menu: MenuItem[] | null, kind: Kind, item: string, persons: num
   if (!key) return null;
   const hit = menu.find((m) => m.category === "夕食" && Number(m.persons) === persons && key.test(m.name));
   if (hit) return hit.price;
-  // One-person dinner: house rule on the HP and in guest replies — any dish
-  // except beef (sukiyaki) is made for one at half the 2-person price
-  // (e.g. chicken hot pot for 1 = ¥3,000). 2026-11-14: Yan Ng's ¥3,000 dinner
-  // was shown to staff as "金額が決まらない" because the menu sheet has no
-  // 1-person rows.
-  if (persons === 1 && !/sukiyaki/i.test(String(key))) {
-    const two = menu.find((m) => m.category === "夕食" && Number(m.persons) === 2 && key.test(m.name));
-    if (two) return Math.round(two.price / 2);
+  // One-person dinner (2026-11-14 社長指示): 1名分 = 2名分 − (3名分 − 2名分).
+  // e.g. chicken: 6,000 − (8,000 − 6,000) = ¥4,000. The 3-person row is used
+  // even when it is not sold (有効=false, e.g. sukiyaki ¥14,000 → ¥6,000).
+  if (persons === 1) {
+    const at = (n: number) => menu.find((m) => m.category === "夕食" && Number(m.persons) === n && key.test(m.name));
+    const two = at(2);
+    const three = at(3);
+    if (two && three) return two.price - (three.price - two.price);
   }
   return null;
 }
