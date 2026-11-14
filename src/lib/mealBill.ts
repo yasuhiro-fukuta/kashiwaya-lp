@@ -45,6 +45,13 @@ function dinnerMenuKey(item: string): RegExp | null {
   return null;
 }
 
+// Prices already promised to a guest before a pricing rule changed. A price
+// we told the guest is never raised afterwards (社長決定).
+const PROMISED: { date: string; room: string; kind: Kind; price: number; why: string }[] = [
+  // 11/9 DM（DM台帳1460行）で「chicken hot pot for one (¥3,000)」と約束。11/14 社長決定「あ」
+  { date: "2026-11-15", room: "2F", kind: "dinner", price: 3000, why: "Yan Ng様に¥3,000で約束済み" },
+];
+
 function priceOf(menu: MenuItem[] | null, kind: Kind, item: string, persons: number): number | null {
   if (!menu) return null;
   if (kind === "breakfast") {
@@ -146,7 +153,8 @@ export function computeBill(lines: OrderLine[], board: BoardRow[], menu: MenuIte
         enPaid.push(enName(kind, l.item, persons));
         continue;
       }
-      const price = Number.isFinite(persons) ? priceOf(menu, kind, l.item, persons) : null;
+      const promised = PROMISED.find((p) => p.date === date && p.room === room && p.kind === kind);
+      const price = promised ? promised.price : Number.isFinite(persons) ? priceOf(menu, kind, l.item, persons) : null;
       if (price == null) {
         unknown = true;
         collect.push(`  ・${what} → 金額は社長に電話で確認してからもらう`);
