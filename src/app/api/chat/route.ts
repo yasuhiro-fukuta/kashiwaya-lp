@@ -188,9 +188,14 @@ export async function POST(req: Request) {
         })
         .catch((err) => {
           console.error("chat: stream error:", err);
+          // Short error code (no secrets) so a broken answer can be diagnosed
+          // from a screenshot without Vercel log access (2026-11-16).
+          const e = err as { status?: number; error?: { error?: { type?: string; message?: string } }; name?: string };
+          const code = [e?.status, e?.error?.error?.type ?? e?.name].filter(Boolean).join(" ");
+          const detail = (e?.error?.error?.message ?? "").slice(0, 120);
           controller.enqueue(
             encoder.encode(
-              "\n\nSorry, something went wrong. Please try again, or contact us on WhatsApp: https://wa.me/819038392354",
+              `\n\nSorry, something went wrong. Please try again, or contact us on WhatsApp: https://wa.me/819038392354${code ? `\n(error: ${code}${detail ? ` — ${detail}` : ""})` : ""}`,
             ),
           );
         })
