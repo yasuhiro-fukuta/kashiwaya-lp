@@ -21,6 +21,12 @@ export type LinkReport = {
     cleared: boolean;
   }[];
   skipped: number;
+  /**
+   * 提携レストランでの夕食（ピエロ等、kind=external）の今日以降の予約。支払い済み・
+   * 紐づけ済みの注文から数える（2026-11-19 社長決定：前日17時に社長が店へ電話する
+   * ので、定時チェックはこの一覧をそのまま出す。人数はここで計算し、AIは写すだけ）。
+   */
+  dinnerOut: { date: string; restaurant: string; persons: number; guest: string; booking: string; orderId: string }[];
   /** 直近3日の、支払いが確認できない注文（状態の確認用） */
   unpaidRecent?: { orderId: string; state?: string; tenders: number; due?: number; total?: number; createdAt?: string; booking?: string; lastName?: string }[];
 };
@@ -77,7 +83,7 @@ function isCancelHandled(o: SquareOrder): boolean {
 const ALREADY_IN_SHEET = new Set<string>(["aSCglcPwLZGgGC4tJ5w3xWkYaXPZY"]);
 
 export async function linkPendingOrders(): Promise<LinkReport> {
-  const report: LinkReport = { linked: [], unmatched: [], problems: [], cancelled: [], skipped: 0 };
+  const report: LinkReport = { linked: [], unmatched: [], problems: [], cancelled: [], skipped: 0, dinnerOut: [] };
   const all = await listOrderPageOrders();
   const pending = all.filter((o) => isPaid(o) && !isLinked(o));
   report.skipped = all.length - pending.length;
@@ -187,7 +193,26 @@ export async function linkPendingOrders(): Promise<LinkReport> {
     }
   }
   await findCancelled(all, report);
+  report.dinnerOut = dinnerOut(all);
   return report;
+}
+
+/** Upcoming dinner-out (partner restaurant) covers, from paid + linked orders. */
+function dinnerOut(all: SquareOrder[]): LinkReport["dinnerOut"] {
+  const today = todayJst();
+  const out: LinkReport["dinnerOut"] = [];
+  for (const o of all) {
+    if (!isPaid(o) || !isLinked(o) || isCancelCleared(o) || (o.refunds ?? []).length > 0) continue;
+    for (const li of o.line_items ?? []) {
+      const m = li.metadata ?? {};
+      if (m.kind !== "external" || !m.date || m.date < today) continue;
+      out.push({
+        date: m.date, restaurant: m.label ?? m.item ?? "", persons: Number(m.persons) || 1,
+        guest: o.metadata?.lastName ?? "", booking: o.metadata?.booking ?? "", orderId: o.id,
+      });
+    }
+  }
+  return out.sort((a, b) => a.date.localeCompare(b.date));
 }
 
 /**

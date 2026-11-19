@@ -3,12 +3,22 @@
 import { useMemo, useState } from "react";
 import { MARUSHO_SITE_URL } from "@/lib/site";
 
+type Restaurant = {
+  key: string;
+  name: string;
+  closedWeekdays: number[];
+  time: string;
+  walk: string;
+  mapUrl: string;
+};
+
 type MenuOption = {
   id: string;
   label: string;
-  kind: "dinner" | "breakfast";
+  kind: "dinner" | "breakfast" | "external"; // external = dinner out at a partner restaurant (Pierrot)
   persons: number;
   price: number;
+  restaurant?: Restaurant;
 };
 
 type Night = {
@@ -26,6 +36,12 @@ type DinnerPick = { optionId: string; sets: number };
 function yen(n: number) {
   return "¥" + n.toLocaleString("en-US");
 }
+
+function weekdayOf(d: string) {
+  return new Date(`${d}T00:00:00Z`).getUTCDay();
+}
+
+const WEEKDAYS = ["Sundays", "Mondays", "Tuesdays", "Wednesdays", "Thursdays", "Fridays", "Saturdays"];
 
 function niceDate(d: string) {
   return new Date(`${d}T00:00:00Z`).toLocaleDateString("en-GB", {
@@ -50,9 +66,12 @@ export default function OrderForm() {
   const [menu, setMenu] = useState<MenuOption[]>([]);
   const [dinners, setDinners] = useState<Record<string, DinnerPick[]>>({});
   const [breakfasts, setBreakfasts] = useState<Record<string, number>>({});
+  // Dinner out: date → option id → number of people
+  const [outs, setOuts] = useState<Record<string, Record<string, number>>>({});
 
   const dinnerMenu = menu.filter((m) => m.kind === "dinner");
   const breakfast = menu.find((m) => m.kind === "breakfast");
+  const externalMenu = menu.filter((m) => m.kind === "external" && m.restaurant);
 
   async function startOrder(e: React.FormEvent) {
     e.preventDefault();
@@ -70,6 +89,7 @@ export default function OrderForm() {
       setMenu(data.menu);
       setDinners({});
       setBreakfasts({});
+      setOuts({});
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong.");
     } finally {
@@ -87,8 +107,11 @@ export default function OrderForm() {
         if (n > 0) out.push({ date, optionId: breakfast.id, sets: n });
       }
     }
+    for (const [date, byOption] of Object.entries(outs)) {
+      for (const [optionId, n] of Object.entries(byOption)) if (n > 0) out.push({ date, optionId, sets: n });
+    }
     return out;
-  }, [dinners, breakfasts, breakfast]);
+  }, [dinners, breakfasts, breakfast, outs]);
 
   const total = lines.reduce((s, l) => s + (menu.find((m) => m.id === l.optionId)?.price ?? 0) * l.sets, 0);
   const hasDinner = lines.some((l) => menu.find((m) => m.id === l.optionId)?.kind === "dinner");
@@ -200,7 +223,7 @@ export default function OrderForm() {
                 <a href={MARUSHO_SITE_URL} target="_blank" rel="noreferrer">
                   {MARUSHO_SITE_URL}
                 </a>
-                . Breakfast can be added below.
+                {externalMenu.length ? ", or book dinner out below" : ""}. Breakfast can be added below.
               </small>
             </p>
           ) : (
@@ -234,6 +257,39 @@ export default function OrderForm() {
             </div>
           )}
 
+          {externalMenu.map((m) => {
+            const r = m.restaurant!;
+            const closed = r.closedWeekdays.includes(weekdayOf(n.date));
+            return (
+              <div key={m.id} className="order-block">
+                <strong>Dinner out at {r.name}</strong>{" "}
+                <small>
+                  ({m.label}, {yen(m.price)} per person · seated at {r.time} · {r.walk} · drinks paid at the restaurant)
+                </small>
+                {closed ? (
+                  <p>
+                    <small>{r.name} is closed on {WEEKDAYS[weekdayOf(n.date)]}.</small>
+                  </p>
+                ) : (
+                  <div className="order-row">
+                    <select
+                      value={outs[n.date]?.[m.id] ?? 0}
+                      onChange={(e) =>
+                        setOuts((prev) => ({ ...prev, [n.date]: { ...(prev[n.date] ?? {}), [m.id]: Number(e.target.value) } }))
+                      }
+                    >
+                      {Array.from({ length: Math.max(n.guests, 4) + 1 }, (_, k) => k).map((k) => (
+                        <option key={k} value={k}>
+                          {k === 0 ? `No dinner at ${r.name}` : `${k} ${k === 1 ? "person" : "people"}`}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+
           {breakfast && (
             <div className="order-block">
               <strong>Breakfast next morning</strong> <small>({breakfast.label}, {yen(breakfast.price)} per person)</small>
@@ -257,6 +313,13 @@ export default function OrderForm() {
       {hasDinner && (
         <p>
           <small>Dinner comes with onigiri (rice balls). We&apos;ll confirm the dinner time with you at check-in.</small>
+        </p>
+      )}
+      {lines.some((l) => menu.find((m) => m.id === l.optionId)?.kind === "external") && (
+        <p>
+          <small>
+            Dinner out is already paid here — just show your confirmation at the restaurant. Drinks are paid there.
+          </small>
         </p>
       )}
 
