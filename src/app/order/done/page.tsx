@@ -3,6 +3,37 @@ import Link from "next/link";
 import { SiteNav, SiteFooter } from "@/components/SiteChrome";
 import { getOrder, isPaid, type SquareOrder } from "@/lib/square";
 import { WHATSAPP_URL_EN } from "@/lib/site";
+import { RESTAURANTS } from "@/lib/mealOrder";
+
+/** Dinner-out lines (partner restaurant, kind=external) → guest instructions. */
+function DinnerOut({ order }: { order: SquareOrder | null }) {
+  const lines = (order?.line_items ?? []).filter((li) => li.metadata?.kind === "external" && li.metadata?.date);
+  if (!lines.length) return null;
+  return (
+    <>
+      {lines.map((li, i) => {
+        const r = RESTAURANTS[li.metadata!.item ?? ""];
+        const name = r?.name ?? li.metadata!.label ?? "the restaurant";
+        const date = new Date(`${li.metadata!.date}T00:00:00Z`).toLocaleDateString("en-GB", {
+          weekday: "short", day: "numeric", month: "short", timeZone: "UTC",
+        });
+        return (
+          <p key={i}>
+            <strong>Dinner at {name} — {date}, {r?.time ?? "18:00"} for {li.metadata!.persons ?? li.quantity}.</strong>{" "}
+            Please be there by {r?.time ?? "18:00"}; it&apos;s {r?.walk ?? "a short walk from Kashiwaya"}
+            {r?.mapUrl ? (
+              <>
+                {" "}(<a href={r.mapUrl} target="_blank" rel="noreferrer">map</a>)
+              </>
+            ) : null}
+            . Your meal is already paid — show this page or your Square receipt at the restaurant. Drinks are
+            paid there.
+          </p>
+        );
+      })}
+    </>
+  );
+}
 
 export const metadata: Metadata = {
   title: "Meal order confirmed",
@@ -38,6 +69,7 @@ export default async function OrderDonePage({
   // went through, so with it the payment is real even when the order can't
   // be read yet: never show "couldn't confirm" in that case.
   const received = !paid && !!transactionId && (ours || !order);
+  const kashiwayaDinner = (order?.line_items ?? []).some((li) => li.metadata?.kind === "dinner");
   // The sheet is written later by /api/order/link (定時チェック), once the
   // order is linked to the booking (2026-11-06 社長決定).
 
@@ -66,11 +98,12 @@ export default async function OrderDonePage({
                 </li>
               ))}
             </ul>
+            <DinnerOut order={order} />
             <p>
               Total paid: ¥{(order.total_money?.amount ?? 0).toLocaleString("en-US")}. A receipt has been
-              sent by Square. We&apos;ll confirm the dinner time at check-in; breakfast is left in your fridge
-              the night before. We&apos;ll match your order to your Booking.com reservation — no need to do
-              anything else.
+              sent by Square. {kashiwayaDinner ? "We'll confirm the dinner time at check-in; breakfast" : "Breakfast"}{" "}
+              is left in your fridge the night before. We&apos;ll match your order to your Booking.com
+              reservation — no need to do anything else.
             </p>
             <p>
               Need to change something? Message us on{" "}
@@ -88,6 +121,7 @@ export default async function OrderDonePage({
                 ))}
               </ul>
             )}
+            <DinnerOut order={order} />
             <p>
               Your payment has been received — Square will email you a receipt shortly. We&apos;ll match
               your order to your Booking.com reservation, so there is nothing else to do.
