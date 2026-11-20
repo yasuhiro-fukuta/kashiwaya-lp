@@ -17,6 +17,10 @@ const MODEL = process.env.CHAT_MODEL ?? "claude-haiku-4-5";
 // staff questions run on a stronger model. Guest mode stays on MODEL.
 const STAFF_MODEL = process.env.STAFF_CHAT_MODEL ?? "claude-sonnet-5";
 const MAX_MESSAGE_CHARS = 2000;
+// Our own earlier answers come back in the history. Staff answers run up to
+// 4096 tokens, well past 2000 chars; holding them to the user limit made every
+// follow-up question in that chat fail with 400 (2026-11-20).
+const MAX_ASSISTANT_CHARS = 20000;
 const MAX_TURNS = 30;
 
 // Naive per-IP rate limit. In-memory, so it resets per serverless instance —
@@ -50,7 +54,7 @@ function isValidHistory(value: unknown): value is ChatMessage[] {
         m &&
         (m.role === "user" || m.role === "assistant") &&
         typeof m.content === "string" &&
-        m.content.length <= MAX_MESSAGE_CHARS &&
+        m.content.length <= (m.role === "assistant" ? MAX_ASSISTANT_CHARS : MAX_MESSAGE_CHARS) &&
         (m.images === undefined ||
           (Array.isArray(m.images) &&
             m.images.length <= MAX_IMAGES &&
