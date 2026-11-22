@@ -4,6 +4,11 @@ import { ArrowRight, UtensilsCrossed, Beer } from "lucide-react";
 import ChatWidget from "@/components/ChatWidget";
 import { SiteNav, SiteFooter } from "@/components/SiteChrome";
 import { MARUSHO_SITE_URL } from "@/lib/site";
+import { priceSummary, tariffAt, yenJp } from "@/lib/mealPrices";
+
+// 料金はプログラムの料金表（mealPrices.ts）から出す。2026-12-01 0:00 JST に新料金へ
+// 切り替わるよう、10分ごとに作り直す（ISR）。
+export const revalidate = 600;
 
 export const metadata: Metadata = {
   title: "食べる — 夕食・朝食",
@@ -19,6 +24,7 @@ const FOOD_IMG = "/gallery/somen.jpg";
 const DRINK_IMG = "/gallery/beer.jpg";
 
 export default function DiningPage() {
+  const P = priceSummary(tariffAt(Date.now()));
   return (
     <>
       <SiteNav lang="ja" solid />
@@ -59,31 +65,31 @@ export default function DiningPage() {
           <ul className="food-menu">
             <li>
               <span>鶏鍋の夕食(2名分 / 以降1名追加ごとに)</span>
-              <span>¥6,000 / +¥2,000</span>
+              <span>¥{yenJp(P.chicken.two)} / +¥{yenJp(P.chicken.extra)}</span>
             </li>
             <li>
               <span>豚しゃぶしゃぶの夕食(2名分 / 以降1名追加ごとに)</span>
-              <span>¥8,000 / +¥3,000</span>
+              <span>¥{yenJp(P.pork.two)} / +¥{yenJp(P.pork.extra)}</span>
             </li>
             <li>
               <span>豚冷しゃぶの夕食(2名分 / 以降1名追加ごとに)</span>
-              <span>¥8,000 / +¥3,000</span>
+              <span>¥{yenJp(P.porkChilled.two)} / +¥{yenJp(P.porkChilled.extra)}</span>
             </li>
             <li>
               <span>和牛すき焼きの夕食(2名分 / 4名分 / 以降2名追加ごとに・偶数名分のみ)</span>
-              <span>¥10,000 / ¥18,000 / +¥8,000</span>
+              <span>¥{yenJp(P.sukiyaki.two)} / ¥{yenJp(P.sukiyaki.four)} / +¥{yenJp(P.sukiyaki.extraTwo)}</span>
             </li>
             <li>
               <span>ビーガン&グルテンフリー鍋の夕食(2名分 / 以降1名追加ごとに)</span>
-              <span>¥8,000 / +¥3,000</span>
+              <span>¥{yenJp(P.vegan.two)} / +¥{yenJp(P.vegan.extra)}</span>
             </li>
             <li>
               <span>ビーガン&グルテンフリー冷製鍋の夕食(2名分 / 以降1名追加ごとに)</span>
-              <span>¥8,000 / +¥3,000</span>
+              <span>¥{yenJp(P.veganChilled.two)} / +¥{yenJp(P.veganChilled.extra)}</span>
             </li>
             <li>
               <span>朝食お茶漬けセット(ビーガン&グルテンフリー)</span>
-              <span>¥1,500 / 人</span>
+              <span>¥{yenJp(P.breakfast)} / 人</span>
             </li>
           </ul>
           <Link href="/ja/stay#book" className="meal-cta">
@@ -156,7 +162,7 @@ export default function DiningPage() {
               カード手数料5%)。なるべく事前のご注文をお願いします。
             </li>
             <li>
-              柏屋の<strong>朝食お茶漬けセット(お一人¥1,500)</strong>も
+              柏屋の<strong>朝食お茶漬けセット(お一人¥{yenJp(P.breakfast)})</strong>も
               一棟貸しでご注文いただけます — 直接予約なら予約時に
               アドオンで、Booking.com経由なら<Link href="/order">食事注文ページ</Link>でどうぞ。
             </li>

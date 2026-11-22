@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Script from "next/script";
 import "./globals.css";
 import { ClickTracking } from "./analytics";
+import { priceSummary, tariffAt, yenJp } from "@/lib/mealPrices";
 
 const SITE_URL = "https://kashiwaya-inn.com";
 /** Google Analytics 4 の測定ID。空文字にすると計測タグごと無効になる。 */
@@ -70,7 +71,13 @@ export const metadata: Metadata = {
   },
 };
 
-const structuredData = {
+// 食事の料金は mealPrices.ts の料金表から出す（2026-12-01 0:00 JST に新料金へ切り替わる）。
+// そのため構造化データは描画のたびに作り、レイアウトは10分ごとに作り直す（ISR）。
+export const revalidate = 600;
+
+function buildStructuredData() {
+  const P = priceSummary(tariffAt(Date.now()));
+  return {
   "@context": "https://schema.org",
   "@graph": [
     {
@@ -206,7 +213,7 @@ const structuredData = {
           name: "How much are dinner and breakfast at Kashiwaya Inn?",
           acceptedAnswer: {
             "@type": "Answer",
-            text: "Dinner sets start at 2 people, plus a set price for each extra person: chicken hot pot ¥6,000 for 2 (+¥2,000 per extra person), pork shabu-shabu or chilled rei-shabu ¥8,000 for 2 (+¥3,000), and vegan gluten-free hot or chilled pots ¥8,000 for 2 (+¥3,000). Wagyu sukiyaki comes in even numbers only: ¥10,000 for 2, ¥18,000 for 4, then +¥8,000 for every 2 more people. Solo travellers can order one set at half the two-person price. The ochazuke breakfast set (vegan & gluten-free) is ¥1,500 per person.",
+            text: `Dinner sets start at 2 people, plus a set price for each extra person: chicken hot pot ¥${yenJp(P.chicken.two)} for 2 (+¥${yenJp(P.chicken.extra)} per extra person), pork shabu-shabu or chilled rei-shabu ¥${yenJp(P.pork.two)} for 2 (+¥${yenJp(P.pork.extra)}), and vegan gluten-free hot or chilled pots ¥${yenJp(P.vegan.two)} for 2 (+¥${yenJp(P.vegan.extra)}). Wagyu sukiyaki comes in even numbers only: ¥${yenJp(P.sukiyaki.two)} for 2, ¥${yenJp(P.sukiyaki.four)} for 4, then +¥${yenJp(P.sukiyaki.extraTwo)} for every 2 more people. Solo travellers can order one set at half the two-person price. The ochazuke breakfast set (vegan & gluten-free) is ¥${yenJp(P.breakfast)} per person.`,
           },
         },
         {
@@ -316,7 +323,8 @@ const structuredData = {
       ],
     },
   ],
-};
+  };
+}
 
 export default function RootLayout({
   children,
@@ -337,7 +345,7 @@ export default function RootLayout({
         />
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(buildStructuredData()) }}
         />
       </head>
       <body>

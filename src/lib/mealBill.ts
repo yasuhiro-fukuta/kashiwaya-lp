@@ -12,17 +12,17 @@
 // night+room, and the model only copies the line. Sources:
 //   - what is served   = 柏屋注文確認票 (orders.ts) — the caterer's final record
 //   - paid or not      = CleaningBoard meal field "(paid) …" (schedule API)
-//   - selling price    = 「メニュー」sheet (menu.ts) — never the caterer's cost
+//   - selling price    = mealPrices.ts の料金表 — never the caterer's cost
+//     （2026-11-22 値上げ：12/1 0:00 JST 以降に受け付けた注文は新料金。注文確認票には
+//      受付日が無いので、12/1以降の夜で旧・新の金額が違う品は「社長に確認」にする）
 // When something can't be decided (no board row, no price), it says so and
 // falls to "未払い" (collect) — never silently "paid".
 
 import { fetchOrders, type OrderLine } from "./orders";
 import { fetchScheduleData, type BoardRow } from "./schedule";
-import { fetchMenu } from "./menu";
+import { decideByServedDate, mealKeyOf, type PriceDecision } from "./mealPrices";
 
 type Kind = "dinner" | "breakfast";
-
-type MenuItem = { name: string; category: string; persons: string; price: number; note: string };
 
 const BREAKFAST_RE = /朝食|breakfast|ochazuke|お茶漬/i;
 const DINNER_RE = /鶏鍋|豚しゃぶ|冷しゃぶ|牛すき|すき焼|ビーガン|ヴィーガン|bbq|chicken|pork|shabu|sukiyaki|wagyu|vegan|hot pot|chilled/i;
@@ -33,18 +33,6 @@ export function kindOf(text: string): Kind | null {
   return null; // not food (手荷物集配 etc.)
 }
 
-// Order-sheet dish → which「メニュー」row it is. null = no selling price on file.
-function dinnerMenuKey(item: string): RegExp | null {
-  const vegan = /ビーガン|ヴィーガン|vegan/i.test(item);
-  const chilled = /冷しゃぶ|chilled|rei/i.test(item);
-  if (vegan) return chilled ? /vegan.*chilled/i : /vegan.*hot pot/i;
-  if (/鶏鍋|chicken/i.test(item)) return /chicken hot pot/i;
-  if (chilled) return /^(?!.*vegan).*chilled/i;
-  if (/豚しゃぶ|shabu|pork/i.test(item)) return /^(?!.*vegan).*pork hot pot/i;
-  if (/牛すき|すき焼|sukiyaki|wagyu/i.test(item)) return /sukiyaki/i;
-  return null;
-}
-
 // Prices already promised to a guest before a pricing rule changed. A price
 // we told the guest is never raised afterwards (社長決定).
 const PROMISED: { date: string; room: string; kind: Kind; price: number; why: string }[] = [
@@ -52,26 +40,11 @@ const PROMISED: { date: string; room: string; kind: Kind; price: number; why: st
   { date: "2026-11-15", room: "2F", kind: "dinner", price: 3000, why: "Yan Ng様に¥3,000で約束済み" },
 ];
 
-function priceOf(menu: MenuItem[] | null, kind: Kind, item: string, persons: number): number | null {
-  if (!menu) return null;
-  if (kind === "breakfast") {
-    const b = menu.find((m) => m.category === "朝食" && Number(m.persons) === 1);
-    return b ? b.price * persons : null;
-  }
-  const key = dinnerMenuKey(item);
-  if (!key) return null;
-  const hit = menu.find((m) => m.category === "夕食" && Number(m.persons) === persons && key.test(m.name));
-  if (hit) return hit.price;
-  // One-person dinner (2026-11-14 社長指示): 1名分 = 2名分 − (3名分 − 2名分).
-  // e.g. chicken: 6,000 − (8,000 − 6,000) = ¥4,000. The 3-person row is used
-  // even when it is not sold (有効=false, e.g. sukiyaki ¥14,000 → ¥6,000).
-  if (persons === 1) {
-    const at = (n: number) => menu.find((m) => m.category === "夕食" && Number(m.persons) === n && key.test(m.name));
-    const two = at(2);
-    const three = at(3);
-    if (two && three) return two.price - (three.price - two.price);
-  }
-  return null;
+/** 売値（受付日が無いので食べる日で決める。mealPrices.ts の decideByServedDate）。 */
+function decidePrice(date: string, kind: Kind, item: string, persons: number): PriceDecision {
+  const key = kind === "breakfast" ? "breakfast" : mealKeyOf(item);
+  if (!key || (kind === "dinner" && key === "breakfast")) return { price: null };
+  return decideByServedDate(date, key, persons);
 }
 
 /** Which kinds are marked "(paid)" in a CleaningBoard meal field. */
@@ -124,7 +97,7 @@ function enName(kind: Kind, item: string, persons: number): string {
 // 【支払い済み】【未払い】 brackets as "everything is paid" and collected
 // nothing (¥10,000 lost). Never write "支払い済み" at room level unless the
 // amount to collect really is zero.
-export function computeBill(lines: OrderLine[], board: BoardRow[], menu: MenuItem[] | null): BillLine[] {
+export function computeBill(lines: OrderLine[], board: BoardRow[]): BillLine[] {
   const groups = new Map<string, OrderLine[]>();
   for (const l of lines) {
     if (!kindOf(l.item)) continue;
@@ -154,10 +127,19 @@ export function computeBill(lines: OrderLine[], board: BoardRow[], menu: MenuIte
         continue;
       }
       const promised = PROMISED.find((p) => p.date === date && p.room === room && p.kind === kind);
-      const price = promised ? promised.price : Number.isFinite(persons) ? priceOf(menu, kind, l.item, persons) : null;
+      const decided: PriceDecision = promised
+        ? { price: promised.price }
+        : Number.isFinite(persons)
+          ? decidePrice(date, kind, l.item, persons)
+          : { price: null };
+      const price = decided.price;
       if (price == null) {
         unknown = true;
-        collect.push(`  ・${what} → 金額は社長に電話で確認してからもらう`);
+        collect.push(
+          decided.candidates
+            ? `  ・${what} → 金額は社長に電話で確認してからもらう（11/30までに受けた注文なら旧料金${yen(decided.candidates.old)}・12/1以降なら新料金${yen(decided.candidates.new)}）`
+            : `  ・${what} → 金額は社長に電話で確認してからもらう`,
+        );
       } else {
         total += price;
         collect.push(`  ・${what} → ${yen(price)} もらう`);
@@ -188,16 +170,16 @@ export function computeBill(lines: OrderLine[], board: BoardRow[], menu: MenuIte
 
 export async function getMealBillBlock(): Promise<string | null> {
   try {
-    const [orders, schedule, menu] = await Promise.all([fetchOrders(), fetchScheduleData(false), fetchMenu()]);
+    const [orders, schedule] = await Promise.all([fetchOrders(), fetchScheduleData(false)]);
     const today = jstToday();
     const from = addDays(today, -1);
     const to = addDays(today, 14);
-    const bill = computeBill(orders.lines, schedule.board ?? [], menu).filter((b) => b.date >= from && b.date <= to);
+    const bill = computeBill(orders.lines, schedule.board ?? []).filter((b) => b.date >= from && b.date <= to);
     return `# 食事と会計（プログラムで計算済み・スタッフ専用）
 ★★★シフト・食事・会計・「いくらもらう？」を聞かれたら、答えの**一番最初**に、その日・その部屋の下の「会計カード」（■から始まるかたまり）を**改行も含めて一字一句そのまま**貼る。シフトの他の内容はその後に書く。支払い済みかどうかの判定や金額の計算を自分でしない・言い換えない・足し算し直さない（2026-11-11 社長指示。AIの判定が聞くたびに入れ替わり、スタッフが誤った金額で会計しかけた）。
 - 会計カードを要約・言い換え・並べ替えしない。「支払い済み」という言葉を部屋全体に使わない（2026-11-11 スタッフが「全部支払い済み」と読み違えて¥10,000をもらい損ねた）。\n- 下にカードが無い部屋は「仕出しなし（もらうお金なし）」。
 - 金額は売値（HPの料金）。仕出し屋への支払額（原価）は出さない。
-- 判定元：品目と数＝注文確認票／支払い済み＝予定表の食事欄の「(paid)」／金額＝「メニュー」シート。今日: ${today}
+- 判定元：品目と数＝注文確認票／支払い済み＝予定表の食事欄の「(paid)」／金額＝プログラムの料金表（2026-12-01 0:00以降に受け付けた注文は新料金）。今日: ${today}
 
 ${bill.map((b) => b.text).join("\n\n") || "(この期間の仕出しなし)"}`;
   } catch (err) {

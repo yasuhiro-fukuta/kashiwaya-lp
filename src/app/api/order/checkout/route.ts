@@ -35,8 +35,10 @@ export async function POST(req: Request) {
 
   try {
     let nights = buildNights(arrival, Number(body.nights), "room", Number(body.guests));
+    // 受け付けた日時＝いま（サーバー時刻）。2026-12-01 0:00 JST 以降は新料金（mealPrices.ts）。
+    const acceptedAt = Date.now();
     const [menu, house] = await Promise.all([
-      getMenuOptions(),
+      getMenuOptions(acceptedAt),
       houseNights(nights[0].date, nights[nights.length - 1].date).catch((err) => {
         console.error("order/checkout: house lookup failed", err);
         return new Set<string>();

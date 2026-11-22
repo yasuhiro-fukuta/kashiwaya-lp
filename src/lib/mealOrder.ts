@@ -3,7 +3,7 @@
 // Prices always come from the「メニュー」sheet (= selling prices on the site);
 // the client never sends a price.
 
-import { fetchMenu } from "@/lib/menu";
+import { fetchMenuAt } from "@/lib/menu";
 
 export const ORDER_DEADLINE_DAYS = 3; // orders close 3 days before the night
 // 2026-11-04 社長指示：夕食の時間は現地で確認するので注文時に聞かない。
@@ -44,8 +44,12 @@ function itemFor(name: string): string | null {
   return null;
 }
 
-export async function getMenuOptions(): Promise<MenuOption[] | null> {
-  const rows = await fetchMenu();
+/**
+ * 注文ページのメニュー。価格は受け付けた日時 at（既定＝今）の料金表で
+ * プログラムが計算する（2026-12-01 0:00 JST から新料金。mealPrices.ts）。
+ */
+export async function getMenuOptions(at: Date | number = Date.now()): Promise<MenuOption[] | null> {
+  const rows = await fetchMenuAt(at);
   if (!rows) return null;
   const out: MenuOption[] = [];
   for (const r of rows) {
