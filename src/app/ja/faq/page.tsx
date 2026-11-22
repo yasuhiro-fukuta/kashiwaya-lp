@@ -3,6 +3,11 @@ import Link from "next/link";
 import ChatWidget from "@/components/ChatWidget";
 import { SiteNav, SiteFooter } from "@/components/SiteChrome";
 import { WHATSAPP_URL_JA } from "@/lib/site";
+import { priceSummary, tariffAt, yenJp } from "@/lib/mealPrices";
+
+// 食事の料金はプログラムの料金表（mealPrices.ts）から出す。2026-12-01 0:00 JST に
+// 新料金へ切り替わるよう、10分ごとに作り直す（ISR）。
+export const revalidate = 600;
 
 export const metadata: Metadata = {
   title: "よくある質問・設備・アクセス",
@@ -15,6 +20,7 @@ export const metadata: Metadata = {
 };
 
 export default function FaqPage() {
+  const P = priceSummary(tariffAt(Date.now()));
   return (
     <>
       <SiteNav lang="ja" solid />
@@ -252,13 +258,13 @@ export default function FaqPage() {
           <summary>食事の料金は?</summary>
           <p>
             夕食セットは2名分から、以降1名追加ごとに加算です:鶏鍋 2名分
-            6,000円(1名追加ごとに+2,000円)、豚しゃぶしゃぶ・豚冷しゃぶ
-            2名分8,000円(+3,000円)、ビーガン&グルテンフリーの鍋・冷製鍋
-            2名分8,000円(+3,000円)。和牛すき焼きは偶数名分のみで、2名分
-            10,000円・4名分18,000円、以降2名追加ごとに+8,000円。
+            {yenJp(P.chicken.two)}円(1名追加ごとに+{yenJp(P.chicken.extra)}円)、豚しゃぶしゃぶ・豚冷しゃぶ
+            2名分{yenJp(P.pork.two)}円(+{yenJp(P.pork.extra)}円)、ビーガン&グルテンフリーの鍋・冷製鍋
+            2名分{yenJp(P.vegan.two)}円(+{yenJp(P.vegan.extra)}円)。和牛すき焼きは偶数名分のみで、2名分
+            {yenJp(P.sukiyaki.two)}円・4名分{yenJp(P.sukiyaki.four)}円、以降2名追加ごとに+{yenJp(P.sukiyaki.extraTwo)}円。
             お一人でのご利用は1日1組まで、
             2名分の半額でご案内します。朝食のお茶漬けセット
-            (ビーガン&グルテンフリー)はお一人1,500円です。
+            (ビーガン&グルテンフリー)はお一人{yenJp(P.breakfast)}円です。
           </p>
         </details>
         <details className="faq-item">

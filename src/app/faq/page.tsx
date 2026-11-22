@@ -3,6 +3,11 @@ import Link from "next/link";
 import ChatWidget from "@/components/ChatWidget";
 import { SiteNav, SiteFooter } from "@/components/SiteChrome";
 import { WHATSAPP_URL_EN } from "@/lib/site";
+import { priceSummary, tariffAt, yenJp } from "@/lib/mealPrices";
+
+// 食事の料金はプログラムの料金表（mealPrices.ts）から出す。2026-12-01 0:00 JST に
+// 新料金へ切り替わるよう、10分ごとに作り直す（ISR）。
+export const revalidate = 600;
 
 export const metadata: Metadata = {
   title: "FAQ, Facilities & Access",
@@ -15,6 +20,7 @@ export const metadata: Metadata = {
 };
 
 export default function FaqPage() {
+  const P = priceSummary(tariffAt(Date.now()));
   return (
     <>
       <SiteNav lang="en" solid />
@@ -306,14 +312,14 @@ export default function FaqPage() {
           <summary>How much are dinner and breakfast?</summary>
           <p>
             Dinner sets start at 2 people, plus a set price for each extra
-            person: chicken hot pot ¥6,000 for 2 (+¥2,000 per extra person),
-            pork shabu-shabu or chilled rei-shabu ¥8,000 for 2 (+¥3,000), and
-            vegan gluten-free hot or chilled pots ¥8,000 for 2 (+¥3,000).
-            Wagyu sukiyaki comes in even numbers only: ¥10,000 for 2, ¥18,000
-            for 4, then +¥8,000 for every 2 more people. Travelling
+            person: chicken hot pot ¥{yenJp(P.chicken.two)} for 2 (+¥{yenJp(P.chicken.extra)} per extra person),
+            pork shabu-shabu or chilled rei-shabu ¥{yenJp(P.pork.two)} for 2 (+¥{yenJp(P.pork.extra)}), and
+            vegan gluten-free hot or chilled pots ¥{yenJp(P.vegan.two)} for 2 (+¥{yenJp(P.vegan.extra)}).
+            Wagyu sukiyaki comes in even numbers only: ¥{yenJp(P.sukiyaki.two)} for 2, ¥{yenJp(P.sukiyaki.four)}{" "}
+            for 4, then +¥{yenJp(P.sukiyaki.extraTwo)} for every 2 more people. Travelling
             solo? One set per day can be ordered at half the two-person
             price. The ochazuke breakfast set (vegan &amp; gluten-free) is
-            ¥1,500 per person.
+            ¥{yenJp(P.breakfast)} per person.
           </p>
         </details>
         <details className="faq-item">

@@ -1,4 +1,13 @@
-# Kashiwaya Inn (柏屋)
+// /llms.txt（旧 public/llms.txt）。食事の料金をプログラムの料金表（mealPrices.ts）から
+// 出すため、静的ファイルからルートに移した。2026-12-01 0:00 JST に新料金へ切り替わるよう
+// 10分ごとに作り直す（ISR）。本文は旧ファイルと同じ（料金の行だけ差し込み）。
+import { priceSummary, tariffAt, yenJp as y } from "@/lib/mealPrices";
+
+export const revalidate = 600;
+
+function body(): string {
+  const P = priceSummary(tariffAt(Date.now()));
+  return `# Kashiwaya Inn (柏屋)
 
 > A 140-year-old kominka (traditional Japanese house) guesthouse in Midono-juku,
 > the 41st post town on the Nakasendo trail — in Nagiso, Kiso Valley, Nagano,
@@ -83,13 +92,13 @@ Japanese versions under /ja/.
   Shabu-shabu on the 5th"; same for breakfast mornings). Booking.com guests
   order meals on WhatsApp (add-ons are not available via OTAs)
 - Dinner sets, price for 2 people / each extra person: chicken hot pot
-  ¥6,000 / +¥2,000 · pork shabu-shabu ¥8,000 / +¥3,000 · pork chilled shabu
-  (rei-shabu) ¥8,000 / +¥3,000 · vegan gluten-free hot pot ¥8,000 / +¥3,000 ·
-  vegan gluten-free chilled pot ¥8,000 / +¥3,000
-- Wagyu sukiyaki: even numbers only — ¥10,000 for 2, ¥18,000 for 4, then
-  +¥8,000 for every 2 more people
+  ¥${y(P.chicken.two)} / +¥${y(P.chicken.extra)} · pork shabu-shabu ¥${y(P.pork.two)} / +¥${y(P.pork.extra)} · pork chilled shabu
+  (rei-shabu) ¥${y(P.porkChilled.two)} / +¥${y(P.porkChilled.extra)} · vegan gluten-free hot pot ¥${y(P.vegan.two)} / +¥${y(P.vegan.extra)} ·
+  vegan gluten-free chilled pot ¥${y(P.veganChilled.two)} / +¥${y(P.veganChilled.extra)}
+- Wagyu sukiyaki: even numbers only — ¥${y(P.sukiyaki.two)} for 2, ¥${y(P.sukiyaki.four)} for 4, then
+  +¥${y(P.sukiyaki.extraTwo)} for every 2 more people
 - Solo travellers: one set per day at half the two-person price
-- Breakfast: ochazuke set (vegan & gluten-free) ¥1,500 per person
+- Breakfast: ochazuke set (vegan & gluten-free) ¥${y(P.breakfast)} per person
 - Dietary needs (vegan, gluten-free, etc.) accommodated on request
 - Note: Booking.com Genius "free breakfast" badges are a Booking.com system
   display with no arrangement with the inn — there are no breakfast-included
@@ -119,3 +128,9 @@ Japanese versions under /ja/.
 - Tsumago–Magome day walk: https://kashiwaya-inn.com/guide/tsumago-magome-day-walk
 - Rainy days in the Kiso: https://kashiwaya-inn.com/guide/rainy-day-in-kiso
 - Gorges & rivers by e-bike: https://kashiwaya-inn.com/guide/kiso-valley-ebike-day
+`;
+}
+
+export function GET() {
+  return new Response(body(), { headers: { "content-type": "text/plain; charset=utf-8" } });
+}

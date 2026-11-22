@@ -4,6 +4,11 @@ import { ArrowRight, UtensilsCrossed, Beer } from "lucide-react";
 import ChatWidget from "@/components/ChatWidget";
 import { SiteNav, SiteFooter } from "@/components/SiteChrome";
 import { MARUSHO_SITE_URL } from "@/lib/site";
+import { priceSummary, tariffAt, yenJp } from "@/lib/mealPrices";
+
+// 料金はプログラムの料金表（mealPrices.ts）から出す。2026-12-01 0:00 JST に新料金へ
+// 切り替わるよう、10分ごとに作り直す（ISR）。
+export const revalidate = 600;
 
 export const metadata: Metadata = {
   title: "Dining — Dinner & Breakfast",
@@ -19,6 +24,7 @@ const FOOD_IMG = "/gallery/somen.jpg";
 const DRINK_IMG = "/gallery/beer.jpg";
 
 export default function DiningPage() {
+  const P = priceSummary(tariffAt(Date.now()));
   return (
     <>
       <SiteNav lang="en" solid />
@@ -60,31 +66,31 @@ export default function DiningPage() {
           <ul className="food-menu">
             <li>
               <span>Chicken hot pot dinner (serves 2 / each extra person)</span>
-              <span>¥6,000 / +¥2,000</span>
+              <span>¥{yenJp(P.chicken.two)} / +¥{yenJp(P.chicken.extra)}</span>
             </li>
             <li>
               <span>Pork shabu-shabu hot pot dinner (serves 2 / each extra person)</span>
-              <span>¥8,000 / +¥3,000</span>
+              <span>¥{yenJp(P.pork.two)} / +¥{yenJp(P.pork.extra)}</span>
             </li>
             <li>
               <span>Pork chilled shabu (rei-shabu) dinner (serves 2 / each extra person)</span>
-              <span>¥8,000 / +¥3,000</span>
+              <span>¥{yenJp(P.porkChilled.two)} / +¥{yenJp(P.porkChilled.extra)}</span>
             </li>
             <li>
               <span>Wagyu sukiyaki dinner (serves 2 / serves 4 / each extra 2 people; even numbers only)</span>
-              <span>¥10,000 / ¥18,000 / +¥8,000</span>
+              <span>¥{yenJp(P.sukiyaki.two)} / ¥{yenJp(P.sukiyaki.four)} / +¥{yenJp(P.sukiyaki.extraTwo)}</span>
             </li>
             <li>
               <span>Vegan gluten-free hot pot dinner (serves 2 / each extra person)</span>
-              <span>¥8,000 / +¥3,000</span>
+              <span>¥{yenJp(P.vegan.two)} / +¥{yenJp(P.vegan.extra)}</span>
             </li>
             <li>
               <span>Vegan gluten-free chilled pot dinner (serves 2 / each extra person)</span>
-              <span>¥8,000 / +¥3,000</span>
+              <span>¥{yenJp(P.veganChilled.two)} / +¥{yenJp(P.veganChilled.extra)}</span>
             </li>
             <li>
               <span>Ochazuke breakfast set (vegan &amp; gluten-free)</span>
-              <span>¥1,500 / person</span>
+              <span>¥{yenJp(P.breakfast)} / person</span>
             </li>
           </ul>
           <Link href="/stay#book" className="meal-cta">
@@ -167,7 +173,7 @@ export default function DiningPage() {
             </li>
             <li>
               Prefer Kashiwaya&apos;s <strong>ochazuke breakfast set
-              (¥1,500 per person)</strong>? It&apos;s available for
+              (¥{yenJp(P.breakfast)} per person)</strong>? It&apos;s available for
               whole-house stays too &mdash; add it at checkout when booking
               direct, or on our <Link href="/order">meal order page</Link> if
               you booked via Booking.com.
