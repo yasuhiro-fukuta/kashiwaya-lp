@@ -49,7 +49,7 @@ A：大きく3つあります。
 1、車道の左側を走ってください。車道が危ないと感じたら歩道を走ってください。歩行者とすれ違う際は必ず自転車を降りてすれ違ってください。
 2、木製の橋の上を通る場合は、必ず自転車から降りて自転車を引いて通行してください。安全及び遺産保存の目的です。
 3、下記のナビゲーションに沿って走行してください。私道を避け、かつ安全が確保できるように入念に設計されたルートです。
-周辺散策：https://www.google.com/maps/d/edit?mid=1UdxxoxfvuLwGjvlmiEC3vyAbExP95b0&usp=sharing
+E-bikeのコース案内（スマホで開くだけ。決めた道を外れると音と画面で知らせます）：https://nakasendo-ebike.com/navi
 半日ルート：https://www.google.com/maps/d/u/0/edit?mid=1YiNMTkkve7S8X5CQWCBHGThYxVx-dBI&usp=sharing
 リンクを押してルートを開いた後、プレビューを押すと、このルートが Google マップにセットされます。利用中、何かトラブルもしくはアドバイスが必要な際は私までご連絡ください。
 
