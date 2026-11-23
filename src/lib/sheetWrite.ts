@@ -24,8 +24,8 @@ export type OverrideRow = {
   memo?: string;
 };
 
-export function appendDmOrders(rows: DmOrderRow[]): Promise<void> {
-  return post("dmOrder.append", rows);
+export function appendDmOrders(rows: DmOrderRow[], deadline?: number): Promise<void> {
+  return post("dmOrder.append", rows, deadline);
 }
 
 /**
@@ -33,15 +33,28 @@ export function appendDmOrders(rows: DmOrderRow[]): Promise<void> {
  * (R) by the hourly batch. Writing "(paid) …" here is what tells staff on
  * site that the meal is already paid, so they don't charge it again.
  */
-export function appendOverrides(rows: OverrideRow[]): Promise<void> {
-  return post("override.append", rows);
+export function appendOverrides(rows: OverrideRow[], deadline?: number): Promise<void> {
+  return post("override.append", rows, deadline);
 }
 
-async function post(action: string, rows: unknown[]): Promise<void> {
+/**
+ * One write can take ~35s: WriteApi.gs waits up to 30s for the script lock
+ * (hourly batch / batch.run) before answering "busy". So only retry when a
+ * whole attempt still fits before `deadline` (epoch ms). Without a deadline
+ * the old behaviour stays (2026-11-23: /api/order/link hit its 60s limit —
+ * 30s lock wait + 20s sleep + another 30s wait).
+ */
+export const WRITE_ATTEMPT_MS = 35_000;
+
+async function post(action: string, rows: unknown[], deadline?: number): Promise<void> {
   const url = process.env.SHEET_WRITE_URL;
   const token = process.env.SHEET_WRITE_TOKEN;
   if (!url || !token) throw new Error("SHEET_WRITE_URL / SHEET_WRITE_TOKEN not set");
+  const pause = deadline ? 5_000 : 20_000;
   for (let attempt = 0; attempt < 3; attempt++) {
+    if (deadline && Date.now() + WRITE_ATTEMPT_MS > deadline) {
+      throw new Error(`${action} skipped: not enough time left (busy, will retry next run)`);
+    }
     const res = await fetch(url, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -53,7 +66,7 @@ async function post(action: string, rows: unknown[]): Promise<void> {
     if (data.ok) return;
     // "busy" = the hourly batch holds the lock; wait and retry.
     if (data.error && /busy/i.test(data.error) && attempt < 2) {
-      await new Promise((r) => setTimeout(r, 20_000));
+      await new Promise((r) => setTimeout(r, pause));
       continue;
     }
     throw new Error(`${action} failed: ${data.error ?? res.status}`);

@@ -6,7 +6,7 @@
 
 import { fetchLodgifyArrivals, findStay, findStayInLodgify, nameMatches, ROOM_TYPES, type LodgifyBooking, type Stay } from "@/lib/stay";
 import { listOrderPageOrders, isPaid, isRefunded, setOrderMetadata, type SquareOrder } from "@/lib/square";
-import { appendDmOrders, appendOverrides, type DmOrderRow, type OverrideRow } from "@/lib/sheetWrite";
+import { appendDmOrders, appendOverrides, WRITE_ATTEMPT_MS, type DmOrderRow, type OverrideRow } from "@/lib/sheetWrite";
 import { addDays, todayJst } from "@/lib/mealOrder";
 
 export type LinkReport = {
@@ -21,6 +21,11 @@ export type LinkReport = {
     cleared: boolean;
   }[];
   skipped: number;
+  /** 時間切れを避けるため今回は手を付けず、次の定時チェックに回した支払い済み注文（未紐づけのまま） */
+  deferred?: { orderId: string; booking: string; lastName: string; arrival: string; total: number }[];
+  /** true＝時間の都合でキャンセル確認（cancelled）を最後まで見ていない */
+  cancelCheckIncomplete?: boolean;
+  elapsedMs?: number;
   /** 直近3日の、支払いが確認できない注文（状態の確認用） */
   unpaidRecent?: { orderId: string; state?: string; tenders: number; due?: number; total?: number; createdAt?: string; booking?: string; lastName?: string }[];
 };
@@ -76,8 +81,18 @@ function isCancelHandled(o: SquareOrder): boolean {
  */
 const ALREADY_IN_SHEET = new Set<string>(["aSCglcPwLZGgGC4tJ5w3xWkYaXPZY"]);
 
+/**
+ * Vercel stops the route at maxDuration (60s). Finish well before it: a sheet
+ * write may wait ~35s for the GAS lock, so stop starting new work at 50s.
+ * Unfinished orders stay unlinked (metadata.logged unset) and the next run
+ * picks them up — nothing is written twice.
+ */
+const DEADLINE_MS = 50_000;
+
 export async function linkPendingOrders(): Promise<LinkReport> {
-  const report: LinkReport = { linked: [], unmatched: [], problems: [], cancelled: [], skipped: 0 };
+  const started = Date.now();
+  const deadline = started + DEADLINE_MS;
+  const report: LinkReport = { linked: [], unmatched: [], problems: [], cancelled: [], skipped: 0, deferred: [] };
   const all = await listOrderPageOrders();
   const pending = all.filter((o) => isPaid(o) && !isLinked(o));
   report.skipped = all.length - pending.length;
@@ -94,6 +109,12 @@ export async function linkPendingOrders(): Promise<LinkReport> {
     const md = o.metadata ?? {};
     const total = o.total_money?.amount ?? 0;
     const booking = md.booking ?? "";
+    // Lookup (~2s) + one lock-waiting write (~35s) must fit; otherwise leave it
+    // for the next run (it stays unlinked, so nothing is written twice).
+    if (Date.now() + 5_000 + WRITE_ATTEMPT_MS > deadline) {
+      report.deferred!.push({ orderId: o.id, booking, lastName: md.lastName ?? "", arrival: md.arrival ?? "", total });
+      continue;
+    }
     if ((o.refunds ?? []).length > 0) {
       report.problems.push({ orderId: o.id, booking, guest: md.lastName ?? "", reason: "返金あり（シートには書いていません）", total, items: items(o) });
       continue;
@@ -171,22 +192,36 @@ export async function linkPendingOrders(): Promise<LinkReport> {
       }
     }
 
+    let dmWritten = false;
     try {
       if (!ALREADY_IN_SHEET.has(o.id)) {
-        await appendDmOrders(rows);
-        await appendOverrides([...byNight.values()]);
+        await appendDmOrders(rows, deadline);
+        dmWritten = true;
+        // The lock was just free, so this one is quick. Allow it past the soft
+        // deadline: skipping it now would leave DM rows without the order being
+        // marked, and the next run would append them twice.
+        await appendOverrides([...byNight.values()], deadline + WRITE_ATTEMPT_MS);
       }
       // Only one new key: checkout already writes 9 and Square allows 10.
       await setOrderMetadata(o, { logged: "1" });
       report.linked.push({ orderId: o.id, guest: stay.guestName, room: stay.room, booking, items: items(o) });
     } catch (err) {
+      const msg = err instanceof Error ? err.message : String(err);
+      if (dmWritten) {
+        // DM rows are in: mark the order anyway so they are never appended twice,
+        // and report the missing "(paid)" line for a manual fix.
+        await setOrderMetadata(o, { logged: "1" }).catch(() => undefined);
+      }
       report.problems.push({
         orderId: o.id, booking, guest: stay.guestName, total, items: items(o),
-        reason: `シートへの書き込みに失敗：${err instanceof Error ? err.message : String(err)}`,
+        reason: dmWritten
+          ? `「DMからの食事注文」は記入済み・紐づけ済み。CleaningOverride の (paid) 行だけ失敗（手で1行足す）：${msg}`
+          : `シートへの書き込みに失敗（未記入・次回の定時チェックで再試行）：${msg}`,
       });
     }
   }
-  await findCancelled(all, report);
+  await findCancelled(all, report, deadline);
+  report.elapsedMs = Date.now() - started;
   return report;
 }
 
@@ -196,26 +231,38 @@ export async function linkPendingOrders(): Promise<LinkReport> {
  * Square で行う。Claude は返金しない）。社長が「返金しない」と決めた注文は
  * metadata.cancelHandled=1 で以後出さない（markCancelHandled）。
  */
-async function findCancelled(all: SquareOrder[], report: LinkReport) {
+async function findCancelled(all: SquareOrder[], report: LinkReport, deadline = Infinity) {
   const today = todayJst();
   const watch = all.filter(
     (o) => isPaid(o) && isLinked(o) && !isCancelHandled(o) && !(o.refunds ?? []).length,
   );
+  // Past stays first: they need no Square/Lodgify call at all (before 2026-11-23
+  // every linked order cost a Square payment read, even long-gone stays).
+  const arrivalOf = (o: SquareOrder) => {
+    const dates = (o.line_items ?? []).map((li) => li.metadata?.date).filter((d): d is string => !!d).sort();
+    return { arrival: o.metadata?.arrival || dates[0] || "", last: dates[dates.length - 1] ?? "" };
+  };
+  const upcoming = watch.filter((o) => {
+    const { arrival, last } = arrivalOf(o);
+    return !!arrival && (last || arrival) >= today;
+  });
+  // Read Lodgify once per arrival date, all dates in parallel (each GAS call ~1–3s).
   const cache = new Map<string, LodgifyBooking[]>();
-  for (const o of watch) {
+  const dates = [...new Set(upcoming.map((o) => arrivalOf(o).arrival))];
+  await Promise.all(
+    dates.map(async (d) => cache.set(d, await fetchLodgifyArrivals(d).catch(() => [] as LodgifyBooking[]))),
+  );
+  for (const o of upcoming) {
+    if (Date.now() > deadline) {
+      report.cancelCheckIncomplete = true;
+      break;
+    }
     // Refunded from the Square dashboard (order.refunds stays empty): no longer
     // waiting for a refund, so stop reporting it.
     if (await isRefunded(o)) continue;
     const md = o.metadata ?? {};
-    // Arrival: new orders carry it; older ones only have line dates.
-    const dates = (o.line_items ?? []).map((li) => li.metadata?.date).filter((d): d is string => !!d).sort();
-    const arrival = md.arrival || dates[0] || "";
-    if (!arrival || (dates[dates.length - 1] ?? arrival) < today) continue;
-    let items = cache.get(arrival);
-    if (!items) {
-      items = await fetchLodgifyArrivals(arrival).catch(() => [] as LodgifyBooking[]);
-      cache.set(arrival, items);
-    }
+    const { arrival } = arrivalOf(o);
+    const items = cache.get(arrival) ?? [];
     const bookingNo = String(md.booking ?? "").replace(/[^0-9A-Za-z]/g, "");
     const mine = items.filter(
       (b) =>
@@ -230,7 +277,7 @@ async function findCancelled(all: SquareOrder[], report: LinkReport) {
     // night+room so the stale "(paid)" line can't attach to whoever books that
     // night next (applyOverride takes the last row per night+room).
     let cleared = isCancelCleared(o);
-    if (!cleared) {
+    if (!cleared && Date.now() + WRITE_ATTEMPT_MS <= deadline) {
       try {
         const kinds = mine.flatMap((b) => (b.rooms ?? []).map((r) => ROOM_TYPES[r.room_type_id])).filter(Boolean);
         const rooms: ("1F" | "2F")[] = kinds.includes("HOUSE") ? ["1F", "2F"]
@@ -245,8 +292,8 @@ async function findCancelled(all: SquareOrder[], report: LinkReport) {
         const nights = new Set(lines.map((li) => li.metadata!.date));
         const ovr: OverrideRow[] = [];
         for (const d of nights) for (const r of rooms) ovr.push({ date: d, room: r, meal: "", memo: `宿泊キャンセルで食事取消 ${o.id}` });
-        if (dm.length) await appendDmOrders(dm);
-        if (ovr.length) await appendOverrides(ovr);
+        if (dm.length) await appendDmOrders(dm, deadline);
+        if (ovr.length) await appendOverrides(ovr, deadline);
         await setOrderMetadata(o, { logged: "x" });
         cleared = true;
       } catch (err) {
