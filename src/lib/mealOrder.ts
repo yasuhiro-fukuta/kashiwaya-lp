@@ -4,6 +4,7 @@
 // the client never sends a price.
 
 import { fetchMenu } from "@/lib/menu";
+import { isNoMealNight } from "@/lib/noMealNights";
 
 export const ORDER_DEADLINE_DAYS = 3; // orders close 3 days before the night
 // 2026-11-04 社長指示：夕食の時間は現地で確認するので注文時に聞かない。
@@ -89,6 +90,7 @@ export type Night = {
   wholeHouse: boolean; // whole-house rental: no dinner (breakfast only)
   bothRooms: boolean; // 1F + 2F (whole house, or one group in both rooms)
   orderable: boolean;
+  noMeals: boolean; // caterer closed (NO_MEAL_NIGHTS): no dinner and no next-morning breakfast
 };
 
 export type OrderLine = {
@@ -133,7 +135,15 @@ export function buildNights(arrival: string, count: number, stayType: string, gu
   const cutoff = firstOrderableNight();
   return Array.from({ length: n }, (_, i) => {
     const date = addDays(arrival, i);
-    return { date, room: "" as const, guests: g, wholeHouse, bothRooms: wholeHouse, orderable: date >= cutoff };
+    return {
+      date,
+      room: "" as const,
+      guests: g,
+      wholeHouse,
+      bothRooms: wholeHouse,
+      orderable: date >= cutoff,
+      noMeals: isNoMealNight(date),
+    };
   });
 }
 
@@ -154,6 +164,9 @@ export function priceOrder(req: OrderRequest, nights: Night[], menu: MenuOption[
   return lines.map((l) => {
     const night = nights.find((n) => n.date === l.date);
     if (!night) throw new Error(`${l.date} is not a night of your stay.`);
+    if (night.noMeals) {
+      throw new Error(`Sorry — we can't serve meals on the night of ${l.date}. Please order delivery from Marusho (https://marusho.vercel.app/) instead.`);
+    }
     if (!night.orderable) throw new Error(`Orders for ${l.date} are closed (${ORDER_DEADLINE_DAYS} days before).`);
     const option = menu.find((m) => m.id === l.optionId);
     if (!option) throw new Error("That menu item is no longer available. Please reload the page.");

@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { MARUSHO_SITE_URL } from "@/lib/site";
+import { NO_MEAL_MESSAGE_EN, NO_MEAL_MESSAGE_JA } from "@/lib/noMealNights";
 
 type MenuOption = {
   id: string;
@@ -18,6 +19,7 @@ type Night = {
   wholeHouse: boolean;
   bothRooms: boolean;
   orderable: boolean;
+  noMeals?: boolean; // caterer closed: no dinner, no next-morning breakfast
 };
 
 type DinnerPick = { optionId: string; sets: number };
@@ -174,7 +176,8 @@ export default function OrderForm() {
     );
   }
 
-  const anyOrderable = nights.some((n) => n.orderable);
+  const mealNights = nights.filter((n) => !n.noMeals);
+  const anyOrderable = mealNights.length === 0 || mealNights.some((n) => n.orderable);
 
   return (
     <div className="order-form">
@@ -185,14 +188,29 @@ export default function OrderForm() {
       )}
 
       {nights.map((n) => (
-        <fieldset key={n.date} className="order-night" disabled={!n.orderable}>
+        <fieldset key={n.date} className="order-night" disabled={!n.orderable && !n.noMeals}>
           <legend>
             {niceDate(n.date)}
-            {n.wholeHouse ? " · Whole house" : ""}
-            {!n.orderable && " — closed"}
+            {n.noMeals ? " — no meals" : ""}
+            {!n.noMeals && n.wholeHouse ? " · Whole house" : ""}
+            {!n.noMeals && !n.orderable && " — closed"}
           </legend>
 
-          {n.wholeHouse ? (
+          {n.noMeals ? (
+            <p className="order-block order-no-meals">
+              <small>
+                {NO_MEAL_MESSAGE_EN}{" "}
+                <a href={MARUSHO_SITE_URL} target="_blank" rel="noreferrer">
+                  {MARUSHO_SITE_URL}
+                </a>
+                <br />
+                {NO_MEAL_MESSAGE_JA}{" "}
+                <a href={MARUSHO_SITE_URL} target="_blank" rel="noreferrer">
+                  {MARUSHO_SITE_URL}
+                </a>
+              </small>
+            </p>
+          ) : n.wholeHouse ? (
             <p className="order-block">
               <small>
                 Dinner isn&apos;t served on whole-house stays. For dinner, please order delivery from
@@ -234,7 +252,7 @@ export default function OrderForm() {
             </div>
           )}
 
-          {breakfast && (
+          {breakfast && !n.noMeals && (
             <div className="order-block">
               <strong>Breakfast next morning</strong> <small>({breakfast.label}, {yen(breakfast.price)} per person)</small>
               <div className="order-row">

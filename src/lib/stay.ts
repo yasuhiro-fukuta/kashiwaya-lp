@@ -4,6 +4,7 @@
 // browser — never other guests' names or the rest of the board.
 
 import { firstOrderableNight, type Night } from "@/lib/mealOrder";
+import { isNoMealNight } from "@/lib/noMealNights";
 
 type BoardRow = {
   date: string;
@@ -103,6 +104,7 @@ async function findStayOnBoard(lastName: string, arrival: string): Promise<Stay 
       wholeHouse,
       bothRooms,
       orderable: d >= cutoff,
+      noMeals: isNoMealNight(d),
     });
     const next = new Date(`${d}T00:00:00Z`);
     next.setUTCDate(next.getUTCDate() + 1);
@@ -172,7 +174,7 @@ export async function findStayInLodgify(lastName: string, arrival: string, booki
   const nights: Night[] = [];
   let d = arrival;
   for (let i = 0; i < 60 && d < hit.departure; i++) {
-    nights.push({ date: d, room: has1F ? "1F" : "2F", guests, wholeHouse, bothRooms, orderable: d >= cutoff });
+    nights.push({ date: d, room: has1F ? "1F" : "2F", guests, wholeHouse, bothRooms, orderable: d >= cutoff, noMeals: isNoMealNight(d) });
     const next = new Date(`${d}T00:00:00Z`);
     next.setUTCDate(next.getUTCDate() + 1);
     d = next.toISOString().slice(0, 10);
